@@ -1,9 +1,9 @@
 {
   "name": "VisitIosHealthSdk",
   "version": "0.1.0",
-  "summary": "A short description of VisitIosHealthSdk.",
+  "summary": "An SDK to inject the health kit data in Visit PWA",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/81799742/VisitIosHealthSdk",
+  "homepage": "https://github.com/VisitApp/VisitIosHealthSdk.git",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +12,7 @@
     "81799742": "yash-vardhan@hotmail.com"
   },
   "source": {
-    "git": "https://github.com/81799742/VisitIosHealthSdk.git",
+    "git": "https://github.com/VisitApp/VisitIosHealthSdk.git",
     "tag": "0.1.0"
   },
   "platforms": {
