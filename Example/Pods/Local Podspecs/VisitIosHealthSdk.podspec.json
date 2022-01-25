@@ -22,7 +22,7 @@
   "resource_bundles": {
     "VisitIosHealthSdk": [
       "VisitIosHealthSdk/Assets/*.png",
-      "VisitIosHealthSdk/Classes/*.storyboard"
+      "VisitIosHealthSdk/Assets/*.storyboard"
     ]
   },
   "pod_target_xcconfig": {
