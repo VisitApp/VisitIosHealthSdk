@@ -21,7 +21,8 @@
   "source_files": "VisitIosHealthSdk/Classes/**/*",
   "resource_bundles": {
     "VisitIosHealthSdk": [
-      "VisitIosHealthSdk/**/*"
+      "VisitIosHealthSdk/Assets/*.png",
+      "VisitIosHealthSdk/Assets/*.storyboard"
     ]
   },
   "pod_target_xcconfig": {
