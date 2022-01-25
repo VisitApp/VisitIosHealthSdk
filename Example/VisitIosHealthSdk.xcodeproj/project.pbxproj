@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F06EB8E454FB0D02B11966E /* Pods_VisitIosHealthSdk_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD1C81726668AEE109503836 /* Pods_VisitIosHealthSdk_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		C3E46AAF4922C8801B850C81 /* Pods_VisitIosHealthSdk_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 577D70B6F036D05BBE15454A /* Pods_VisitIosHealthSdk_Example.framework */; };
-		C9D8C5D70657F9681F0D327A /* Pods_VisitIosHealthSdk_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4185C8DC61B587E934EDD722 /* Pods_VisitIosHealthSdk_Tests.framework */; };
+		8A245FE56191D6C9EAAB2CCD /* Pods_VisitIosHealthSdk_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15886204CCE9F76CEE1D59B0 /* Pods_VisitIosHealthSdk_Example.framework */; };
 		D34D0BE5279FD51F000AC38F /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D34D0BE4279FD51F000AC38F /* HealthKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,10 +29,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4185C8DC61B587E934EDD722 /* Pods_VisitIosHealthSdk_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisitIosHealthSdk_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		15886204CCE9F76CEE1D59B0 /* Pods_VisitIosHealthSdk_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisitIosHealthSdk_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		262F2ED1E94AB5FE21CB96C5 /* Pods-VisitIosHealthSdk_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisitIosHealthSdk_Tests.release.xcconfig"; path = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		41BEF87386917854B6D87192 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		444A7FE4671B7E375885F3D1 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		577D70B6F036D05BBE15454A /* Pods_VisitIosHealthSdk_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisitIosHealthSdk_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		50BEB5617270366B7DF794F9 /* Pods-VisitIosHealthSdk_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisitIosHealthSdk_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		5BC10F103B20976CC6A62461 /* VisitIosHealthSdk.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = VisitIosHealthSdk.podspec; path = ../VisitIosHealthSdk.podspec; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* VisitIosHealthSdk_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisitIosHealthSdk_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -44,12 +45,11 @@
 		607FACE51AFB9204008FA782 /* VisitIosHealthSdk_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VisitIosHealthSdk_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		692E15CE3D02E4F8F32472BD /* Pods-VisitIosHealthSdk_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisitIosHealthSdk_Example.release.xcconfig"; path = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example.release.xcconfig"; sourceTree = "<group>"; };
-		CA35327E2124EA58A4D46D51 /* Pods-VisitIosHealthSdk_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisitIosHealthSdk_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		A87501C28825C27AF5D6C4AB /* Pods-VisitIosHealthSdk_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisitIosHealthSdk_Example.release.xcconfig"; path = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example.release.xcconfig"; sourceTree = "<group>"; };
+		BD1C81726668AEE109503836 /* Pods_VisitIosHealthSdk_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisitIosHealthSdk_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7AE1B4E58EAB54DDED91582 /* Pods-VisitIosHealthSdk_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisitIosHealthSdk_Tests.debug.xcconfig"; path = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		D34D0BE3279FD51E000AC38F /* VisitIosHealthSdk_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VisitIosHealthSdk_Example.entitlements; sourceTree = "<group>"; };
 		D34D0BE4279FD51F000AC38F /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		D8C3042018E1196CF6C117A1 /* Pods-VisitIosHealthSdk_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisitIosHealthSdk_Tests.release.xcconfig"; path = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		DC4B2CEC8AA1738474FFE894 /* Pods-VisitIosHealthSdk_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisitIosHealthSdk_Tests.debug.xcconfig"; path = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3E46AAF4922C8801B850C81 /* Pods_VisitIosHealthSdk_Example.framework in Frameworks */,
 				D34D0BE5279FD51F000AC38F /* HealthKit.framework in Frameworks */,
+				8A245FE56191D6C9EAAB2CCD /* Pods_VisitIosHealthSdk_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,7 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9D8C5D70657F9681F0D327A /* Pods_VisitIosHealthSdk_Tests.framework in Frameworks */,
+				5F06EB8E454FB0D02B11966E /* Pods_VisitIosHealthSdk_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,8 +77,8 @@
 			isa = PBXGroup;
 			children = (
 				D34D0BE4279FD51F000AC38F /* HealthKit.framework */,
-				577D70B6F036D05BBE15454A /* Pods_VisitIosHealthSdk_Example.framework */,
-				4185C8DC61B587E934EDD722 /* Pods_VisitIosHealthSdk_Tests.framework */,
+				15886204CCE9F76CEE1D59B0 /* Pods_VisitIosHealthSdk_Example.framework */,
+				BD1C81726668AEE109503836 /* Pods_VisitIosHealthSdk_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -86,10 +86,10 @@
 		54891F1570A989AA3C791063 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CA35327E2124EA58A4D46D51 /* Pods-VisitIosHealthSdk_Example.debug.xcconfig */,
-				692E15CE3D02E4F8F32472BD /* Pods-VisitIosHealthSdk_Example.release.xcconfig */,
-				DC4B2CEC8AA1738474FFE894 /* Pods-VisitIosHealthSdk_Tests.debug.xcconfig */,
-				D8C3042018E1196CF6C117A1 /* Pods-VisitIosHealthSdk_Tests.release.xcconfig */,
+				50BEB5617270366B7DF794F9 /* Pods-VisitIosHealthSdk_Example.debug.xcconfig */,
+				A87501C28825C27AF5D6C4AB /* Pods-VisitIosHealthSdk_Example.release.xcconfig */,
+				C7AE1B4E58EAB54DDED91582 /* Pods-VisitIosHealthSdk_Tests.debug.xcconfig */,
+				262F2ED1E94AB5FE21CB96C5 /* Pods-VisitIosHealthSdk_Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -172,11 +172,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk_Example" */;
 			buildPhases = (
-				E8A350B68F5341433A16A5AB /* [CP] Check Pods Manifest.lock */,
+				10C21791417679202912C7F7 /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				36554FAFCEAACF9561D4DEF1 /* [CP] Embed Pods Frameworks */,
+				52419E273A624EE9DBD992C9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -191,7 +191,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk_Tests" */;
 			buildPhases = (
-				B0D0E1052B9F7613F99491CA /* [CP] Check Pods Manifest.lock */,
+				76F6991B7CEF4F3795EEEDB2 /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
@@ -270,7 +270,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		36554FAFCEAACF9561D4DEF1 /* [CP] Embed Pods Frameworks */ = {
+		10C21791417679202912C7F7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VisitIosHealthSdk_Example-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		52419E273A624EE9DBD992C9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -288,7 +310,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B0D0E1052B9F7613F99491CA /* [CP] Check Pods Manifest.lock */ = {
+		76F6991B7CEF4F3795EEEDB2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -304,28 +326,6 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-VisitIosHealthSdk_Tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E8A350B68F5341433A16A5AB /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-VisitIosHealthSdk_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -483,7 +483,7 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA35327E2124EA58A4D46D51 /* Pods-VisitIosHealthSdk_Example.debug.xcconfig */;
+			baseConfigurationReference = 50BEB5617270366B7DF794F9 /* Pods-VisitIosHealthSdk_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = VisitIosHealthSdk_Example.entitlements;
@@ -500,7 +500,7 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 692E15CE3D02E4F8F32472BD /* Pods-VisitIosHealthSdk_Example.release.xcconfig */;
+			baseConfigurationReference = A87501C28825C27AF5D6C4AB /* Pods-VisitIosHealthSdk_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = VisitIosHealthSdk_Example.entitlements;
@@ -517,7 +517,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DC4B2CEC8AA1738474FFE894 /* Pods-VisitIosHealthSdk_Tests.debug.xcconfig */;
+			baseConfigurationReference = C7AE1B4E58EAB54DDED91582 /* Pods-VisitIosHealthSdk_Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = AU9UJ3DSGS;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -540,7 +540,7 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D8C3042018E1196CF6C117A1 /* Pods-VisitIosHealthSdk_Tests.release.xcconfig */;
+			baseConfigurationReference = 262F2ED1E94AB5FE21CB96C5 /* Pods-VisitIosHealthSdk_Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = AU9UJ3DSGS;
 				FRAMEWORK_SEARCH_PATHS = (
