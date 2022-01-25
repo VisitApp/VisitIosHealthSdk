@@ -2,7 +2,7 @@
   "name": "VisitIosHealthSdk",
   "version": "0.1.0",
   "summary": "An SDK to inject the health kit data in Visit PWA",
-  "description": "TODO: Add long description of the pod here.",
+  "description": "An SDK to inject the health kit data in Visit PWA",
   "homepage": "https://github.com/VisitApp/VisitIosHealthSdk.git",
   "license": {
     "type": "MIT",
@@ -21,7 +21,7 @@
   "source_files": "VisitIosHealthSdk/Classes/**/*",
   "resource_bundles": {
     "VisitIosHealthSdk": [
-      "VisitIosHealthSdk/Classes/*.png",
+      "VisitIosHealthSdk/Assets/*.png",
       "VisitIosHealthSdk/Classes/*.storyboard"
     ]
   },

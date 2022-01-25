@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  VisitIosHealthSdk: cea4c8d83f0b682e93445ba4d59cfefd03dc5c21
+  VisitIosHealthSdk: cb8c8f89484e78604bb69b7eb00f636c8499efe8
 
 PODFILE CHECKSUM: d7c9bbebd902fff0ba98dcdf0e27c04921f1d169
 
