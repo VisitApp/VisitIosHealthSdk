@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'VisitIosHealthSdk_Example' do
+  pod 'VisitIosHealthSdk', :path => '../'
+
+  target 'VisitIosHealthSdk_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

@@ -1,0 +1,31 @@
+{
+  "name": "VisitIosHealthSdk",
+  "version": "0.1.0",
+  "summary": "A short description of VisitIosHealthSdk.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/81799742/VisitIosHealthSdk",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "81799742": "yash-vardhan@hotmail.com"
+  },
+  "source": {
+    "git": "https://github.com/81799742/VisitIosHealthSdk.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "VisitIosHealthSdk/Classes/**/*",
+  "resource_bundles": {
+    "VisitIosHealthSdk": [
+      "VisitIosHealthSdk/Classes/*.png",
+      "VisitIosHealthSdk/Classes/*.storyboard"
+    ]
+  },
+  "pod_target_xcconfig": {
+    "PRODUCT_BUNDLE_IDENTIFIER": "com.getvisitapp.visitIosHealthSdk"
+  }
+}

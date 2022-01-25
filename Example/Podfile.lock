@@ -1,0 +1,16 @@
+PODS:
+  - VisitIosHealthSdk (0.1.0)
+
+DEPENDENCIES:
+  - VisitIosHealthSdk (from `../`)
+
+EXTERNAL SOURCES:
+  VisitIosHealthSdk:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  VisitIosHealthSdk: 2929ddee5c5347cf81d29936bd0fe226c878038a
+
+PODFILE CHECKSUM: d7c9bbebd902fff0ba98dcdf0e27c04921f1d169
+
+COCOAPODS: 1.11.2

@@ -1,0 +1,6 @@
+framework module VisitIosHealthSdk {
+  umbrella header "VisitIosHealthSdk-umbrella.h"
+
+  export *
+  module * { export * }
+}
