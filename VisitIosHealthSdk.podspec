@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
   s.source_files = 'VisitIosHealthSdk/Classes/**/*'
 
   s.resource_bundles = {
-    'VisitIosHealthSdk' => ['VisitIosHealthSdk/Classes/*.png','VisitIosHealthSdk/Classes/*.storyboard']
+    'VisitIosHealthSdk' => ['VisitIosHealthSdk/Assets/*.png','VisitIosHealthSdk/Classes/*.storyboard']
   }
 
   s.pod_target_xcconfig = {
