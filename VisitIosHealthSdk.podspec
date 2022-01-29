@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'VisitIosHealthSdk'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'An SDK to inject the health kit data in Visit PWA'
 
 # This description is used to generate tags and improve search results.
@@ -40,7 +40,4 @@ Pod::Spec.new do |s|
     'PRODUCT_BUNDLE_IDENTIFIER': 'com.getvisitapp.visitIosHealthSdk'
   }
 
-  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-  
 end

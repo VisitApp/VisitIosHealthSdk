@@ -12,6 +12,9 @@
 @interface VisitIosHealthController : UIViewController<WKScriptMessageHandler>{
     // Member variables go here.
     NSString *baseUrl;
+    NSString *token;
+    NSTimeInterval gfHourlyLastSync;
+    NSTimeInterval googleFitLastSync;
     NSCalendar* calendar;
     NSString *gender;
     NSUInteger bmrCaloriesPerHour;
@@ -22,6 +25,6 @@
     BOOL hasLoadedOnce;
 }
 //@property (nonatomic, retain) UIViewController * viewController;
-- (void)loadVisitWebUrl:(NSString *) baseUrl magicLink:(NSString*) magicLink caller:(UIViewController*) caller;
+- (void)loadVisitWebUrl:(NSString*) magicLink caller:(UIViewController*) caller;
 @end
 
