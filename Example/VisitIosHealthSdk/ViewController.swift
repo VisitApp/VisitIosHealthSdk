@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         visitHealthView.view.translatesAutoresizingMaskIntoConstraints = false
     }
     override func viewDidAppear(_ animated: Bool) {
-        visitHealthView.loadVisitWebUrl("https://star-health.getvisitapp.xyz",magicLink: "star-health?token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOi[%E2%80%A6]GFsIn0.f0656mzmcRMSCywkbEptdd6JgkDfIqN0S9t-P1aPyt8&id=8158",caller: self)
+        visitHealthView.loadVisitWebUrl( "https://star-health.getvisitapp.xyz/star-health?token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOi[%E2%80%A6]GFsIn0.f0656mzmcRMSCywkbEptdd6JgkDfIqN0S9t-P1aPyt8&id=8158",caller: self)
     }
     
     override func didReceiveMemoryWarning() {

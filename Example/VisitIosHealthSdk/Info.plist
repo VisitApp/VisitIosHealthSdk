@@ -24,6 +24,11 @@
 	<string>App requires your permission to read health and fitness data.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>App requires your permission to store health and fitness data in HealthKit.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
