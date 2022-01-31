@@ -18,6 +18,8 @@
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
     webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:config];
+    webView.scrollView.scrollEnabled=TRUE;
+    webView.scrollView.bounces=TRUE;
     [webView addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:NSKeyValueObservingOptionNew context:NULL];
     calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierISO8601];
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"IST"];
@@ -70,13 +72,13 @@
     
     [[VisitIosHealthController sharedManager] requestAuthorizationToShareTypes:[NSSet setWithArray:writeTypes] readTypes:[NSSet setWithArray:readTypes]
                                                                 completion:^(BOOL success, NSError *error) {
-        NSLog(@"requestAuthorizationToShareTypes executed");
+//        NSLog(@"requestAuthorizationToShareTypes executed");
         [self canAccessHealthKit:^(BOOL value){
             if(value){
-                NSLog(@"the health kit permission granted");
+//                NSLog(@"the health kit permission granted");
                 [self onHealthKitPermissionGranted];
             }else{
-                NSLog(@"the health kit permission not granted");
+//                NSLog(@"the health kit permission not granted");
                 UIAlertController * alert = [UIAlertController
                                                  alertControllerWithTitle:@"Permission Denied"
                                                  message:@"Please go to Settings>Privacy>Health and approve the required permissions"
@@ -116,7 +118,7 @@
     dispatch_group_t loadDetailsGroup=dispatch_group_create();
     __block NSString* numberOfSteps = 0;
     __block NSTimeInterval totalSleepTime = 0;
-    NSLog(@"gender is, %@",gender);
+//    NSLog(@"gender is, %@",gender);
     for (int i = 0; i<2; i++) {
         
         dispatch_group_enter(loadDetailsGroup);
@@ -139,7 +141,7 @@
                             NSDate* endDate = [item valueForKey:@"endDate"];
                             NSTimeInterval duration = [endDate timeIntervalSinceDate:startDate] / 60;
                             totalSleepTime+=duration;
-                            NSLog(@"Sleep value is, %@, while duration is %f",sleepValue,duration);
+//                            NSLog(@"Sleep value is, %@, while duration is %f",sleepValue,duration);
                     }
                     }
                 }
@@ -158,8 +160,8 @@
         }else{
             self->bmrCaloriesPerHour = 1493 / 24;
         }
-        NSLog(@"the steps result is, %@",numberOfSteps);
-        NSLog(@"total sleep time is %f",totalSleepTime);
+//        NSLog(@"the steps result is, %@",numberOfSteps);
+//        NSLog(@"total sleep time is %f",totalSleepTime);
         NSInteger sleepTime = totalSleepTime;
         //        -[WKWebView loadRequest:] must be used from main thread only
         if(!self->hasLoadedOnce){
@@ -168,10 +170,10 @@
                 self->hasLoadedOnce = true;
                 [self->webView evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
                     if(error != nil) {
-                        NSLog(@"SomeFunction Error: %@",error);
+//                        NSLog(@"SomeFunction Error: %@",error);
                         return;
                     }
-                    NSLog(@"SomeFunction Success %@",result);
+//                    NSLog(@"SomeFunction Success %@",result);
                 }];
             });
         }
@@ -288,9 +290,9 @@
                                                  value:1-days
                                                 toDate:endDatePeriod
                                                options:0];
-        NSLog(@"startDate and endDate in custom fetchDistanceWalkingRunning is, %@, %@",startDate,endDatePeriod);
+//        NSLog(@"startDate and endDate in custom fetchDistanceWalkingRunning is, %@, %@",startDate,endDatePeriod);
     }
-    NSLog(@"startDate and endDate in fetchDistanceWalkingRunning is, %@, %@",startDate,endDatePeriod);
+//    NSLog(@"startDate and endDate in fetchDistanceWalkingRunning is, %@, %@",startDate,endDatePeriod);
     NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                                                      fromDate:[NSDate date]];
     anchorComponents.hour = 0;
@@ -318,7 +320,7 @@
                                        HKQuantity *quantity = result.sumQuantity;
                                        if (quantity) {
                                            int value = [[NSNumber numberWithInt:[quantity doubleValueForUnit:distanceUnit]] intValue];
-                                           NSLog(@"in fetchDistanceWalkingRunning %d", value);
+//                                           NSLog(@"in fetchDistanceWalkingRunning %d", value);
                                            
                                            [data addObject:[NSNumber numberWithInt:value]];
                                        }else{
@@ -365,7 +367,7 @@
                 }
             }];
             callback(data);
-            NSLog(@"fetchDistanceWalkingRunning is,%@",data);
+//            NSLog(@"fetchDistanceWalkingRunning is,%@",data);
         };
         
         [[VisitIosHealthController sharedManager] executeQuery:query];
@@ -394,15 +396,15 @@
                                                  value:-days
                                                 toDate:endDatePeriod
                                                options:0];
-        NSLog(@"startDate and endDate in custom fetchSleepPattern is, %@, %@",startDate,endDatePeriod);
+//        NSLog(@"startDate and endDate in custom fetchSleepPattern is, %@, %@",startDate,endDatePeriod);
     }
-    NSLog(@"startDate and endDate in fetchSleepPattern is, %@ %@",startDate,endDatePeriod);
+//    NSLog(@"startDate and endDate in fetchSleepPattern is, %@ %@",startDate,endDatePeriod);
     NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDatePeriod options:HKQueryOptionStrictStartDate];
     [self fetchSleepCategorySamplesForPredicate:predicate
                                               limit:HKObjectQueryNoLimit
                                          completion:^(NSArray *results, NSError *error) {
                                              if(results){
-                                                 NSLog(@"fetchSleepCategorySamplesForPredicate result, %@",results);
+//                                                 NSLog(@"fetchSleepCategorySamplesForPredicate result, %@",results);
                                                  callback(results);
                                                  return;
                                              } else {
@@ -441,7 +443,7 @@
                     HKQuantity *quantity = sample.quantity;
                     double value = [quantity doubleValueForUnit:unit];
                     if(value){
-                        NSLog(@"startDate and endDate for fetchQuantitySamplesOfType is %@ & %@", sample.startDate,sample.endDate);
+//                        NSLog(@"startDate and endDate for fetchQuantitySamplesOfType is %@ & %@", sample.startDate,sample.endDate);
                         NSNumber* val = [NSNumber numberWithDouble:[sample.endDate timeIntervalSinceDate:sample.startDate]/60];
                         NSDictionary *element = @{
                             @"date" : sample.endDate,
@@ -466,10 +468,10 @@
                         
                         NSTimeInterval duration = [sample.endDate timeIntervalSinceDate:sample.startDate];
                         totalActivityDuration+=duration;
-                        NSLog(@"fetchQuantitySamplesOfType dict is %@",dict);
+//                        NSLog(@"fetchQuantitySamplesOfType dict is %@",dict);
                     }
                 }
-                NSLog(@"fetchQuantitySamplesOfType dataByFrequency %@ ",dataByFrequency);
+//                NSLog(@"fetchQuantitySamplesOfType dataByFrequency %@ ",dataByFrequency);
                 [data addObject:[NSString stringWithFormat:@"%f",totalActivityDuration/60]];
                 [data addObject:dataByFrequency];
                 completion(data, error);
@@ -525,7 +527,7 @@
     NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicate, userEnteredValuePredicate]];
     [self fetchQuantitySamplesOfType:stepCountType unit:[HKUnit countUnit] predicate:compoundPredicate ascending:true limit:HKObjectQueryNoLimit completion:^(NSArray *results, NSError *error) {
             if (results) {
-                NSLog(@"the results of getActivityTime %@",results);
+//                NSLog(@"the results of getActivityTime %@",results);
                 callback([NSMutableArray arrayWithArray:results]);
                 return;
             } else {
@@ -543,7 +545,7 @@
         {
             // Convert the JSON object to NSData
             NSData * httpBodyData = [NSJSONSerialization dataWithJSONObject:body options:0 error:nil];
-            NSLog(@"hitting api %@ with body=%@",downloadUrl, httpBodyData);
+//            NSLog(@"hitting api %@ with body=%@",downloadUrl, httpBodyData);
             // set the http body
             [request setHTTPBody:httpBodyData];
             [request setHTTPMethod:@"POST"];
@@ -673,7 +675,7 @@
         startingDate =[calendar dateByAddingComponents:component toDate:endOfToday options:0];
         numberOfDays=30;
     }
-    NSLog(@"numberOfDays are ,%ld, while startingDate is,%@",(long)numberOfDays,startDate);
+//    NSLog(@"numberOfDays are ,%ld, while startingDate is,%@",(long)numberOfDays,startDate);
 
     for (NSInteger i=numberOfDays; i>0; i--) {
         dispatch_group_enter(loadDetailsGroup);
@@ -684,7 +686,7 @@
     }
 
     dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-        NSLog(@"dispatch_group_notify called %@",dates);
+//        NSLog(@"dispatch_group_notify called %@",dates);
             callback(dates);
     });
 }
@@ -720,9 +722,9 @@
                                                  value:1-days
                                                 toDate:endDatePeriod
                                                options:0];
-        NSLog(@"startDate and endDate in custom fetchSteps is, %@, %@",startDate,endDatePeriod);
+//        NSLog(@"startDate and endDate in custom fetchSteps is, %@, %@",startDate,endDatePeriod);
     }
-    NSLog(@"startDate and endDate in fetchSteps is, %@, %@",startDate,endDatePeriod);
+//    NSLog(@"startDate and endDate in fetchSteps is, %@, %@",startDate,endDatePeriod);
     NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                                                      fromDate:[NSDate date]];
     anchorComponents.hour = 0;
@@ -1132,8 +1134,11 @@
                 }];
             }
         }
+        NSLog(@"callEmbellishApi steps=%@, calories=%@, distance=%@",steps, calories, distance);
         dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-            [self preprocessEmbellishRequest:steps calories:calories distance:distance date:date];
+            if([steps count]>0 && [calories count] > 0 && [distance count]>0){
+                [self preprocessEmbellishRequest:steps calories:calories distance:distance date:date];
+            }
         });
     }
 }
@@ -1145,26 +1150,26 @@
     __block NSArray* distanceData;
     __block NSArray* activityData;
     __block NSArray* sleep;
-    NSLog(@"days are %ld",(long)days);
+//    NSLog(@"days are %ld",(long)days);
     for (int i = 0; i<4; i++) {
         dispatch_group_enter(syncDataGroup);
         if(i==0){
             [self fetchSteps:@"custom" endDate:[NSDate date] days:days callback:^(NSArray * data) {
-                NSLog(@"steps data for custom range is, %@",[data objectAtIndex:0]);
+//                NSLog(@"steps data for custom range is, %@",[data objectAtIndex:0]);
                 steps = [data objectAtIndex:0];
                 calorie = [data objectAtIndex:1];
                 dispatch_group_leave(syncDataGroup);
             }];
         }else if(i==1){
             [self fetchDistanceWalkingRunning:@"custom" endDate:[NSDate date] days:days callback:^(NSArray * distance) {
-                NSLog(@"distance data for custom range is, %@",distance);
+//                NSLog(@"distance data for custom range is, %@",distance);
                 distanceData=distance;
                 dispatch_group_leave(syncDataGroup);
             }];
         }else if(i==2){
             [self getActivityTime:[NSDate date] frequency:@"custom" days:days callback:^(NSMutableArray * activity) {
                 NSMutableArray* arr = [activity objectAtIndex:1];
-                NSLog(@"activity data for custom range is, %@",activity);
+//                NSLog(@"activity data for custom range is, %@",activity);
                 activityData = arr;
                 dispatch_group_leave(syncDataGroup);
             }];
@@ -1181,12 +1186,12 @@
                         [NSNumber numberWithDouble: [@(floor([startDate timeIntervalSince1970] * 1000)) longLongValue]];
                         NSNumber* wakeupTime =
                         [NSNumber numberWithDouble: [@(floor([endDate timeIntervalSince1970] * 1000)) longLongValue]];
-                        NSLog(@"startDate before calendar function ,%@",startDate);
+//                        NSLog(@"startDate before calendar function ,%@",startDate);
                         [self->calendar rangeOfUnit:NSCalendarUnitDay
                                            startDate:&startDate
                                             interval:&interval
                                              forDate:endDate];
-                        NSLog(@"startDate after calendar function ,%@",startDate);
+//                        NSLog(@"startDate after calendar function ,%@",startDate);
                         NSNumber* startTimestamp =
                         [NSNumber numberWithDouble: [@(floor([startDate timeIntervalSince1970] * 1000)) longLongValue]];
                         NSDictionary *element = @{
@@ -1205,7 +1210,7 @@
                                 if([[NSCalendar currentCalendar] isDate:itemEndDate inSameDayAsDate:endDate]){
                                     [elem setValue:itemSleepTime forKey:@"sleepTime"];
                                     [data removeObjectAtIndex:i];
-                                    NSLog(@"removed date is, ====>> %@",endDate);
+//                                    NSLog(@"removed date is, ====>> %@",endDate);
                                 }
                             }
                             [data addObject:elem];
@@ -1215,13 +1220,17 @@
                     }
                 }
                 sleep = data;
-                NSLog(@"fetchSleepPattern data is, ====>> %lu %@",(unsigned long)[data count],data);
+//                NSLog(@"fetchSleepPattern data is, ====>> %lu %@",(unsigned long)[data count],data);
                 dispatch_group_leave(syncDataGroup);
             }];
         }
     }
+//    NSLog(@"callSyncData steps=%@, calories=%@, distance=%@, activity=%@, sleep=%@",steps, calorie, distanceData, activityData, sleep);
+
     dispatch_group_notify(syncDataGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-        NSMutableArray* dailySyncData =[NSMutableArray new];
+    if([steps count]>0 && [distanceData count]>0 && [activityData count]>0 && [sleep count]>0)
+       {
+           NSMutableArray* dailySyncData =[NSMutableArray new];
         int count = 0;
         for (NSDate* date in dates) {
             NSDictionary* dict = @{
@@ -1250,7 +1259,9 @@
                 @"fitnessData" : dailySyncData,
         };
         [self PostJson:@"users/data-sync" body:httpBody];
-        NSLog(@"dailySyncData is, %@",dailySyncData);
+//        NSLog(@"dailySyncData is, %@",dailySyncData);
+           
+       }
     });
 }
 
@@ -1258,7 +1269,7 @@
     NSData *data = [message.body dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     NSString *methodName = [json valueForKey:@"method"];
-    NSLog(@"json is %@",[json description]);
+//    NSLog(@"json is %@",[json description]);
     if([methodName isEqualToString:@"connectToGoogleFit"]) {
         [self canAccessHealthKit:^(BOOL value){
             if(value){
