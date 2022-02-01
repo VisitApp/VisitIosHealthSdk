@@ -13,8 +13,8 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 - Supports iOS version >=13.0
 - Please ensure that you have added permission texts for the following usages in your Info.plist file - Privacy - Health Share Usage Description, Privacy - Health Update Usage Description
-- In Signing & Capabilities add HealthKit
-
+- Add HealthKit in Signing & Capabilities
+- The project needs to have cocoapods added to it. Please follow this [article](https://www.hackingwithswift.com/articles/95/how-to-add-cocoapods-to-your-project) to add cocoapods to your project.
 
 ## Installation
 
