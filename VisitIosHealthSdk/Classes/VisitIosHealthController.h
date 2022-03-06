@@ -13,18 +13,24 @@
     // Member variables go here.
     NSString *baseUrl;
     NSString *token;
+    NSString *memberId;
     NSTimeInterval gfHourlyLastSync;
     NSTimeInterval googleFitLastSync;
     NSCalendar* calendar;
     NSString *gender;
+    NSString *tataAIG_base_url;
+    NSString *tataAIG_auth_token;
     NSUInteger bmrCaloriesPerHour;
+    UIStoryboard* storyboard;
+    UIViewController * sbViewController;
     HKHealthStore *healthStore;
-    UIViewController * storyboardVC;
     WKWebView *webView;
     UIActivityIndicatorView *activityIndicator;
-    BOOL hasLoadedOnce;
+    UIViewController* caller;
 }
-//@property (nonatomic, retain) UIViewController * viewController;
+
 - (void)loadVisitWebUrl:(NSString*) magicLink caller:(UIViewController*) caller;
+- (void) initialParams:(NSDictionary *)params;
+
 @end
 
