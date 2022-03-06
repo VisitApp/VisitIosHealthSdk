@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'VisitIosHealthSdk'
-  s.version          = '0.1.6'
+  s.version          = '0.1.7'
   s.summary          = 'An SDK to inject the health kit data in Visit PWA'
 
 # This description is used to generate tags and improve search results.
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-  An SDK to inject the health kit data in Visit PWA
+  An iOS SDK to inject the health kit data in Visit PWA
                        DESC
 
   s.homepage         = 'https://github.com/VisitApp/VisitIosHealthSdk.git'
