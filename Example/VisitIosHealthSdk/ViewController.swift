@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     let button = UIButton(frame: CGRect(x: 20, y: 20, width: 200, height: 60))
     let tataAIG_base_url = "https://uathealthvas.tataaig.com"
     let tataAIG_auth_token = "Basic Z2V0X3Zpc2l0OkZoNjh2JHdqaHU4WWd3NiQ="
+    let uatLastSyncTime = "1645641000424"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +28,7 @@ class ViewController: UIViewController {
         self.showButton()
 
         // passing tataAIG_base_url and tataAIG_auth_token in form of a dictionary
-        visitHealthView.initialParams(["tataAIG_base_url":tataAIG_base_url, "tataAIG_auth_token":tataAIG_auth_token])
+        visitHealthView.initialParams(["tataAIG_base_url":tataAIG_base_url, "tataAIG_auth_token":tataAIG_auth_token,"uatLastSyncTime":uatLastSyncTime])
         
         // adding observer to watch for events
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: .customNotificationName, object: nil)

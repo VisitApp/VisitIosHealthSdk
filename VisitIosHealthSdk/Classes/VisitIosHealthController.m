@@ -39,17 +39,19 @@ API_AVAILABLE(ios(13.0))
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSString *memberId = [prefs stringForKey:@"memberId"];
         self->memberId = memberId;
-        NSString *uatLastSyncTime = [prefs stringForKey:@"uatLastSyncTime"];
+        NSString *uatLastSyncTime = [params valueForKey:@"uatLastSyncTime"] ? [params valueForKey:@"uatLastSyncTime"]: [prefs stringForKey:@"uatLastSyncTime"];
         NSLog(@"initWithParams memberId and uatLastSyncTime obtained, %@ and %@", memberId, uatLastSyncTime);
-        if(memberId!= NULL && uatLastSyncTime!= NULL){
-            NSTimeInterval gfHourlyLastSync = [uatLastSyncTime doubleValue];
-            NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
-            [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
-               if([dates count]>0){
-                   [self callUatApi:dates];
-               }
-            }];
-        }
+        [VisitIosHealthController canAccessHealthKit:^(BOOL value){
+            if(value && memberId!= NULL && uatLastSyncTime!= NULL){
+                NSTimeInterval gfHourlyLastSync = [uatLastSyncTime doubleValue];
+                NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
+                [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
+                   if([dates count]>0){
+                       [self callUatApi:dates];
+                   }
+                }];
+            }
+        }];
 }
 
 - (void)requestAuthorization {
@@ -491,6 +493,16 @@ API_AVAILABLE(ios(13.0))
                     //
                     NSString *returnString = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
                     NSLog(@"Response:%@ for endpoint=%@",returnString,downloadUrl);
+                    if ([returnString rangeOfString:@"SUCCESS"].location == NSNotFound &&
+                        [endPoint rangeOfString:@"uat"].location == NSNotFound) {
+                      NSLog(@"not the uat api");
+                    } else {
+                        NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
+                        NSString* currentTimeStamp = [timeInSeconds stringValue];
+                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                        [prefs setObject:currentTimeStamp forKey:@"uatLastSyncTime"];
+                        NSLog(@"uat api called successfully,%@",currentTimeStamp);
+                    }
 
                     //PARSE JSON RESPONSE
                     NSDictionary *json_response = [NSJSONSerialization JSONObjectWithData:data
@@ -501,7 +513,7 @@ API_AVAILABLE(ios(13.0))
                         if ( [json_response isKindOfClass:[NSDictionary class]] ) {
                             // do dictionary things
                             for ( NSString *key in [json_response allKeys] ) {
-                                NSLog(@"%@: %@", key, json_response[key]);
+                                NSLog(@"json_response %@: %@", key, json_response[key]);
                             }
                         }
                         else if ( [json_response isKindOfClass:[NSArray class]] ) {
@@ -843,7 +855,7 @@ API_AVAILABLE(ios(13.0))
 }
 
 -(void)callUatApi:(NSMutableArray*) dates{
-    __block NSMutableArray *uatData = [[NSMutableArray alloc]init];
+    __block NSMutableArray *uatData = [NSMutableArray new];
     dispatch_group_t loadUatData=dispatch_group_create();
     dispatch_group_enter(loadUatData);
     for (NSDate* date in dates) {
@@ -1086,6 +1098,8 @@ API_AVAILABLE(ios(13.0))
             }
         }];
     }else if([methodName isEqualToString:@"inHraEndPage"]){
+        NSString *javascript = [NSString stringWithFormat:@"isIosUser(true)"];
+        [self injectJavascript:javascript];
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
             if(value){
                 [self postNotification:@"FitnessPermissionGranted"];
@@ -1106,6 +1120,8 @@ API_AVAILABLE(ios(13.0))
         [self postNotification:@"HealthKitConnectedAndSavedInPWA"];
         [self closePWA];
     }else if([methodName isEqualToString:@"inFitSelectScreen"]){
+        NSString *javascript = [NSString stringWithFormat:@"isIosUser(true)"];
+        [self injectJavascript:javascript];
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
             if(value){
                 [self postNotification:@"FitnessPermissionGranted"];
