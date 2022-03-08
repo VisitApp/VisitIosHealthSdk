@@ -1,8 +1,9 @@
 {
   "name": "VisitIosHealthSdk",
-  "version": "0.1.3",
+  "version": "0.1.9",
   "summary": "An SDK to inject the health kit data in Visit PWA",
-  "description": "An SDK to inject the health kit data in Visit PWA",
+  "swift_versions": "4.0",
+  "description": "An iOS SDK to inject the health kit data in Visit PWA",
   "homepage": "https://github.com/VisitApp/VisitIosHealthSdk.git",
   "license": {
     "type": "MIT",
@@ -13,19 +14,30 @@
   },
   "source": {
     "git": "https://github.com/VisitApp/VisitIosHealthSdk.git",
-    "tag": "0.1.3"
+    "tag": "0.1.9"
   },
   "platforms": {
-    "ios": "9.0"
+    "ios": "13.0"
   },
-  "source_files": "VisitIosHealthSdk/Classes/**/*",
+  "source_files": "VisitIosHealthSdk/Classes/**/*.{swift,h,m}",
+  "dependencies": {
+    "TwilioVideo": [
+      "~> 4.4"
+    ]
+  },
+  "public_header_files": "VisitIosHealthSdk/Classes/**/*.h",
   "resource_bundles": {
     "VisitIosHealthSdk": [
       "VisitIosHealthSdk/Assets/*.png",
-      "VisitIosHealthSdk/Assets/*.storyboard"
+      "VisitIosHealthSdk/Assets/*.storyboard",
+      "VisitIosHealthSdk/Assets/*.xib"
     ]
   },
   "pod_target_xcconfig": {
-    "PRODUCT_BUNDLE_IDENTIFIER": "com.getvisitapp.visitIosHealthSdk"
-  }
+    "EXCLUDED_ARCHS[sdk=iphonesimulator*]": "arm64"
+  },
+  "user_target_xcconfig": {
+    "EXCLUDED_ARCHS[sdk=iphonesimulator*]": "arm64"
+  },
+  "swift_version": "4.0"
 }

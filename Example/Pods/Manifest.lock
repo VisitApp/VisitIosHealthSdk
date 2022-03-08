@@ -1,16 +1,23 @@
 PODS:
-  - VisitIosHealthSdk (0.1.3)
+  - TwilioVideo (4.6.2)
+  - VisitIosHealthSdk (0.1.9):
+    - TwilioVideo (~> 4.4)
 
 DEPENDENCIES:
   - VisitIosHealthSdk (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - TwilioVideo
 
 EXTERNAL SOURCES:
   VisitIosHealthSdk:
     :path: "../"
 
 SPEC CHECKSUMS:
-  VisitIosHealthSdk: c865216e20e8f988b6bedad6f39b0f6c4deb0194
+  TwilioVideo: f8c75425bce3f41912bb24352154b0502d89a9b3
+  VisitIosHealthSdk: c9179f6f75bbc138086ca623cbba88e6daade28c
 
-PODFILE CHECKSUM: d7c9bbebd902fff0ba98dcdf0e27c04921f1d169
+PODFILE CHECKSUM: 8babd99adb893d52b7249551c29242f6307ae8ad
 
 COCOAPODS: 1.11.2

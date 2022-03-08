@@ -11,6 +11,7 @@
 #endif
 
 #import "VisitIosHealthController.h"
+#import "VisitVideoCallDelegate.h"
 
 FOUNDATION_EXPORT double VisitIosHealthSdkVersionNumber;
 FOUNDATION_EXPORT const unsigned char VisitIosHealthSdkVersionString[];

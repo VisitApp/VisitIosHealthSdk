@@ -1,6 +1,6 @@
 PODS:
   - TwilioVideo (4.6.2)
-  - VisitIosHealthSdk (0.1.8):
+  - VisitIosHealthSdk (0.1.9):
     - TwilioVideo (~> 4.4)
 
 DEPENDENCIES:
@@ -16,7 +16,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   TwilioVideo: f8c75425bce3f41912bb24352154b0502d89a9b3
-  VisitIosHealthSdk: 9a3e0617fbe4b1b056519ad2cf189da8387c57f7
+  VisitIosHealthSdk: c9179f6f75bbc138086ca623cbba88e6daade28c
 
 PODFILE CHECKSUM: 8babd99adb893d52b7249551c29242f6307ae8ad
 
