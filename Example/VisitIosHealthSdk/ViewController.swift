@@ -13,7 +13,8 @@ extension Notification.Name {
     static let customNotificationName = Notification.Name("VisitEventType")
 }
 
-class ViewController: UIViewController {
+// extend VisitVideoCallDelegate if the video calling feature needs to be integrated otherwise UIViewController can be used
+class ViewController: VisitVideoCallDelegate {
 
     let visitHealthView = VisitIosHealthController.init();
     let button = UIButton(frame: CGRect(x: 20, y: 20, width: 200, height: 60))
@@ -26,7 +27,10 @@ class ViewController: UIViewController {
         
         // show button programattically, in actual app this can be ignored
         self.showButton()
-
+        
+        // include this line to include video calling
+        visitHealthView.videoCallDelegate = self;
+        
         // passing tataAIG_base_url and tataAIG_auth_token in form of a dictionary
         visitHealthView.initialParams(["tataAIG_base_url":tataAIG_base_url, "tataAIG_auth_token":tataAIG_auth_token,"uatLastSyncTime":uatLastSyncTime])
         
@@ -61,6 +65,8 @@ class ViewController: UIViewController {
                 print("health kit permission granted")
             case "HRA_Completed":
                 print("hra completed")
+            case "StartVideoCall":
+                print("start video call")
             case "HRAQuestionAnswered":
                 print("HRAQuestionAnswered,",current,"of",total)
             case "ClosePWAEvent":
@@ -80,7 +86,7 @@ class ViewController: UIViewController {
         // adding subview and loading url, below statements need to be called in same order
         visitHealthView.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(visitHealthView.view)
-        visitHealthView.loadVisitWebUrl( "https://tata-aig.getvisitapp.xyz/sso?userParams=0UQpL6UCwpWLwQjwMZGOEz1Qt3lhN3BbQXuvTBhsRo4gTy6kz7JftAFCVY14rGwIaGAOu8jRbe8cOgjKxIR1cjYI0MlwkOLcDDxLfYZzMiM9Tkks2JwwC4k12kQsO5O6J0VPKTMhSfz6qzngMQmLx8d2tkocMELoNF8_ABWuAxwc4SB0r4v8wAVGsfAjEsktS8R09ZbVfVrXdCnV1qPmFw&clientId=tata-aig-a8b455",caller: self)
+        visitHealthView.loadVisitWebUrl("https://web.getvisitapp.com/",caller: self)
     }
     
     override func didReceiveMemoryWarning() {

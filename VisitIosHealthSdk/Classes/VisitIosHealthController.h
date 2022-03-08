@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 #import <HealthKit/HealthKit.h>
+#import "VisitVideoCallDelegate.h"
 
 @interface VisitIosHealthController : UIViewController<WKScriptMessageHandler>{
     // Member variables go here.
@@ -29,7 +30,8 @@
     UIViewController* caller;
 }
 
-- (void)loadVisitWebUrl:(NSString*) magicLink caller:(UIViewController*) caller;
+@property (nonatomic, weak) VisitVideoCallDelegate* videoCallDelegate;
+- (void) loadVisitWebUrl:(NSString*) magicLink caller:(UIViewController*) caller;
 - (void) initialParams:(NSDictionary *)params;
 
 @end

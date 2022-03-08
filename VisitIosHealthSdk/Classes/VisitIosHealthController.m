@@ -6,6 +6,7 @@
 //
 
 #import "VisitIosHealthController.h"
+#import "VisitVideoCallDelegate.h"
 
 API_AVAILABLE(ios(13.0))
 @implementation VisitIosHealthController
@@ -1135,7 +1136,6 @@ API_AVAILABLE(ios(13.0))
     }else if([methodName isEqualToString:@"updateApiBaseUrl"]){
         baseUrl = [json valueForKey:@"apiBaseUrl"];
         token = [json valueForKey:@"authtoken"];
-        
         NSTimeInterval gfHourlyLastSync = [[json valueForKey:@"gfHourlyLastSync"] doubleValue];
         NSTimeInterval googleFitLastSync = [[json valueForKey:@"googleFitLastSync"] doubleValue];
         NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
@@ -1169,6 +1169,14 @@ API_AVAILABLE(ios(13.0))
         }];
     }else if([methodName isEqualToString:@"closeView"]){
         [self closePWA];
+    }else if([methodName isEqualToString:@"startVideoCall"]){
+        [self postNotification:@"StartVideoCall"];
+        NSString *doctorName = [json valueForKey:@"doctorName"];
+        NSString *profileImg = [json valueForKey:@"profileImg"];
+        NSString *roomName = [json valueForKey:@"roomName"];
+        NSString *token = [json valueForKey:@"token"];
+        NSLog(@"doctorName=%@, profileImg=%@, roomName=%@, token=%@",doctorName,profileImg,roomName, token);
+        [_videoCallDelegate segueToVideoCall:token roomName:roomName doctorName:doctorName doctorProfileImg:profileImg];
     }else if([methodName isEqualToString:@"openPDF"]){
         NSString *link = [json valueForKey:@"url"];
         NSURL *url = [NSURL URLWithString:link];
