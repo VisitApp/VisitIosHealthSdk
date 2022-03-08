@@ -40,13 +40,6 @@ To use the SDK, you simply need to initialize VisitIosHealthController in your V
 Here's an example code where the `VisitIosHealthController` is programmatically initialized -
 
 ```swift
-//
-//  ViewController.swift
-//  VisitIosHealthSdk
-//
-//  Created by 81799742 on 01/24/2022.
-//  Copyright (c) 2022 81799742. All rights reserved.
-//
 
 import UIKit
 import VisitIosHealthSdk;
@@ -55,13 +48,13 @@ extension Notification.Name {
     static let customNotificationName = Notification.Name("VisitEventType")
 }
 
-class ViewController: UIViewController {
+// extend VisitVideoCallDelegate if the video calling feature needs to be integrated otherwise UIViewController can be used
+class ViewController: VisitVideoCallDelegate {
 
     let visitHealthView = VisitIosHealthController.init();
     let button = UIButton(frame: CGRect(x: 20, y: 20, width: 200, height: 60))
-    let tataAIG_base_url = "tataAIG_base_url"
-    let tataAIG_auth_token = "tataAIG_auth_token"
-    // time stamp in form of a string
+    let external_api_base_url = "external_api_base_url"
+    let external_api_base_url_auth_token = "external_api_base_url_auth_token"
     let uatLastSyncTime = "1645641000424"
     
     override func viewDidLoad() {
@@ -69,9 +62,12 @@ class ViewController: UIViewController {
         
         // show button programattically, in actual app this can be ignored
         self.showButton()
-
-        // passing tataAIG_base_url and tataAIG_auth_token in form of a dictionary, uatLastSyncTime is optional
-        visitHealthView.initialParams(["tataAIG_base_url":tataAIG_base_url, "tataAIG_auth_token":tataAIG_auth_token,"uatLastSyncTime":uatLastSyncTime])
+        
+        // include this line to include video calling
+        visitHealthView.videoCallDelegate = self;
+        
+        // passing tataAIG_base_url and tataAIG_auth_token in form of a dictionary
+        visitHealthView.initialParams(["tataAIG_base_url":external_api_base_url, "tataAIG_auth_token":external_api_base_url,"uatLastSyncTime":uatLastSyncTime])
         
         // adding observer to watch for events
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: .customNotificationName, object: nil)
@@ -104,6 +100,8 @@ class ViewController: UIViewController {
                 print("health kit permission granted")
             case "HRA_Completed":
                 print("hra completed")
+            case "StartVideoCall":
+                print("start video call")
             case "HRAQuestionAnswered":
                 print("HRAQuestionAnswered,",current,"of",total)
             case "ClosePWAEvent":
@@ -132,6 +130,8 @@ class ViewController: UIViewController {
     }
 
 }
+
+
 
 
 
