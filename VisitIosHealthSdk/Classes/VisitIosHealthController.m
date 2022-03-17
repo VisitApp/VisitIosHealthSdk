@@ -1142,8 +1142,9 @@ API_AVAILABLE(ios(13.0))
         NSDate* dailyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: googleFitLastSync/1000];
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        memberId = [json valueForKey:@"memberId"];
-        [prefs setObject:memberId forKey:@"memberId"];
+        if(![[json valueForKey:@"memberId"] isEqual:@"<null>"]){
+            memberId = [json valueForKey:@"memberId"];
+        }
         [prefs setObject:[json valueForKey:@"gfHourlyLastSync"] forKey:@"uatLastSyncTime"];
         
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
@@ -1154,7 +1155,9 @@ API_AVAILABLE(ios(13.0))
                 [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
                    if([dates count]>0){
                        [self callEmbellishApi:dates];
-                       [self callUatApi:dates];
+                       if(![self->memberId isEqual:@"<null>"]){
+                           [self callUatApi:dates];
+                       }
                    }
                 }];
                 [self getDateRanges:dailyDataSyncTime callback:^(NSMutableArray * dates) {
