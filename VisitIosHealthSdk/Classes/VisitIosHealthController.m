@@ -730,9 +730,6 @@ API_AVAILABLE(ios(13.0))
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:NSStringFromSelector(@selector(estimatedProgress))] && object == webView) {
-//        NSLog(@"%f", webView.estimatedProgress);
-        // estimatedProgress is a value from 0.0 to 1.0
-        // Update your UI here accordingly
         if(webView.estimatedProgress>0.99){
             [activityIndicator stopAnimating];
             [sbViewController dismissViewControllerAnimated:NO completion:^{
@@ -741,6 +738,13 @@ API_AVAILABLE(ios(13.0))
         }
     }
 }
+
+- (void)closeAddDependentView:(UIButton*)button
+   {
+       [addDependentViewController dismissViewControllerAnimated:NO completion:^{
+           NSLog(@"dependent view dismissed");
+       }];
+  }
 
 - (void)loadVisitWebUrl:(NSString*) magicLink caller:(UIViewController*) caller{
     self->caller = caller;
@@ -802,6 +806,27 @@ API_AVAILABLE(ios(13.0))
 //            NSLog(@"SomeFunction Success %@",result);
         }];
     });
+}
+
+-(void) openDependentLink:(NSURL *) url{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *btnImage = [UIImage systemImageNamed:@"chevron.left"];
+    [button setImage:btnImage forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(closeAddDependentView:)
+    forControlEvents:UIControlEventTouchUpInside];
+    [button setTintColor: UIColor.blackColor];
+    button.frame = CGRectMake(0.0, 60.0, 50.0, 40.0);
+    
+    addDependentViewController = [[UIViewController alloc] init];
+    addDependentViewController.modalPresentationStyle = 0;
+    [addDependentViewController.view addSubview:button];
+    addDependentViewController.view.frame = CGRectMake(0.0, 100.0, self.view.frame.size.width, self.view.frame.size.height-100.0);
+    [self presentViewController:addDependentViewController animated:false completion:nil];
+    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    WKWebView *addDependentView = [[WKWebView alloc] initWithFrame:addDependentViewController.view.frame configuration:config];
+    NSURLRequest* request = [NSURLRequest requestWithURL: url];
+    [addDependentView loadRequest:request];
+    [addDependentViewController.view addSubview:addDependentView];
 }
 
 -(void) preprocessEmbellishRequest:(NSArray*) steps calories:(NSArray*) calories distance:(NSArray*) distance date:(NSDate*) date {
@@ -1183,7 +1208,14 @@ API_AVAILABLE(ios(13.0))
     }else if([methodName isEqualToString:@"openPDF"]){
         NSString *link = [json valueForKey:@"url"];
         NSURL *url = [NSURL URLWithString:link];
-        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        NSData *pdfData = [NSData dataWithContentsOfURL:url];
+        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[pdfData] applicationActivities:nil];
+        activityViewController.excludedActivityTypes = @[
+            UIActivityTypeCopyToPasteboard,
+            UIActivityTypePrint,
+            UIActivityTypeMarkupAsPDF,
+        ];
+        [self presentViewController:activityViewController animated:YES completion:nil];
     }else if([methodName isEqualToString:@"mailTo"]){
         NSString *email = [json valueForKey:@"email"];
         NSString *subject = [json valueForKey:@"subject"];
@@ -1196,7 +1228,10 @@ API_AVAILABLE(ios(13.0))
         }else{
             NSLog(@"Cannot open url");
         }
-        
+    }else if([methodName isEqualToString:@"openDependentLink"]){
+        NSString* link = [[json valueForKey:@"link"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSURL *url = [NSURL URLWithString:link];
+        [self openDependentLink:url];
     }
 }
 

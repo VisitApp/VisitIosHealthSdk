@@ -86,7 +86,7 @@ class ViewController: VisitVideoCallDelegate {
         // adding subview and loading url, below statements need to be called in same order
         visitHealthView.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(visitHealthView.view)
-        visitHealthView.loadVisitWebUrl("https://web.getvisitapp.com/",caller: self)
+        visitHealthView.loadVisitWebUrl("https://axis-tata.getvisitapp.xyz/sso?userParams=DJsu6SFXLdsSNBuRr2Q83Z9Am1Y3EOEmKY2o4S4hvoYmjZxusiABb7D0nxr3bDtprg0o603IWvmMPOMT-IMuXa5faX64LueVOPmX15BC-WLpWDd8gXPrDUDBD9-w2u-u&clientId=tata-aig-axis-f7b4d3",caller: self)
     }
     
     override func didReceiveMemoryWarning() {

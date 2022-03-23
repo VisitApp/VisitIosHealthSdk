@@ -24,6 +24,8 @@
     NSUInteger bmrCaloriesPerHour;
     UIStoryboard* storyboard;
     UIViewController * sbViewController;
+    UIViewController * addDependentViewController;
+    UIView * addDependentTopBar;
     HKHealthStore *healthStore;
     WKWebView *webView;
     UIActivityIndicatorView *activityIndicator;
