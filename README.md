@@ -106,6 +106,7 @@ class ViewController: VisitVideoCallDelegate {
             case "HRAQuestionAnswered":
                 print("HRAQuestionAnswered,",current,"of",total)
             case "ClosePWAEvent":
+                NotificationCenter.default.removeObserver(self, name: .customNotificationName, object: nil)
                 // show initial button again, in actual app this can be ignored
                 self.showButton();
 
