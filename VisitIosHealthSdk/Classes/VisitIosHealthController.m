@@ -1078,6 +1078,7 @@ API_AVAILABLE(ios(13.0))
 
 -(void) closePWA{
     [self postNotification:@"ClosePWAEvent"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"VisitEventType" object:nil];
     [self removeFromParentViewController];
     [webView.configuration.userContentController removeAllUserScripts];
     dispatch_async(dispatch_get_main_queue(), ^{
