@@ -57,6 +57,7 @@ class ViewController: VisitVideoCallDelegate {
     let external_api_base_url = "external_api_base_url"
     let external_api_base_url_auth_token = "external_api_base_url_auth_token"
     let uatLastSyncTime = "1645641000424"
+    private var observer: Any!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +72,7 @@ class ViewController: VisitVideoCallDelegate {
         visitHealthView.initialParams(["tataAIG_base_url":external_api_base_url, "tataAIG_auth_token":external_api_base_url,"uatLastSyncTime":uatLastSyncTime])
         
         // adding observer to watch for events
-        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: .customNotificationName, object: nil)
+        NotificationCenter.default.addObserver(forName: .customNotificationName, object: nil, queue: nil, using: methodOfReceivedNotification(notification:))
         
     }
     
@@ -106,7 +107,7 @@ class ViewController: VisitVideoCallDelegate {
             case "HRAQuestionAnswered":
                 print("HRAQuestionAnswered,",current,"of",total)
             case "ClosePWAEvent":
-                NotificationCenter.default.removeObserver(self, name: .customNotificationName, object: nil)
+                NotificationCenter.default.removeObserver(observer)
                 // show initial button again, in actual app this can be ignored
                 self.showButton();
 
