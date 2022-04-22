@@ -13,6 +13,8 @@ API_AVAILABLE(ios(13.0))
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UILayoutGuide * guide = self.view.safeAreaLayoutGuide;
+    [self.view.bottomAnchor constraintEqualToAnchor:guide.bottomAnchor].active = YES;
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];

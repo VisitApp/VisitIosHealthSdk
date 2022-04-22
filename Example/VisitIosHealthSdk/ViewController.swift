@@ -20,7 +20,7 @@ class ViewController: VisitVideoCallDelegate {
     let button = UIButton(frame: CGRect(x: 20, y: 20, width: 200, height: 60))
     let tataAIG_base_url = "https://uathealthvas.tataaig.com"
     let tataAIG_auth_token = "Basic Z2V0X3Zpc2l0OkZoNjh2JHdqaHU4WWd3NiQ="
-    let uatLastSyncTime = "1645641000424"
+    let uatLastSyncTime = "1649742210000"
     
     override func viewDidLoad() {
         super.viewDidLoad()
