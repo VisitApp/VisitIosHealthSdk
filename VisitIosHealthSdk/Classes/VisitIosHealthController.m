@@ -13,12 +13,20 @@ API_AVAILABLE(ios(13.0))
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UILayoutGuide * guide = self.view.safeAreaLayoutGuide;
-    [self.view.bottomAnchor constraintEqualToAnchor:guide.bottomAnchor].active = YES;
+    CGRect safeAreaFrame;
+    if (@available(iOS 11.0, *)) {
+        UIEdgeInsets safeAreaInsets = self.view.safeAreaInsets;
+        safeAreaFrame = CGRectMake(safeAreaInsets.left,
+                                   safeAreaInsets.top,
+                                   self.view.frame.size.width - safeAreaInsets.left - safeAreaInsets.right,
+                                   self.view.frame.size.height - safeAreaInsets.top - safeAreaInsets.bottom);
+    } else {
+        safeAreaFrame = self.view.frame;
+    }
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
-    webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:config];
+    webView = [[WKWebView alloc] initWithFrame:safeAreaFrame configuration:config];
     gender = @"Not Set";
 }
 
