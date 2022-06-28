@@ -1248,6 +1248,9 @@ API_AVAILABLE(ios(13.0))
         NSString* link = [[json valueForKey:@"link"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         NSURL *url = [NSURL URLWithString:link];
         [self openDependentLink:url];
+    }else if([methodName isEqualToString:@"pendingHraUpdation"]){
+        NSString *javascript = [NSString stringWithFormat:@"updateHraToAig()"];
+        [self injectJavascript:javascript];
     }
 }
 
