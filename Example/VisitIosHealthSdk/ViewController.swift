@@ -18,6 +18,7 @@ class ViewController: VisitVideoCallDelegate {
 
     let visitHealthView = VisitIosHealthController.init();
     let button = UIButton(frame: CGRect(x: 20, y: 20, width: 200, height: 60))
+    let button2 = UIButton(frame: CGRect(x: 20, y: 40, width: 200, height: 60))
     let tataAIG_base_url = "https://uathealthvas.tataaig.com"
     let tataAIG_auth_token = "Basic Z2V0X3Zpc2l0OkZoNjh2JHdqaHU4WWd3NiQ="
     let uatLastSyncTime = "1649742210000"
@@ -46,10 +47,22 @@ class ViewController: VisitVideoCallDelegate {
         button.backgroundColor = .blue
         button.setTitleColor(UIColor.white, for: .normal)
         button.addTarget(self, action: #selector(self.buttonTapped), for: .touchUpInside)
+        
+        
+        self.view.addSubview(button2)
+        button2.center = CGPoint(x: view.frame.size.width  / 2, y: view.frame.size.height / 3)
+        button2.setTitle("Call HRA API", for: .normal)
+        button2.backgroundColor = .blue
+        button2.setTitleColor(UIColor.white, for: .normal)
+        button2.addTarget(self, action: #selector(self.hraButtonTapped), for: .touchUpInside)
     }
     
     @objc func hideButton(){
         button.removeFromSuperview()
+    }
+    
+    @objc func hideButton2(){
+        button2.removeFromSuperview()
     }
     
     @objc func methodOfReceivedNotification(notification: Notification) {
@@ -69,6 +82,8 @@ class ViewController: VisitVideoCallDelegate {
                 print("start video call")
             case "HRAQuestionAnswered":
                 print("HRAQuestionAnswered,",current,"of",total)
+//            case "hraInComplete":
+                
             case "ClosePWAEvent":
                 // show initial button again, in actual app this can be ignored
                 self.showButton();
@@ -82,12 +97,17 @@ class ViewController: VisitVideoCallDelegate {
     @objc func buttonTapped(sender : UIButton) {
         // since both UIs share same view the button needs to be hidden, in actual app this can be ignored
         self.hideButton()
-        
+        self.hideButton2()
         // adding subview and loading url, below statements need to be called in same order
         visitHealthView.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(visitHealthView.view)
-        visitHealthView.loadVisitWebUrl("https://tata-aig.getvisitapp.xyz/sso?userParams=0UQpL6UCwpWLwQjwMZGOEz1Qt3lhN3BbQXuvTBhsRo4gTy6kz7JftAFCVY14rGwIaGAOu8jRbe8cOgjKxIR1cjYI0MlwkOLcDDxLfYZzMiM9Tkks2JwwC4k12kQsO5O6J0VPKTMhSfz6qzngMQmLx8d2tkocMELoNF8_ABWuAxwc4SB0r4v8wAVGsfAjEsktS8R09ZbVfVrXdCnV1qPmFw&clientId=tata-aig-a8b455",caller: self)
+        visitHealthView.loadVisitWebUrl("https://tata-aig.getvisitapp.xyz/sso?userParams=_FrVgrpADBIjcWqmVhp8qikkfp2z_J-Nak09HEqnweQGZv6uyPozfjlJEHmadAeTYkQF87ih_ld8zvEigDA6rHhVQaATBznnAeFy1wGITSbPbKTFaodW8MUlgI6Hk8xNkcGXc-E0S1V5OCxkrmiSn7WVt4jcoVr-G_eaOAPgVIjhGJCcyy438u5hH-Swo3Gq&clientId=tata-aig-a8b455",caller: self)
     }
+    
+    @objc func hraButtonTapped(sender : UIButton) {
+        visitHealthView.callHraApi()
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

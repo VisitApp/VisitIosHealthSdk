@@ -35,6 +35,7 @@
 @property (nonatomic, weak) VisitVideoCallDelegate* videoCallDelegate;
 - (void) loadVisitWebUrl:(NSString*) magicLink caller:(UIViewController*) caller;
 - (void) initialParams:(NSDictionary *)params;
+- (void) callHraApi;
 
 @end
 

@@ -548,6 +548,70 @@ API_AVAILABLE(ios(13.0))
         }
 }
 
+-(void)PutJson:(NSString*) endPoint body:(NSDictionary*) body authToken:(NSString*) authToken{
+    NSString *downloadUrl = endPoint;
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString: downloadUrl]];
+    if([NSJSONSerialization isValidJSONObject:body])
+        {
+            // Convert the JSON object to NSData
+            NSData * httpBodyData = [NSJSONSerialization dataWithJSONObject:body options:0 error:nil];
+//            NSLog(@"hitting api %@ with body=%@",downloadUrl, httpBodyData);
+            // set the http body
+            [request setHTTPBody:httpBodyData];
+            [request setHTTPMethod:@"PUT"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [request setValue:authToken forHTTPHeaderField:@"Authorization"];
+            NSURLSessionDataTask * task= [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"Download Error:%@ for endpoint=%@",error.description,downloadUrl);
+                }
+                if (data) {
+
+                    //
+                    // THIS CODE IS FOR PRINTING THE RESPONSE
+                    //
+                    NSString *returnString = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
+                    NSLog(@"Response:%@ for endpoint=%@",returnString,downloadUrl);
+                    if ([returnString rangeOfString:@"SUCCESS"].location == NSNotFound &&
+                        [endPoint rangeOfString:@"uat"].location == NSNotFound) {
+                      NSLog(@"not the uat api");
+                    } else {
+                        NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
+                        NSString* currentTimeStamp = [timeInSeconds stringValue];
+                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                        [prefs setObject:currentTimeStamp forKey:@"uatLastSyncTime"];
+                        NSLog(@"uat api called successfully,%@",currentTimeStamp);
+                    }
+
+                    //PARSE JSON RESPONSE
+                    NSDictionary *json_response = [NSJSONSerialization JSONObjectWithData:data
+                                                                                  options:0
+                                                                                    error:NULL];
+
+                    if ( json_response ) {
+                        if ( [json_response isKindOfClass:[NSDictionary class]] ) {
+                            // do dictionary things
+                            for ( NSString *key in [json_response allKeys] ) {
+                                NSLog(@"json_response %@: %@", key, json_response[key]);
+                            }
+                        }
+                        else if ( [json_response isKindOfClass:[NSArray class]] ) {
+                            NSLog(@"%@",json_response);
+                        }
+                    }
+                    else {
+                        NSLog(@"Error serializing JSON: %@", error);
+                        NSLog(@"RAW RESPONSE: %@",data);
+                        NSString *returnString2 = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
+                        NSLog(@"Response:%@  for endpoint=%@ where data is=%@",returnString2, downloadUrl,[body description]);
+                    }
+                }
+            }];
+            [task resume];
+        }
+}
+
 - (void)fetchHourlySteps:(NSDate*) endDate callback:(void(^)(NSArray*))callback{
     HKQuantityType *stepCountType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -1125,6 +1189,24 @@ API_AVAILABLE(ios(13.0))
     }];
 }
 
+- (void) callHraApi{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSString *data = [prefs stringForKey:@"data"];
+    NSString *isIncomplete = [prefs stringForKey:@"isIncomplete"];
+    NSLog(@"hra data in callHraApi is, %@, while isIncomplete is %ld",data,(long)[isIncomplete integerValue]);
+    
+    if((long)[isIncomplete integerValue]==0){
+        NSError *jsonError;
+        NSData *objectData = [data dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+                                              options:NSJSONReadingMutableContainers
+                                                error:&jsonError];
+        
+        NSLog(@"the hra-fitness-details req, %@",json);
+        [self PutJson:[NSString stringWithFormat:@"%@/hra-fitness-details",self->tataAIG_base_url] body:json authToken:self->tataAIG_auth_token];
+    }
+}
+
 - (void)userContentController:(nonnull WKUserContentController *)userContentController didReceiveScriptMessage:(nonnull WKScriptMessage *)message {
     NSData *data = [message.body dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -1251,9 +1333,14 @@ API_AVAILABLE(ios(13.0))
     }else if([methodName isEqualToString:@"pendingHraUpdation"]){
         NSString *javascript = [NSString stringWithFormat:@"updateHraToAig()"];
         [self injectJavascript:javascript];
+    }else if([methodName isEqualToString:@"hraInComplete"]){
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSString *apiData = [json valueForKey:@"data"];
+        NSString *isIncomplete = [json valueForKey:@"flag"];
+        [prefs setObject:apiData forKey:@"data"];
+        [prefs setObject:isIncomplete forKey:@"isIncomplete"];
+        [self postNotification:@"hraInComplete"];
     }
 }
-
-
 
 @end
