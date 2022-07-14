@@ -54,10 +54,10 @@ class ViewController: VisitVideoCallDelegate {
 
     let visitHealthView = VisitIosHealthController.init();
     let button = UIButton(frame: CGRect(x: 20, y: 20, width: 200, height: 60))
-    let external_api_base_url = "external_api_base_url"
-    let external_api_base_url_auth_token = "external_api_base_url_auth_token"
-    let uatLastSyncTime = "1645641000424"
-    private var observer: Any!
+    let button2 = UIButton(frame: CGRect(x: 20, y: 40, width: 200, height: 60))
+    let tataAIG_base_url = "https://uathealthvas.tataaig.com"
+    let tataAIG_auth_token = "Basic Z2V0X3Zpc2l0OkZoNjh2JHdqaHU4WWd3NiQ="
+    let uatLastSyncTime = "1649742210000"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,10 +69,10 @@ class ViewController: VisitVideoCallDelegate {
         visitHealthView.videoCallDelegate = self;
         
         // passing tataAIG_base_url and tataAIG_auth_token in form of a dictionary
-        visitHealthView.initialParams(["tataAIG_base_url":external_api_base_url, "tataAIG_auth_token":external_api_base_url,"uatLastSyncTime":uatLastSyncTime])
+        visitHealthView.initialParams(["tataAIG_base_url":tataAIG_base_url, "tataAIG_auth_token":tataAIG_auth_token,"uatLastSyncTime":uatLastSyncTime])
         
         // adding observer to watch for events
-        NotificationCenter.default.addObserver(forName: .customNotificationName, object: nil, queue: nil, using: methodOfReceivedNotification(notification:))
+        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: .customNotificationName, object: nil)
         
     }
     
@@ -83,10 +83,22 @@ class ViewController: VisitVideoCallDelegate {
         button.backgroundColor = .blue
         button.setTitleColor(UIColor.white, for: .normal)
         button.addTarget(self, action: #selector(self.buttonTapped), for: .touchUpInside)
+        
+        
+        self.view.addSubview(button2)
+        button2.center = CGPoint(x: view.frame.size.width  / 2, y: view.frame.size.height / 3)
+        button2.setTitle("Call HRA API", for: .normal)
+        button2.backgroundColor = .blue
+        button2.setTitleColor(UIColor.white, for: .normal)
+        button2.addTarget(self, action: #selector(self.hraButtonTapped), for: .touchUpInside)
     }
     
     @objc func hideButton(){
         button.removeFromSuperview()
+    }
+    
+    @objc func hideButton2(){
+        button2.removeFromSuperview()
     }
     
     @objc func methodOfReceivedNotification(notification: Notification) {
@@ -106,8 +118,8 @@ class ViewController: VisitVideoCallDelegate {
                 print("start video call")
             case "HRAQuestionAnswered":
                 print("HRAQuestionAnswered,",current,"of",total)
+                
             case "ClosePWAEvent":
-                NotificationCenter.default.removeObserver(observer)
                 // show initial button again, in actual app this can be ignored
                 self.showButton();
 
@@ -120,12 +132,17 @@ class ViewController: VisitVideoCallDelegate {
     @objc func buttonTapped(sender : UIButton) {
         // since both UIs share same view the button needs to be hidden, in actual app this can be ignored
         self.hideButton()
-        
+        self.hideButton2()
         // adding subview and loading url, below statements need to be called in same order
         visitHealthView.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(visitHealthView.view)
         visitHealthView.loadVisitWebUrl("magic_link",caller: self)
     }
+    
+    @objc func hraButtonTapped(sender : UIButton) {
+        visitHealthView.callHraApi()
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -133,8 +150,6 @@ class ViewController: VisitVideoCallDelegate {
     }
 
 }
-
-
 
 
 
