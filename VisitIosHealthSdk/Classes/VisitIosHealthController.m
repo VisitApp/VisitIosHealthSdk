@@ -1191,11 +1191,9 @@ API_AVAILABLE(ios(13.0))
 
 - (void) callHraApi{
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSString *data = [prefs stringForKey:@"data"];
     NSString *isIncomplete = [prefs stringForKey:@"isIncomplete"];
-    NSLog(@"hra data in callHraApi is, %@, while isIncomplete is %ld",data,(long)[isIncomplete integerValue]);
-    
-    if((long)[isIncomplete integerValue]==0){
+    if(isIncomplete && (long)[isIncomplete integerValue]==0){
+        NSString *data = [prefs stringForKey:@"data"];
         NSError *jsonError;
         NSData *objectData = [data dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData

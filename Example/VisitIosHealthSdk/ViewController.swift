@@ -34,6 +34,7 @@ class ViewController: VisitVideoCallDelegate {
         
         // passing tataAIG_base_url and tataAIG_auth_token in form of a dictionary
         visitHealthView.initialParams(["tataAIG_base_url":tataAIG_base_url, "tataAIG_auth_token":tataAIG_auth_token,"uatLastSyncTime":uatLastSyncTime])
+        visitHealthView.callHraApi()
         
         // adding observer to watch for events
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: .customNotificationName, object: nil)
