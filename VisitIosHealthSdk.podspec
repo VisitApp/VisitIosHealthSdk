@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'VisitIosHealthSdk'
-  s.version          = '0.2.9'
+  s.version          = '0.3.0'
   s.summary          = 'An SDK to inject the health kit data in Visit PWA'
   s.swift_versions   = '4.0'
 
@@ -44,8 +44,6 @@ Pod::Spec.new do |s|
   }
 
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-  s.pod_target_xcconfig = { 'DEVELOPMENT_TEAM' => 'AU9UJ3DSGS' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-  s.user_target_xcconfig = { 'DEVELOPMENT_TEAM' => 'AU9UJ3DSGS' }
 
 end
