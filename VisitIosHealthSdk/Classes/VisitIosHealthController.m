@@ -11,14 +11,20 @@
 API_AVAILABLE(ios(13.0))
 @implementation VisitIosHealthController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (instancetype)initWithFrame:(CGRect)frame{
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    config.preferences.javaScriptEnabled = YES;
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
-    self.view.backgroundColor = UIColor.whiteColor;
-    webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:config];
+    self = [super initWithFrame:CGRectZero configuration:config];
+    [self.scrollView setScrollEnabled:NO];
+    [self.scrollView setMultipleTouchEnabled:NO];
     gender = @"Not Set";
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder{
+    return [super initWithCoder:coder];
 }
 
 + (HKHealthStore *)sharedManager {
@@ -30,20 +36,6 @@ API_AVAILABLE(ios(13.0))
 
     return store;
 }
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    if (@available(iOS 11.0, *)) {
-        UIEdgeInsets safeAreaInsets = self.view.safeAreaInsets;
-        webView.frame = CGRectMake(safeAreaInsets.left,
-                                   safeAreaInsets.top,
-                                   self.view.frame.size.width - safeAreaInsets.left - safeAreaInsets.right,
-                                   self.view.frame.size.height - safeAreaInsets.top - safeAreaInsets.bottom);
-    }
-    [super viewDidAppear:animated];
-}
-
-
 
 -(void)initialParams:(NSDictionary *)params {
         NSLog(@"initWithParams params %@",params);
@@ -120,7 +112,8 @@ API_AVAILABLE(ios(13.0))
                 [alert addAction:yesButton];
                 [alert addAction:noButton];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self presentViewController:alert animated:false completion:nil];
+                    
+//                    [self presentViewController:alert animated:false completion:nil];
                 });
             }
         }];
@@ -808,8 +801,8 @@ API_AVAILABLE(ios(13.0))
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:NSStringFromSelector(@selector(estimatedProgress))] && object == webView) {
-        if(webView.estimatedProgress>0.99){
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(estimatedProgress))]) {
+        if(self.estimatedProgress>0.99){
             [activityIndicator stopAnimating];
             [sbViewController dismissViewControllerAnimated:NO completion:^{
                 NSLog(@"Storyboard dismissed");
@@ -825,11 +818,19 @@ API_AVAILABLE(ios(13.0))
        }];
   }
 
-- (void)loadVisitWebUrl:(NSString*) magicLink caller:(UIViewController*) caller{
-    self->caller = caller;
+- (UIViewController *)currentTopViewController {
+    UIViewController *topVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    while (topVC.presentedViewController) {
+        topVC = topVC.presentedViewController;
+    }
+    return topVC;
+}
+
+- (void)loadVisitWebUrl:(NSString*) magicLink{
     NSBundle* podBundle = [NSBundle bundleForClass:[self class]];
     NSURL* bundleUrl = [podBundle URLForResource:@"VisitIosHealthSdk" withExtension:@"bundle"];
     NSBundle* bundle = [NSBundle bundleWithURL:bundleUrl];
+    
     storyboard = [UIStoryboard storyboardWithName:@"Loader" bundle:bundle];
     sbViewController = [storyboard instantiateInitialViewController];
     sbViewController.modalPresentationStyle = 0;
@@ -838,18 +839,19 @@ API_AVAILABLE(ios(13.0))
     activityIndicator.center = sbViewController.view.center;
     [sbViewController.view addSubview:activityIndicator];
     [activityIndicator startAnimating];
-    [self presentViewController:sbViewController animated:false completion:nil];
 
-    [webView addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:NSKeyValueObservingOptionNew context:NULL];
-    [self.view addSubview:webView];
+    currentTopVC = [self currentTopViewController];
+    [currentTopVC presentViewController:sbViewController animated:false completion:nil];
+
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:NSKeyValueObservingOptionNew context:NULL];
     calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierISO8601];
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"IST"];
-
-//    NSLog(@"loadVisitWebUrl is called ===>>> %@", magicLink);
+    
+    
+    NSLog(@"loadVisitWebUrl is called ===>>> %@", magicLink);
     NSURL *url = [NSURL URLWithString:magicLink];
     NSURLRequest* request = [NSURLRequest requestWithURL: url];
-    [webView loadRequest:request];
-//    NSLog(@"Your request of loadVisitUrl is ===>>> %@", request);
+    [super loadRequest:request];
 }
 
 - (NSString *)readGender
@@ -877,7 +879,7 @@ API_AVAILABLE(ios(13.0))
 -(void) injectJavascript:(NSString *) javascript{
 //    NSLog(@"javascript to be injected %@",javascript);
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self->webView evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
+        [self evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
             if(error != nil) {
                 NSLog(@"injectJavascript Error: %@",error);
                 return;
@@ -899,8 +901,9 @@ API_AVAILABLE(ios(13.0))
     addDependentViewController = [[UIViewController alloc] init];
     addDependentViewController.modalPresentationStyle = 0;
     [addDependentViewController.view addSubview:button];
-    addDependentViewController.view.frame = CGRectMake(0.0, 100.0, self.view.frame.size.width, self.view.frame.size.height-100.0);
-    [self presentViewController:addDependentViewController animated:false completion:nil];
+    addDependentViewController.view.frame = CGRectMake(0.0, 100.0, self.frame.size.width, self.frame.size.height-100.0);
+    [currentTopVC presentViewController:addDependentViewController animated:false completion:nil];
+
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
     WKWebView *addDependentView = [[WKWebView alloc] initWithFrame:addDependentViewController.view.frame configuration:config];
     NSURLRequest* request = [NSURLRequest requestWithURL: url];
@@ -1158,14 +1161,12 @@ API_AVAILABLE(ios(13.0))
 -(void) closePWA{
     [self postNotification:@"ClosePWAEvent"];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"VisitEventType" object:nil];
-    [self removeFromParentViewController];
-    [webView.configuration.userContentController removeAllUserScripts];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.view removeFromSuperview];
-        });
-    webView.navigationDelegate = nil;
-    webView.scrollView.delegate = nil;
-    [webView stopLoading];
+    [self.videoCallDelegate.navigationController popViewControllerAnimated:YES];
+    [self.configuration.userContentController removeAllUserScripts];
+    [self removeFromSuperview];
+    self.navigationDelegate = nil;
+    self.scrollView.delegate = nil;
+    [self stopLoading];
 }
 
 -(void) postNotification:(NSString *) event{
@@ -1311,7 +1312,7 @@ API_AVAILABLE(ios(13.0))
             UIActivityTypePrint,
             UIActivityTypeMarkupAsPDF,
         ];
-        [self presentViewController:activityViewController animated:YES completion:nil];
+        [currentTopVC presentViewController:activityViewController animated:YES completion:nil];
     }else if([methodName isEqualToString:@"mailTo"]){
         NSString *email = [json valueForKey:@"email"];
         NSString *subject = [json valueForKey:@"subject"];

@@ -10,7 +10,7 @@
 #import <HealthKit/HealthKit.h>
 #import "VisitVideoCallDelegate.h"
 
-@interface VisitIosHealthController : UIViewController<WKScriptMessageHandler>{
+@interface VisitIosHealthController : WKWebView<WKScriptMessageHandler>{
     // Member variables go here.
     NSString *baseUrl;
     NSString *token;
@@ -24,16 +24,16 @@
     NSUInteger bmrCaloriesPerHour;
     UIStoryboard* storyboard;
     UIViewController * sbViewController;
+    UIViewController *currentTopVC;
     UIViewController * addDependentViewController;
     UIView * addDependentTopBar;
     HKHealthStore *healthStore;
-    WKWebView *webView;
     UIActivityIndicatorView *activityIndicator;
     UIViewController* caller;
 }
 
 @property (nonatomic, weak) VisitVideoCallDelegate* videoCallDelegate;
-- (void) loadVisitWebUrl:(NSString*) magicLink caller:(UIViewController*) caller;
+- (void) loadVisitWebUrl:(NSString*) magicLink;
 - (void) initialParams:(NSDictionary *)params;
 - (void) callHraApi;
 
