@@ -46,7 +46,7 @@ class ViewController: VisitVideoCallDelegate {
         button.removeFromSuperview()
     }
     
-    // important
+    // notification observer
     @objc func methodOfReceivedNotification(notification: Notification) {
         let event = notification.userInfo?["event"] as! String
         let current = notification.userInfo?["current"] ?? ""
