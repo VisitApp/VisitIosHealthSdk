@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <VisitIosHealthSdk/VisitIosHealthSdk-Swift.h>
+#import <VisitIosHealthSdk-Swift.h>
 #import "VisitVideoCallDelegate.h"
 #import "VisitIosHealthController.h"
 
