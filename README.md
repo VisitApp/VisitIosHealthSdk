@@ -24,7 +24,7 @@ it, add the following lines to the top of your Podfile:
 
 ```ruby
 source 'https://github.com/VisitApp/visit-ios-pod-spec.git'
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
 ```
 
 Then, add the following line within the target in your Podfile:
