@@ -16,6 +16,7 @@
 			dependencies = (
 			);
 			name = TwilioVideo;
+			productName = TwilioVideo;
 		};
 /* End PBXAggregateTarget section */
 
@@ -51,7 +52,7 @@
 		909B428FB952770F3D3D87C60A23E4E7 /* mute@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A531BA860FEE485392B842D4D30D277 /* mute@2x.png */; };
 		9840459160627536A329BB301C3F6496 /* video-off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78381906387738991F7B86C3639D053D /* video-off@3x.png */; };
 		9F8F5425B06E22593A00AB8D89BA67A3 /* VisitVideoCallDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 948F66EDC148F1ED1F42DAFA9FBFE34A /* VisitVideoCallDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A3E113B858D907C10214B7020F575E48 /* VisitIosHealthSdk-VisitIosHealthSdk in Resources */ = {isa = PBXBuildFile; fileRef = 3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk-VisitIosHealthSdk */; };
+		A3E113B858D907C10214B7020F575E48 /* VisitIosHealthSdk.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk.bundle */; };
 		A8819231E8BF2F3FA8AD83072FC8F8E0 /* disconnect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE1EF441E76F09FB8C97FAF1F73335BF /* disconnect@2x.png */; };
 		B504CA0ACB5DB3767A8E1FAC056D9E5F /* Mic_On.png in Resources */ = {isa = PBXBuildFile; fileRef = BB662A707EF93AEC17DBAD68E56374F5 /* Mic_On.png */; };
 		C53E8113E922277654A8007164CE8F16 /* VideoCallView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58AEFE3BD21BF5F64F9FFC1D923BE7BB /* VideoCallView.xib */; };
@@ -103,20 +104,20 @@
 
 /* Begin PBXFileReference section */
 		0332DBD6EF351CEE5CAF66E675826AD0 /* switch-camera@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "switch-camera@2x.png"; path = "VisitIosHealthSdk/Assets/switch-camera@2x.png"; sourceTree = "<group>"; };
-		03E5B07E43918DC675DBBEE3120EEA1D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		03E5B07E43918DC675DBBEE3120EEA1D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		03ECA3D3EC0CD21994AAB272C0951BDC /* Pods-VisitIosHealthSdk_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-VisitIosHealthSdk_Tests-dummy.m"; sourceTree = "<group>"; };
 		07294FD44B804670EB08F7C9B3282FBA /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = VisitIosHealthSdk/Classes/Utils.swift; sourceTree = "<group>"; };
 		07C2C6B5E606F3BBC7786A3784B83E0C /* Pods-VisitIosHealthSdk_Example */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-VisitIosHealthSdk_Example"; path = Pods_VisitIosHealthSdk_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		10A52D3259E83F081309ABE408E95056 /* Pods-VisitIosHealthSdk_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-VisitIosHealthSdk_Example-dummy.m"; sourceTree = "<group>"; };
 		10A5366137C071B6277F1CBA62514A89 /* back.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = back.png; path = VisitIosHealthSdk/Assets/back.png; sourceTree = "<group>"; };
-		110120833F2D1CB6AA4B70D2EE436F07 /* TwilioVideo.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = TwilioVideo.xcframework; sourceTree = "<group>"; };
+		110120833F2D1CB6AA4B70D2EE436F07 /* TwilioVideo.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; path = TwilioVideo.xcframework; sourceTree = "<group>"; };
 		11B55C083FD618635F01E82B68C55877 /* Camera_On@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Camera_On@3x.png"; path = "VisitIosHealthSdk/Assets/Camera_On@3x.png"; sourceTree = "<group>"; };
 		161DB5D1D10B9C38ED6270E0C475335E /* disconnect.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = disconnect.png; path = VisitIosHealthSdk/Assets/disconnect.png; sourceTree = "<group>"; };
 		21F03FD9B9B0B0850A49023C28DAA247 /* switch-camera@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "switch-camera@3x.png"; path = "VisitIosHealthSdk/Assets/switch-camera@3x.png"; sourceTree = "<group>"; };
 		2331A79CF9F5E4EBBAD72A04E0BF2C8B /* video-off@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "video-off@2x.png"; path = "VisitIosHealthSdk/Assets/video-off@2x.png"; sourceTree = "<group>"; };
 		237B8E479BBB4547CE548C75984C84F6 /* switch-camera.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "switch-camera.png"; path = "VisitIosHealthSdk/Assets/switch-camera.png"; sourceTree = "<group>"; };
 		312953E3A91A201B9EC4FE016EBF8EDA /* VisitIosHealthSdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VisitIosHealthSdk.debug.xcconfig; sourceTree = "<group>"; };
-		3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk-VisitIosHealthSdk */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "VisitIosHealthSdk-VisitIosHealthSdk"; path = VisitIosHealthSdk.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VisitIosHealthSdk.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		35B925C9D3F1199781D7A5FB8F8CF387 /* video-off.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "video-off.png"; path = "VisitIosHealthSdk/Assets/video-off.png"; sourceTree = "<group>"; };
 		3925F82423E73D1FE04C98207DC325AB /* back@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "back@3x.png"; path = "VisitIosHealthSdk/Assets/back@3x.png"; sourceTree = "<group>"; };
 		3C6E5936A5D5BC94E0A54BCB351E76DF /* Pods-VisitIosHealthSdk_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-VisitIosHealthSdk_Example-frameworks.sh"; sourceTree = "<group>"; };
@@ -145,7 +146,7 @@
 		94EB9CAE50CE2090230CADCE7AFA14B8 /* VisitIosHealthSdk-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "VisitIosHealthSdk-prefix.pch"; sourceTree = "<group>"; };
 		9A0097C524E9E034002F0ECA5B961950 /* Mic_On@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Mic_On@2x.png"; path = "VisitIosHealthSdk/Assets/Mic_On@2x.png"; sourceTree = "<group>"; };
 		9BED16D8A5D2341FF1DD980A81A1B2C9 /* Pods-VisitIosHealthSdk_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-VisitIosHealthSdk_Example.modulemap"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A60DADD106C6082BB7A54A0767127311 /* VisitVideoCallDelegate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = VisitVideoCallDelegate.m; path = VisitIosHealthSdk/Classes/VisitVideoCallDelegate.m; sourceTree = "<group>"; };
 		A6E72E4B62077DDD543E55EC8500307B /* TwilioVideo-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "TwilioVideo-xcframeworks.sh"; sourceTree = "<group>"; };
 		A86726983A2CCD36C0B989AAE43ADA96 /* VisitIosHealthController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = VisitIosHealthController.m; path = VisitIosHealthSdk/Classes/VisitIosHealthController.m; sourceTree = "<group>"; };
@@ -156,11 +157,11 @@
 		BB662A707EF93AEC17DBAD68E56374F5 /* Mic_On.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = Mic_On.png; path = VisitIosHealthSdk/Assets/Mic_On.png; sourceTree = "<group>"; };
 		BE1E0EABA74A8B2C12B01A3090F40D35 /* Pods-VisitIosHealthSdk_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-VisitIosHealthSdk_Example-umbrella.h"; sourceTree = "<group>"; };
 		CAB11A866F64961145E42AEE83CF9FA0 /* Pods-VisitIosHealthSdk_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-VisitIosHealthSdk_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		CAF599149D3C29D3064144AD9F2AFD23 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		CAF599149D3C29D3064144AD9F2AFD23 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		CB324F56C547637A231EC9D96CCAE999 /* VisitIosHealthSdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VisitIosHealthSdk.release.xcconfig; sourceTree = "<group>"; };
 		CB787390C7EFF0C4B07D793302A6F17C /* disconnect@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "disconnect@3x.png"; path = "VisitIosHealthSdk/Assets/disconnect@3x.png"; sourceTree = "<group>"; };
 		CB8D60D6D6EE7FA5AC7122310F817B4A /* Pods-VisitIosHealthSdk_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-VisitIosHealthSdk_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		D387402220FABC4D8A834756D0CAF905 /* VisitIosHealthSdk.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = VisitIosHealthSdk.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		D387402220FABC4D8A834756D0CAF905 /* VisitIosHealthSdk.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = VisitIosHealthSdk.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		D6B8ED21B4779AC4959BD3D6B60E3CCD /* VisitIosHealthSdk-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "VisitIosHealthSdk-Info.plist"; sourceTree = "<group>"; };
 		DA0EAA908731F67E65939F70299F000B /* Mic_On@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Mic_On@3x.png"; path = "VisitIosHealthSdk/Assets/Mic_On@3x.png"; sourceTree = "<group>"; };
 		DC7A46A09C1BC2BA7A8017576225B1C2 /* VisitIosHealthSdk-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "VisitIosHealthSdk-umbrella.h"; sourceTree = "<group>"; };
@@ -313,7 +314,6 @@
 				475690E4BB623719638A31377E280408 /* Frameworks */,
 				F08FD53D2796575F333D38687F2724B9 /* Support Files */,
 			);
-			name = TwilioVideo;
 			path = TwilioVideo;
 			sourceTree = "<group>";
 		};
@@ -339,7 +339,7 @@
 				07C2C6B5E606F3BBC7786A3784B83E0C /* Pods-VisitIosHealthSdk_Example */,
 				4D1B1193672C40AC694C85E4D30C7B32 /* Pods-VisitIosHealthSdk_Tests */,
 				3CA1734516F0BEC9C83B138DCCD16051 /* VisitIosHealthSdk */,
-				3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk-VisitIosHealthSdk */,
+				3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -447,7 +447,7 @@
 			);
 			name = "VisitIosHealthSdk-VisitIosHealthSdk";
 			productName = VisitIosHealthSdk;
-			productReference = 3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk-VisitIosHealthSdk */;
+			productReference = 3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		334DA38700BDF9A254D1BB80A8E28211 /* Pods-VisitIosHealthSdk_Tests */ = {
@@ -515,8 +515,13 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastSwiftUpdateCheck = 1300;
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					1268F850B51C45248BDE5EF66FEB7F04 = {
+						DevelopmentTeam = AU9UJ3DSGS;
+					};
+				};
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -583,7 +588,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3E113B858D907C10214B7020F575E48 /* VisitIosHealthSdk-VisitIosHealthSdk in Resources */,
+				A3E113B858D907C10214B7020F575E48 /* VisitIosHealthSdk.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -777,6 +782,7 @@
 			baseConfigurationReference = CB324F56C547637A231EC9D96CCAE999 /* VisitIosHealthSdk.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/VisitIosHealthSdk";
+				DEVELOPMENT_TEAM = AU9UJ3DSGS;
 				IBSC_MODULE = VisitIosHealthSdk;
 				INFOPLIST_FILE = "Target Support Files/VisitIosHealthSdk/ResourceBundle-VisitIosHealthSdk-VisitIosHealthSdk-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -944,8 +950,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
@@ -956,6 +961,7 @@
 			baseConfigurationReference = 312953E3A91A201B9EC4FE016EBF8EDA /* VisitIosHealthSdk.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/VisitIosHealthSdk";
+				DEVELOPMENT_TEAM = AU9UJ3DSGS;
 				IBSC_MODULE = VisitIosHealthSdk;
 				INFOPLIST_FILE = "Target Support Files/VisitIosHealthSdk/ResourceBundle-VisitIosHealthSdk-VisitIosHealthSdk-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

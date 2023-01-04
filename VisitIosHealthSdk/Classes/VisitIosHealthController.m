@@ -131,6 +131,53 @@ API_AVAILABLE(ios(13.0))
     [self injectJavascript:javascript];
 }
 
+-(void) insertDataToCard{
+    dispatch_group_t loadDetailsGroup=dispatch_group_create();
+    __block NSString* numberOfSteps = 0;
+    __block NSTimeInterval totalSleepTime = 0;
+    NSLog(@"gender is, %@",gender);
+    for (int i = 0; i<2; i++) {
+        dispatch_group_enter(loadDetailsGroup);
+        if(i==0){
+            //  getting steps for current day
+            [self fetchSteps:@"day" endDate:[NSDate date] days:0 callback:^(NSArray * result) {
+                if([[result objectAtIndex:0] count]>0){
+                    numberOfSteps = [[result objectAtIndex:0] objectAtIndex:0];
+                }
+                dispatch_group_leave(loadDetailsGroup);
+            }];
+        }else if (i==1){
+            //  getting sleep pattern for the day past
+            [self fetchSleepPattern:[NSDate date] frequency:@"day" days:0 callback:^(NSArray * result) {
+              NSLog(@"Sleep result is, %@",result);
+                if([result count]>0){
+                    for (NSDictionary* item in result) {
+                        NSString* sleepValue = [item valueForKey:@"value"];
+                        if([sleepValue isEqualToString:@"INBED"]||[sleepValue isEqualToString:@"ASLEEP"]){
+                            NSDate* startDate = [item valueForKey:@"startDate"];
+                            NSDate* endDate = [item valueForKey:@"endDate"];
+                            NSTimeInterval duration = [endDate timeIntervalSinceDate:startDate] / 60;
+                            totalSleepTime+=duration;
+                            NSLog(@"Sleep value is, %@, while duration is %f",sleepValue,duration);
+                        }
+                    }
+                }
+                dispatch_group_leave(loadDetailsGroup);
+            }];
+        }
+    }
+    
+    dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+        NSLog(@"the steps result is, %@",numberOfSteps);
+        NSLog(@"total sleep time is %f",totalSleepTime);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString *javascript = [NSString stringWithFormat:@"updateFitnessPermissions(true,'%@','%f')",numberOfSteps, totalSleepTime];
+                [self injectJavascript:javascript];
+            });
+    });
+    
+}
+
 - (void)fetchSleepCategorySamplesForPredicate:(NSPredicate *)predicate
                                    limit:(NSUInteger)lim
                                    completion:(void (^)(NSArray *, NSError *))completion {
@@ -827,27 +874,27 @@ API_AVAILABLE(ios(13.0))
 }
 
 - (void)loadVisitWebUrl:(NSString*) magicLink{
-    NSBundle* podBundle = [NSBundle bundleForClass:[self class]];
-    NSURL* bundleUrl = [podBundle URLForResource:@"VisitIosHealthSdk" withExtension:@"bundle"];
-    NSBundle* bundle = [NSBundle bundleWithURL:bundleUrl];
-    
-    storyboard = [UIStoryboard storyboardWithName:@"Loader" bundle:bundle];
-    sbViewController = [storyboard instantiateInitialViewController];
-    sbViewController.modalPresentationStyle = 0;
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
-    activityIndicator.color = UIColor.systemPurpleColor;
-    activityIndicator.center = sbViewController.view.center;
-    [sbViewController.view addSubview:activityIndicator];
-    [activityIndicator startAnimating];
-
     currentTopVC = [self currentTopViewController];
-    [currentTopVC presentViewController:sbViewController animated:false completion:nil];
-
-    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:NSKeyValueObservingOptionNew context:NULL];
+    
+//    NSBundle* podBundle = [NSBundle bundleForClass:[self class]];
+//    NSURL* bundleUrl = [podBundle URLForResource:@"VisitIosHealthSdk" withExtension:@"bundle"];
+//    NSBundle* bundle = [NSBundle bundleWithURL:bundleUrl];
+    
+//    storyboard = [UIStoryboard storyboardWithName:@"Loader" bundle:bundle];
+//    sbViewController = [storyboard instantiateInitialViewController];
+//    sbViewController.modalPresentationStyle = 0;
+//    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
+//    activityIndicator.color = UIColor.systemPurpleColor;
+//    activityIndicator.center = sbViewController.view.center;
+//    [sbViewController.view addSubview:activityIndicator];
+//    [activityIndicator startAnimating];
+//    [currentTopVC presentViewController:sbViewController animated:false completion:nil];
+//    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:NSKeyValueObservingOptionNew context:NULL];
+    
     calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierISO8601];
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"IST"];
-    
-    
+
+
     NSLog(@"loadVisitWebUrl is called ===>>> %@", magicLink);
     NSURL *url = [NSURL URLWithString:magicLink];
     NSURLRequest* request = [NSURLRequest requestWithURL: url];
@@ -1027,6 +1074,21 @@ API_AVAILABLE(ios(13.0))
             [self preprocessEmbellishRequest:steps calories:calories distance:distance date:date];
             }
         });
+    }
+}
+
+- (void) urlOpened:(NSURL*) url{
+    NSLog(@"urlOpened triggered %@ %hhd",url.absoluteString,fitbitConnectionTriggered);
+
+    if(fitbitConnectionTriggered){
+        if ([url.absoluteString rangeOfString:@"fitbit"].location == NSNotFound) {
+            NSLog(@"url not matched");
+        } else {
+            NSLog(@"url matched");
+            NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
+            [self injectJavascript:javascript];
+            fitbitConnectionTriggered = FALSE;
+        }
     }
 }
 
@@ -1220,6 +1282,15 @@ API_AVAILABLE(ios(13.0))
                 [self requestAuthorization];
             }
         }];
+    }else if([methodName isEqualToString:@"connectToFitbit"]) {
+        NSString *urlString = [json valueForKey:@"url"];
+        NSURL *url = [NSURL URLWithString:urlString];
+        if([[UIApplication sharedApplication] canOpenURL:url]){
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+                fitbitConnectionTriggered = TRUE;
+        }else{
+            NSLog(@"Cannot open url");
+        }
     }else if([methodName isEqualToString:@"inHraEndPage"]){
         NSString *javascript = [NSString stringWithFormat:@"isIosUser(true)"];
         [self injectJavascript:javascript];
@@ -1319,7 +1390,6 @@ API_AVAILABLE(ios(13.0))
         NSString *mail = [NSString stringWithFormat: @"mailto:%@?subject=%@", email, subject];
         mail = [mail stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         NSURL *url = [NSURL URLWithString:mail];
-//        NSLog(@"url to be opened %@, %@", mail,url);
         if([[UIApplication sharedApplication] canOpenURL:url]){
                 [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
         }else{
@@ -1339,6 +1409,8 @@ API_AVAILABLE(ios(13.0))
         [prefs setObject:apiData forKey:@"data"];
         [prefs setObject:isIncomplete forKey:@"isIncomplete"];
         [self postNotification:@"hraInComplete"];
+    }else if([methodName isEqualToString:@"askForGoogleFitGraphData"]){
+        [self insertDataToCard];
     }
 }
 

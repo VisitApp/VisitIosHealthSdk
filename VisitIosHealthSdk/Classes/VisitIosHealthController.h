@@ -30,12 +30,14 @@
     HKHealthStore *healthStore;
     UIActivityIndicatorView *activityIndicator;
     UIViewController* caller;
+    BOOL fitbitConnectionTriggered;
 }
 
 @property (nonatomic, weak) VisitVideoCallDelegate* videoCallDelegate;
 - (void) loadVisitWebUrl:(NSString*) magicLink;
 - (void) initialParams:(NSDictionary *)params;
 - (void) callHraApi;
+- (void) urlOpened:(NSURL*) url;
 
 @end
 
