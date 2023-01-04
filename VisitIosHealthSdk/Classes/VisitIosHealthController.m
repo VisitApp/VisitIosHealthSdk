@@ -847,17 +847,6 @@ API_AVAILABLE(ios(13.0))
         }];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:NSStringFromSelector(@selector(estimatedProgress))]) {
-        if(self.estimatedProgress>0.99){
-            [activityIndicator stopAnimating];
-            [sbViewController dismissViewControllerAnimated:NO completion:^{
-                NSLog(@"Storyboard dismissed");
-            }];
-        }
-    }
-}
-
 - (void)closeAddDependentView:(UIButton*)button
    {
        [addDependentViewController dismissViewControllerAnimated:NO completion:^{
@@ -875,22 +864,6 @@ API_AVAILABLE(ios(13.0))
 
 - (void)loadVisitWebUrl:(NSString*) magicLink{
     currentTopVC = [self currentTopViewController];
-    
-//    NSBundle* podBundle = [NSBundle bundleForClass:[self class]];
-//    NSURL* bundleUrl = [podBundle URLForResource:@"VisitIosHealthSdk" withExtension:@"bundle"];
-//    NSBundle* bundle = [NSBundle bundleWithURL:bundleUrl];
-    
-//    storyboard = [UIStoryboard storyboardWithName:@"Loader" bundle:bundle];
-//    sbViewController = [storyboard instantiateInitialViewController];
-//    sbViewController.modalPresentationStyle = 0;
-//    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
-//    activityIndicator.color = UIColor.systemPurpleColor;
-//    activityIndicator.center = sbViewController.view.center;
-//    [sbViewController.view addSubview:activityIndicator];
-//    [activityIndicator startAnimating];
-//    [currentTopVC presentViewController:sbViewController animated:false completion:nil];
-//    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:NSKeyValueObservingOptionNew context:NULL];
-    
     calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierISO8601];
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"IST"];
 
