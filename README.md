@@ -36,11 +36,33 @@ pod 'VisitIosHealthSdk'
 
 ## Usage
 
-To use the SDK, you simply need to initialize VisitIosHealthController in your ViewController. Ensure that the initalized view is added to your main subview in viewDidLoad method. Once that is done call the loadVisitWebUrl method in viewDidAppear lifecycle method.
+To use the SDK, you simply need to initialize VisitIosHealthController in your AppDelegate, and import this view inside your view controller. Ensure that the initalized view is added to your main subview in viewDidLoad method. Once that is done call the loadVisitWebUrl method.
 
 Here's an example code where the `VisitIosHealthController` is programmatically initialized -
 
 ```swift
+//  AppDelegate.swift
+import UIKit
+import VisitIosHealthSdk
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    let visitHealthView = VisitIosHealthController.init();
+
+    // add urlOpened method in the delegate's open method like below
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        visitHealthView.urlOpened(url);
+        return true
+    }
+
+    // add the shared static method like below to import visitHealthView in your view controller
+    static func shared() -> AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
+}
+
+
+//  ViewController.swift
 import UIKit
 import VisitIosHealthSdk;
 
@@ -51,7 +73,7 @@ extension Notification.Name {
 // extend VisitVideoCallDelegate if the video calling feature needs to be integrated otherwise UIViewController can be used
 class ViewController: VisitVideoCallDelegate {
     // required
-    let visitHealthView = VisitIosHealthController.init();
+    let visitHealthView = AppDelegate.shared().visitHealthView
     
     let button = UIButton(frame: CGRect(x: 20, y: 20, width: 200, height: 60))
     override func viewDidLoad() {
@@ -81,7 +103,7 @@ class ViewController: VisitVideoCallDelegate {
         button.removeFromSuperview()
     }
     
-    // important
+    // notification observer
     @objc func methodOfReceivedNotification(notification: Notification) {
         let event = notification.userInfo?["event"] as! String
         let current = notification.userInfo?["current"] ?? ""

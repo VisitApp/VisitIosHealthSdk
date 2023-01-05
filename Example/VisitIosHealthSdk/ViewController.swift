@@ -82,7 +82,7 @@ class ViewController: VisitVideoCallDelegate {
         // all the below statements are required
         self.view.addSubview(visitHealthView)
         visitHealthView.translatesAutoresizingMaskIntoConstraints = false
-        visitHealthView.loadVisitWebUrl("https://tata-aig.getvisitapp.xyz/sso?userParams=Kzdzgp8Pe6DTEgvljdI5itsRV03uMwm5wlrnRHA9jsxtfdU8A2FfhAcno_A3ja8faMn2B2HQRAkQ3i5v14WLbovrEg_9sgoluwcs-4pmtcxQxk61NhS1hR1y0lEdwbnrTrmWdGGqpDDoln-gxsEB6Mk3FYprNuE-SjwGnzlacxhnD3s8In7haPYJXMteENBvyDLKG_O4iR2n7Bhz08GM_EcsFRWWVLc_NHF-XvG_OtgldLTsrsQDWuBdkT9fCXl1nfhN1EfbcrbjVnLCHQNEwZkSS56F7jbeRAEyjkzuZzA&clientId=tata-aig-a8b455")
+        visitHealthView.loadVisitWebUrl("--magic-link--")
         let views = ["view" : visitHealthView]
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[view]|", options: NSLayoutFormatOptions.alignAllCenterX, metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|", options: NSLayoutFormatOptions.alignAllCenterY, metrics: nil, views: views))
