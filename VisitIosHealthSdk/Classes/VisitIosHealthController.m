@@ -1384,7 +1384,10 @@ API_AVAILABLE(ios(13.0))
         [self postNotification:@"hraInComplete"];
     }else if([methodName isEqualToString:@"askForGoogleFitGraphData"]){
         [self insertDataToCard];
+    }else if([methodName isEqualToString:@"navigateToSettings"]){
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
     }
+    
 }
 
 @end
