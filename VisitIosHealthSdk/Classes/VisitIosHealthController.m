@@ -1059,6 +1059,7 @@ API_AVAILABLE(ios(13.0))
         } else {
             NSLog(@"url matched");
             NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
+            [self postNotification:@"FitbitPermissionGranted"];
             [self injectJavascript:javascript];
             fitbitConnectionTriggered = FALSE;
         }

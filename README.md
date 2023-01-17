@@ -115,6 +115,8 @@ class ViewController: VisitVideoCallDelegate {
                 print("health kit permission requested")
             case "FitnessPermissionGranted":
                 print("health kit permission granted")
+            case "FitbitPermissionGranted":
+                print("Fitbit permission granted")
             case "HRA_Completed":
                 print("hra completed")
             case "StartVideoCall":
