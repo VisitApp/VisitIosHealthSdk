@@ -31,6 +31,7 @@
     UIActivityIndicatorView *activityIndicator;
     UIViewController* caller;
     BOOL fitbitConnectionTriggered;
+    BOOL syncingEnabled;
 }
 
 @property (nonatomic, weak) VisitVideoCallDelegate* videoCallDelegate;
@@ -38,6 +39,7 @@
 - (void) initialParams:(NSDictionary *)params;
 - (void) callHraApi;
 - (void) urlOpened:(NSURL*) url;
+- (void) setSyncingEnabled:(BOOL)value;
 
 @end
 

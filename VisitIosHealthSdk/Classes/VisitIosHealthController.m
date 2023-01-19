@@ -20,6 +20,7 @@ API_AVAILABLE(ios(13.0))
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
     gender = @"Not Set";
+    syncingEnabled = YES;
     return self;
 }
 
@@ -1051,7 +1052,7 @@ API_AVAILABLE(ios(13.0))
 }
 
 - (void) urlOpened:(NSURL*) url{
-    NSLog(@"urlOpened triggered %@ %hhd",url.absoluteString,fitbitConnectionTriggered);
+//    NSLog(@"urlOpened triggered %@ %hhd",url.absoluteString,fitbitConnectionTriggered);
 
     if(fitbitConnectionTriggered){
         if ([url.absoluteString rangeOfString:@"fitbit"].location == NSNotFound) {
@@ -1148,7 +1149,6 @@ API_AVAILABLE(ios(13.0))
             }];
         }
     }
-//    NSLog(@"callSyncData steps=%@, calories=%@, distance=%@, activity=%@, sleep=%@",steps, calorie, distanceData, activityData, sleep);
 
     dispatch_group_notify(syncDataGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
     if([steps count]>0 && [distanceData count]>0 && [activityData count]>0 && [sleep count]>0)
@@ -1224,6 +1224,10 @@ API_AVAILABLE(ios(13.0))
         @"current":value,
         @"total":total
     }];
+}
+
+- (void)setSyncingEnabled:(BOOL)value {
+    syncingEnabled = value;
 }
 
 - (void) callHraApi{
@@ -1314,29 +1318,32 @@ API_AVAILABLE(ios(13.0))
         }
         [prefs setObject:[json valueForKey:@"gfHourlyLastSync"] forKey:@"uatLastSyncTime"];
         
-        [VisitIosHealthController canAccessHealthKit:^(BOOL value){
-            if(value){
-                [self postNotification:@"FitnessPermissionGranted"];
-                NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(false)"];
-                [self injectJavascript:javascript];
-                [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
-                   if([dates count]>0){
-                       [self callEmbellishApi:dates];
-                       if(![self->memberId isEqual:@"<null>"]){
-                           [self callUatApi:dates];
+        if(syncingEnabled){
+            [VisitIosHealthController canAccessHealthKit:^(BOOL value){
+                if(value){
+                    [self postNotification:@"FitnessPermissionGranted"];
+                    NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(false)"];
+                    [self injectJavascript:javascript];
+                    [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
+                       if([dates count]>0){
+                           [self callEmbellishApi:dates];
+                           if(![self->memberId isEqual:@"<null>"]){
+                               [self callUatApi:dates];
+                           }
                        }
-                   }
-                }];
-                [self getDateRanges:dailyDataSyncTime callback:^(NSMutableArray * dates) {
-                    if([dates count]>0){
-                        [self callSyncData:[dates count] dates:dates];
-                    }
-                }];
-            }else{
-                NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(true)"];
-                [self injectJavascript:javascript];
-            }
-        }];
+                    }];
+                    [self getDateRanges:dailyDataSyncTime callback:^(NSMutableArray * dates) {
+                        if([dates count]>0){
+                            [self callSyncData:[dates count] dates:dates];
+                        }
+                    }];
+                }else{
+                    NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(true)"];
+                    [self injectJavascript:javascript];
+                }
+            }];
+        }
+        
     }else if([methodName isEqualToString:@"closeView"]){
         [self closePWA];
     }else if([methodName isEqualToString:@"startVideoCall"]){

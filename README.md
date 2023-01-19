@@ -137,6 +137,9 @@ class ViewController: VisitVideoCallDelegate {
     @objc func buttonTapped(sender : UIButton) {
         // since both UIs share same view the button needs to be hidden, in actual app this can be ignored
         self.hideButton()
+
+        // OPTIONAL : syncing is enabled by default but it can be toggled using this method
+        visitHealthView.setSyncingEnabled(true)
         
         // all the below statements are required
         self.view.addSubview(visitHealthView)
