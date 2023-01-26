@@ -8,7 +8,7 @@
 #import "VisitIosHealthController.h"
 #import "VisitVideoCallDelegate.h"
 
-API_AVAILABLE(ios(13.0))
+API_AVAILABLE(ios(11.0))
 @implementation VisitIosHealthController
 
 - (instancetype)initWithFrame:(CGRect)frame{

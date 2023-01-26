@@ -91,7 +91,7 @@ class ViewController: VisitVideoCallDelegate {
         
         
         
-        visitHealthView.loadVisitWebUrl("http://tata-aig.getvisitapp.xyz/sso?userParams=yuAeVTpF4C3w2cguETyMeZZJBkZCkNt55RRYHIirGDLbzgtW0f4dfYKyUUxMzSaq0IYjOuyavj2nJvfPnyxFHzjmBIA2m2yrMIB2F5l-kO-MZgdl5afhShrepawOSwcavR-ctyzy82303U_FMACWbhEKNPe9hyYGjot8Db0yG9Hs_wLC77IXuvARXejIBkeEutA679aoq10l_CZvX_YM4XabcH4lgUPh5bxHkhXoE4kr1cTXLlbhj4ESuY_C6InWTl4OAN77-WD8PRMuNOcv85hqvObQOzhDh3UTo4N8mOg&clientId=tata-aig-a8b455")
+        visitHealthView.loadVisitWebUrl("magic-link")
         
         let views = ["view" : visitHealthView]
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[view]|", options: NSLayoutFormatOptions.alignAllCenterX, metrics: nil, views: views))
