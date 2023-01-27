@@ -1251,7 +1251,9 @@ API_AVAILABLE(ios(11.0))
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     NSString *methodName = [json valueForKey:@"method"];
     NSLog(@"json is %@",[json description]);
-    if([methodName isEqualToString:@"connectToGoogleFit"]) {
+    if([methodName isEqualToString:@"disconnectFromFitbit"]){
+        [self postNotification:@"FibitDisconnected"];
+    }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
             if(value){
                 [self postNotification:@"FitnessPermissionGranted"];
