@@ -1250,13 +1250,13 @@ API_AVAILABLE(ios(11.0))
     NSData *data = [message.body dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     NSString *methodName = [json valueForKey:@"method"];
-    NSLog(@"json is %@",[json description]);
+//    NSLog(@"methodName is %@",methodName);
     if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];
     }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
             if(value){
-                [self postNotification:@"FitnessPermissionGranted"];
+                // [self postNotification:@"FitnessPermissionGranted"];
                 [self onHealthKitPermissionGranted];
             }else{
                 [self requestAuthorization];
@@ -1276,7 +1276,7 @@ API_AVAILABLE(ios(11.0))
         [self injectJavascript:javascript];
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
             if(value){
-                [self postNotification:@"FitnessPermissionGranted"];
+                // [self postNotification:@"FitnessPermissionGranted"];
                 NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(false)"];
                 [self injectJavascript:javascript];
             }else{
@@ -1298,7 +1298,7 @@ API_AVAILABLE(ios(11.0))
         [self injectJavascript:javascript];
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
             if(value){
-                [self postNotification:@"FitnessPermissionGranted"];
+                // [self postNotification:@"FitnessPermissionGranted"];
                 NSString *javascript = [NSString stringWithFormat:@"googleFitStatus(true)"];
                 [self injectJavascript:javascript];
             }else{
@@ -1323,7 +1323,7 @@ API_AVAILABLE(ios(11.0))
         if(syncingEnabled){
             [VisitIosHealthController canAccessHealthKit:^(BOOL value){
                 if(value){
-                    [self postNotification:@"FitnessPermissionGranted"];
+                    // [self postNotification:@"FitnessPermissionGranted"];
                     NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(false)"];
                     [self injectJavascript:javascript];
                     [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
@@ -1396,6 +1396,8 @@ API_AVAILABLE(ios(11.0))
         [self insertDataToCard];
     }else if([methodName isEqualToString:@"navigateToSettings"]){
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+    }else if([methodName isEqualToString:@"couponRedeemed"]){
+        [self postNotification:@"couponRedeemed"];
     }
     
 }

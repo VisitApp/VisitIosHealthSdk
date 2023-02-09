@@ -74,10 +74,19 @@ extension Notification.Name {
 class ViewController: VisitVideoCallDelegate {
     // required
     let visitHealthView = AppDelegate.shared().visitHealthView
+
+    // initializing a viewcontroller vc
+    let vc = UIViewController()
     
     let button = UIButton(frame: CGRect(x: 20, y: 20, width: 200, height: 60))
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // intializing visitHealthView's frame
+        visitHealthView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+
+        // initializing vc's view with visitHealthView
+        vc.view = visitHealthView
         
         // show button programattically, in actual app this can be ignored
         self.showButton()
@@ -125,10 +134,14 @@ class ViewController: VisitVideoCallDelegate {
                 print("start video call")
             case "HRAQuestionAnswered":
                 print("HRAQuestionAnswered,",current,"of",total)
+            case "couponRedeemed":
+                print("couponRedeemed triggered")
                 
             case "ClosePWAEvent":
                 // show initial button again, in actual app this can be ignored
                 self.showButton();
+                // dimsissing the viewcontroller vc
+                self.dismiss(animated: true)
 
             default:
                 print("nothing")
@@ -143,13 +156,9 @@ class ViewController: VisitVideoCallDelegate {
         // OPTIONAL : syncing is enabled by default but it can be toggled using this method
         visitHealthView.setSyncingEnabled(true)
         
-        // all the below statements are required
-        self.view.addSubview(visitHealthView)
-        visitHealthView.translatesAutoresizingMaskIntoConstraints = false
+        // presenting the viewcontroller vc
+        self.present(vc, animated: true)
         visitHealthView.loadVisitWebUrl("--magic-link--")
-        let views = ["view" : visitHealthView]
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[view]|", options: NSLayoutFormatOptions.alignAllCenterX, metrics: nil, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|", options: NSLayoutFormatOptions.alignAllCenterY, metrics: nil, views: views))
     }
     
     override func didReceiveMemoryWarning() {
