@@ -1398,6 +1398,10 @@ API_AVAILABLE(ios(11.0))
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
     }else if([methodName isEqualToString:@"couponRedeemed"]){
         [self postNotification:@"couponRedeemed"];
+    }else if([methodName isEqualToString:@"openLink"]){
+        NSString* link = [[json valueForKey:@"link"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSURL *url = [NSURL URLWithString:link];
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
     }
     
 }

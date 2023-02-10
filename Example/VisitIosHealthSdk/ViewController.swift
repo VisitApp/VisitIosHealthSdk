@@ -110,7 +110,7 @@ class ViewController: VisitVideoCallDelegate {
 
         
         
-        visitHealthView.loadVisitWebUrl("https://tata-aig.getvisitapp.xyz/sso?userParams=LH53MbTMvD-UcbZxap-i6S-h-D2Y0JgBpwJdDPhiJGglt2TtB7rOGM6_5Pe47zr_U6HkbChvwOkquwDooQRsynxJPzmfvaEWy3-lrXrKHsOCYi2-ViIMXSG6Q4WMD-O9xzjF2QiQkFghTInA8c5JX61MgSqsQoh-J4O9QeWF5b8IWqB8O8dBhOBOJ2GW4xaVQOuly1pQGRsiT4vmmHFlEANQkVxDFG5c_VjeTcVU-0BnkolpS7_iUAPxIyTc97LjJeNlEy9zsko-BrXlbKBn8S0uWnhDRQcI2A240DFR5oTxgJajUvZuaqE4fIzvSX9oE1WighSTWVuUWGoYVvvR1w&clientId=tata-aig-a8b455")
+        visitHealthView.loadVisitWebUrl("https://api.samuraijack.xyz/url-shortener/m/JAjYyb70")
         
     }
     
