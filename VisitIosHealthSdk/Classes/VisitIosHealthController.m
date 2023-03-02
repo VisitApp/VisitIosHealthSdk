@@ -14,6 +14,7 @@ API_AVAILABLE(ios(11.0))
 - (instancetype)initWithFrame:(CGRect)frame{
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
     config.preferences.javaScriptEnabled = YES;
+    config.allowsInlineMediaPlayback = YES;
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
@@ -896,6 +897,232 @@ API_AVAILABLE(ios(11.0))
     }
 }
 
+- (NSData *) arrayToJSON:(NSArray *) inputArray
+{
+    NSError *error = nil;
+    id result = [NSJSONSerialization dataWithJSONObject:inputArray
+                                                options:kNilOptions error:&error];
+    if (error != nil) return nil;
+    return result;
+}
+
+-(void) injectSleepData:(NSString *) javascript{
+    NSLog(@"javascript to be injected %@",javascript);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
+            if(error != nil) {
+                NSLog(@"SomeFunction Error: %@",error);
+                return;
+            }
+            NSLog(@"SomeFunction Success %@",result);
+        }];
+    });
+}
+
+-(void) injectJavascript:(NSArray *) data type:(NSString *) type frequency:(NSString *) frequency activityTime:(NSString *) activityTime{
+    NSString* hoursInDay = @"[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]";
+    NSString* daysInWeek = @"[1,2,3,4,5,6,7]";
+    NSString* daysInMonth = @"[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]";
+    NSString* samples;
+    NSString *jsonArrayData;
+    if([frequency isEqualToString:@"day"]){
+        samples=hoursInDay;
+    }else if ([frequency isEqualToString:@"week"]){
+        samples=daysInWeek;
+    }else if ([frequency isEqualToString:@"month"]){
+        samples=daysInMonth;
+    }
+    if([type isEqualToString:@"steps"] || [type isEqualToString:@"calories"]){
+        if([type isEqualToString:@"steps"]){
+            jsonArrayData = [[data objectAtIndex:0] componentsJoinedByString:@","];
+        }else{
+            jsonArrayData = [[data objectAtIndex:1] componentsJoinedByString:@","];
+        }
+    }else{
+         jsonArrayData = [data componentsJoinedByString:@","];
+    }
+    NSString *javascript = [NSString stringWithFormat:@"DetailedGraph.updateData(%@,[%@],'%@','%@','%@')", samples, jsonArrayData, type,frequency, activityTime];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
+            if(error != nil) {
+                NSLog(@"injectJavascript Error: %@",error);
+                return;
+            }
+            NSLog(@"injectJavascript Success: %@",javascript);
+        }];
+    });
+}
+
+-(NSMutableArray*) getBlankSleepWeeks:(NSUInteger) currentCount date:(NSDate*) date{
+    NSMutableArray *result = [[NSMutableArray alloc]init];
+    NSInteger value = 1;
+    NSDate *nextDayTime=date;
+    NSNumber *nextDayTimeStamp;
+    NSDateComponents *dateComponents;
+    NSString* day;
+    NSLog(@"day is, %@",day);
+    int counter =(int) currentCount;
+    while(counter<7){
+        nextDayTime = [calendar dateByAddingUnit:NSCalendarUnitDay value:value toDate:nextDayTime options:NSCalendarMatchStrictly];
+        nextDayTimeStamp = [NSNumber numberWithDouble: [@(floor([nextDayTime timeIntervalSince1970] * 1000)) longLongValue]];
+        dateComponents = [calendar components: NSCalendarUnitWeekday fromDate: nextDayTime];
+        day =calendar.shortWeekdaySymbols[dateComponents.weekday-1];
+        NSDictionary *element = @{
+                @"sleepTime" : @0,
+                @"wakeupTime" : @0,
+                @"day" : day,
+                @"startTimestamp" : nextDayTimeStamp,
+        };
+        NSLog(@"element is %@",element);
+        [result addObject:[NSMutableDictionary dictionaryWithDictionary:element]];
+        counter++;
+    }
+    return result;
+}
+
+-(void) renderGraphData:(NSString *) type frequency:(NSString *) frequency date:(NSDate *) date{
+    if([type isEqualToString:@"steps"] || [type isEqualToString:@"distance"]||[type isEqualToString:@"calories"]){
+        dispatch_group_t loadDetailsGroup=dispatch_group_create();
+        __block NSArray* stepsOrDistance = 0;
+        __block NSString* totalActivityDuration = 0;
+        for (int i = 0; i<2; i++) {
+            dispatch_group_enter(loadDetailsGroup);
+            if(i==0){
+                [self getActivityTime:date frequency:frequency days:0 callback:^(NSMutableArray * result){
+                    totalActivityDuration = [result objectAtIndex:0];
+                    dispatch_group_leave(loadDetailsGroup);
+                }];
+            }else if(i==1){
+                if([type isEqualToString:@"steps"] || [type isEqualToString:@"calories"]){
+                    if([frequency isEqualToString:@"day"]){
+                        [self fetchHourlySteps:date callback:^(NSArray * result) {
+                            stepsOrDistance = result;
+                            dispatch_group_leave(loadDetailsGroup);
+                        }];
+                    }else{
+                        [self fetchSteps:frequency endDate: date days:0 callback:^(NSArray * result) {
+                            stepsOrDistance = result;
+                            dispatch_group_leave(loadDetailsGroup);
+                        }];
+                    }
+                }else if ([type isEqualToString:@"distance"]){
+                    if([frequency isEqualToString:@"day"]){
+                        [self fetchHourlyDistanceWalkingRunning:date callback:^(NSArray * result) {
+                            stepsOrDistance = result;
+                            dispatch_group_leave(loadDetailsGroup);
+                        }];
+                    }else{
+                        [self fetchDistanceWalkingRunning:frequency endDate: date days:0 callback:^(NSArray * result) {
+                            stepsOrDistance = result;
+                            dispatch_group_leave(loadDetailsGroup);
+                        }];
+                    }
+                }
+            }
+        }
+        dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+            [self injectJavascript:stepsOrDistance type:type frequency:frequency activityTime:totalActivityDuration];
+        });
+    }else if([type isEqualToString:@"sleep"]){
+            if([frequency isEqualToString:@"day"]){
+                [self fetchSleepPattern:date frequency:frequency days:0 callback:^(NSArray * results) {
+                NSNumber* sleepTime = 0;
+                NSNumber* wakeTime = 0;
+                int count = 0;
+                for (NSDictionary *object in results) {
+                    NSString* sleepValue = [object valueForKey:@"value"];
+                    if([sleepValue isEqualToString:@"INBED"]||[sleepValue isEqualToString:@"ASLEEP"]){
+                        if(count==0){
+                            sleepTime =
+                            [NSNumber numberWithDouble: [@(floor([[object valueForKey:@"startDate"] timeIntervalSince1970] * 1000)) longLongValue]];
+                            
+                        }
+                        wakeTime =
+                        [NSNumber numberWithDouble: [@(floor([[object valueForKey:@"endDate"] timeIntervalSince1970] * 1000)) longLongValue]];
+                        count++;
+                    }
+                }
+                NSLog(@"sleepTime and wakeTime data, %@ %@",sleepTime, wakeTime);
+                    
+                if(sleepTime && wakeTime){
+                    NSString *javascript = [NSString stringWithFormat:@"DetailedGraph.updateDailySleep(%@,%@)", sleepTime,wakeTime];
+                    [self injectSleepData:javascript];
+                }else{
+                    NSString *javascript = [NSString stringWithFormat:@"DetailedGraph.updateDailySleep(0,0)"];
+                    [self injectSleepData:javascript];
+                }
+            } ];
+            }else{
+                [self fetchSleepPattern:date frequency:frequency days:0 callback:^(NSArray * results) {
+                    NSMutableArray *data = [[NSMutableArray alloc]init];
+                    NSLog(@"weekly sleep results, %@", results);
+                    if([results count]){
+                        for (NSDictionary* item in results) {
+                            NSString* sleepValue = [item valueForKey:@"value"];
+                            if([sleepValue isEqualToString:@"INBED"]||[sleepValue isEqualToString:@"ASLEEP"]){
+                                NSDate* startDate = [item valueForKey:@"startDate"];
+                                NSDate* endDate = [item valueForKey:@"endDate"];
+                                NSTimeInterval interval;
+                                NSNumber* sleepTime =
+                                [NSNumber numberWithDouble: [@(floor([startDate timeIntervalSince1970] * 1000)) longLongValue]];
+                                NSNumber* wakeupTime =
+                                [NSNumber numberWithDouble: [@(floor([endDate timeIntervalSince1970] * 1000)) longLongValue]];
+                                NSLog(@"startDate before calendar function ,%@",startDate);
+                                [self->calendar rangeOfUnit:NSCalendarUnitDay
+                                                   startDate:&startDate
+                                                    interval:&interval
+                                                     forDate:endDate];
+                                NSLog(@"startDate after calendar function ,%@",startDate);
+                                NSNumber* startTimestamp =
+                                [NSNumber numberWithDouble: [@(floor([startDate timeIntervalSince1970] * 1000)) longLongValue]];
+                                NSDateComponents * dateComponents = [self->calendar components: NSCalendarUnitDay | NSCalendarUnitWeekday fromDate: endDate];
+                                NSString* day =self->calendar.shortWeekdaySymbols[dateComponents.weekday - 1];
+                                NSLog(@"Day name: %@", day);
+                                NSDictionary *element = @{
+                                        @"sleepTime" : sleepTime,
+                                        @"wakeupTime" : wakeupTime,
+                                        @"day" : day,
+                                        @"startTimestamp" : startTimestamp,
+                                };
+                                NSMutableDictionary *elem = [NSMutableDictionary dictionaryWithDictionary:element];
+
+                                NSLog(@"data is, ====>> %@",data);
+                                if([data count]>0){
+                                    for (int i=0;i<[data count]; i++) {
+                                        NSMutableDictionary* item = [data objectAtIndex:i];
+                                        NSString* itemDay = [item objectForKey:@"day"];
+                                        NSString* itemSleepTime = [item objectForKey:@"sleepTime"];
+                                        if([itemDay isEqualToString:day]){
+                                            [elem setValue:itemSleepTime forKey:@"sleepTime"];
+                                            [data removeObjectAtIndex:i];
+                                            NSLog(@"removed day is, ====>> %@",itemDay);
+                                        }
+                                    }
+                                    [data addObject:elem];
+                                }else{
+                                    [data addObject:elem];
+                                }
+                            }
+                        }
+                    }
+                    if([data count]<7 && [data count]>0){
+                        NSMutableDictionary* item = [data objectAtIndex:[data count]-1];
+                        NSNumber* startTimeStamp = [item objectForKey:@"startTimestamp"];
+                        NSTimeInterval unixTimeStamp = [startTimeStamp doubleValue] / 1000.0;
+                        NSMutableArray* newData = [self getBlankSleepWeeks:[data count] date:[NSDate dateWithTimeIntervalSince1970:unixTimeStamp]];
+                        [data addObjectsFromArray:newData];
+                    }
+                    NSLog(@"data is, %@",data);
+                    NSData* jsonArray = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingPrettyPrinted error:nil ];
+                    NSString *jsonString = [[NSString alloc] initWithData:jsonArray encoding:NSUTF8StringEncoding];
+                    NSString *javascript = [NSString stringWithFormat:@"DetailedGraph.updateSleepData(JSON.stringify(%@))",  jsonString];
+                    [self injectSleepData:javascript];
+                }];
+           }
+        
+    }
+}
+
 
 -(void) injectJavascript:(NSString *) javascript{
 //    NSLog(@"javascript to be injected %@",javascript);
@@ -1246,11 +1473,19 @@ API_AVAILABLE(ios(11.0))
     }
 }
 
+- (NSDate *)convertStringToDate:(NSString *)date {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+    NSLocale *posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    [formatter setLocale:posix];
+    return [formatter dateFromString:date];
+}
+
 - (void)userContentController:(nonnull WKUserContentController *)userContentController didReceiveScriptMessage:(nonnull WKScriptMessage *)message {
     NSData *data = [message.body dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     NSString *methodName = [json valueForKey:@"method"];
-//    NSLog(@"methodName is %@",methodName);
+    NSLog(@"methodName is %@",methodName);
     if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];
     }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
@@ -1262,6 +1497,12 @@ API_AVAILABLE(ios(11.0))
                 [self requestAuthorization];
             }
         }];
+    }else if([methodName isEqualToString:@"getDataToGenerateGraph"]){
+        NSString *type = [json valueForKey:@"type"];
+        NSString *frequency = [json valueForKey:@"frequency"];
+        NSString *timestamp = [json valueForKey:@"timestamp"];
+        NSDate *date = [self convertStringToDate:timestamp];
+        [self renderGraphData:type frequency:frequency date:date];
     }else if([methodName isEqualToString:@"connectToFitbit"]) {
         NSString *urlString = [json valueForKey:@"url"];
         NSURL *url = [NSURL URLWithString:urlString];
