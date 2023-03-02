@@ -1180,9 +1180,11 @@ API_AVAILABLE(ios(11.0))
                 NSDictionary *httpBody = @{
                         @"data" : embellishData,
                         @"dt" : [NSNumber numberWithLong:finalDate],
+                        @"platform" : @"IOS",
                 };
                 
-                [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync",baseUrl] body:httpBody authToken:token];
+                [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync?isPWA=yes",baseUrl] body:httpBody authToken:token];
+                NSLog(@"embellish-sync data is, %@",httpBody.description);
 }
 
 -(void) preprocessUatRequest:(NSArray*) steps calories:(NSArray*) calories date:(NSDate*) date callback:(void(^)(NSDictionary*))callback {
@@ -1413,9 +1415,10 @@ API_AVAILABLE(ios(11.0))
         }
         NSDictionary *httpBody = @{
                 @"fitnessData" : dailySyncData,
+                @"platform" : @"IOS",
         };
-           [self PostJson:[NSString stringWithFormat:@"%@/users/data-sync",self->baseUrl] body:httpBody authToken:self->token];
-//        NSLog(@"dailySyncData is, %@",dailySyncData);
+           [self PostJson:[NSString stringWithFormat:@"%@/users/data-sync?isPWA=yes",self->baseUrl] body:httpBody authToken:self->token];
+        NSLog(@"dailySyncData is, %@",httpBody);
            
        }
     });
