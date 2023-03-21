@@ -1252,7 +1252,12 @@ API_AVAILABLE(ios(11.0))
 }
 
 -(void)callEmbellishApi:(NSMutableArray*) dates{
+    dispatch_group_t loadBulkHealthData=dispatch_group_create();
+    NSMutableArray* bulkHealthData = [NSMutableArray new];
+    NSUInteger totalIterations = [dates count];
+    dispatch_group_enter(loadBulkHealthData);
     for (NSDate* date in dates) {
+        totalIterations++;
         dispatch_group_t loadDetailsGroup=dispatch_group_create();
         __block NSArray* steps;
         __block NSArray* calories;
@@ -1274,10 +1279,52 @@ API_AVAILABLE(ios(11.0))
         }
         dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
             if([steps count]>0 && [calories count] > 0 && [distance count]>0){
-            [self preprocessEmbellishRequest:steps calories:calories distance:distance date:date];
+                
+                NSMutableArray* embellishData = [NSMutableArray new];
+                int count=0;
+                for (NSNumber* step in steps) {
+
+                    NSDictionary *dict = @{
+                            @"st" : step,
+                            @"c" : [calories objectAtIndex:count],
+                            @"d" : [distance objectAtIndex:count],
+                            @"h" : [NSNumber numberWithInt:count],
+                            @"s" : @"",
+                    };
+                    count++;
+                    [embellishData addObject:dict];
+                }
+//                NSLog(@"the httpBody is, %lu",(unsigned long)[embellishData count]);
+                NSTimeInterval unixDate = [date timeIntervalSince1970]*1000;
+                NSInteger finalDate = unixDate;
+                NSDictionary *body = @{
+                        @"data" : embellishData,
+                        @"dt" : [NSNumber numberWithLong:finalDate],
+                };
+                
+                [bulkHealthData addObject:body];
+                NSLog(@"embellish-sync date is, %@, while last date is %@",date, [dates lastObject]);
+                if ([date isEqualToDate:[dates lastObject] ]) {
+                    NSLog(@"embellish-sync this happened");
+                    dispatch_group_leave(loadBulkHealthData);
+                }
+                
+//                [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync?isPWA=yes",self->baseUrl] body:httpBody authToken:self->token];
+//                NSLog(@"embellish-sync data is, %@",httpBody.description);
+                
+//            [self preprocessEmbellishRequest:steps calories:calories distance:distance date:date];
             }
         });
     }
+
+    dispatch_group_notify(loadBulkHealthData,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+        NSDictionary *body = @{
+                @"bulkHealthData" : bulkHealthData,
+                @"platform" : @"IOS",
+        };
+        [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync?isPWA=yes",self->baseUrl] body:body authToken:self->token];
+        // NSLog(@"embellish-sync bulkHealthData is, %@",bulkHealthData.description);
+    });
 }
 
 - (void) urlOpened:(NSURL*) url{
@@ -1489,7 +1536,17 @@ API_AVAILABLE(ios(11.0))
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     NSString *methodName = [json valueForKey:@"method"];
     NSLog(@"methodName is %@",methodName);
-    if([methodName isEqualToString:@"disconnectFromFitbit"]){
+    if([methodName isEqualToString:@"disableDataSyncing"]){
+        syncingEnabled = false;
+        [self postNotification:@"DisableSyncing"];
+        NSString *javascript = [NSString stringWithFormat:@"syncingEnabled(false)"];
+        [self injectJavascript:javascript];
+    }else if([methodName isEqualToString:@"enableDataSyncing"]){
+        syncingEnabled = true;
+        [self postNotification:@"EnableSyncing"];
+        NSString *javascript = [NSString stringWithFormat:@"syncingEnabled(true)"];
+        [self injectJavascript:javascript];
+    }else if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];
     }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
@@ -1540,6 +1597,13 @@ API_AVAILABLE(ios(11.0))
     }else if([methodName isEqualToString:@"inFitSelectScreen"]){
         NSString *javascript = [NSString stringWithFormat:@"isIosUser(true)"];
         [self injectJavascript:javascript];
+        if(syncingEnabled){
+            NSString *javascript = [NSString stringWithFormat:@"syncingEnabled(true)"];
+            [self injectJavascript:javascript];
+        }else{
+            NSString *javascript = [NSString stringWithFormat:@"syncingEnabled(false)"];
+            [self injectJavascript:javascript];
+        }
         [VisitIosHealthController canAccessHealthKit:^(BOOL value){
             if(value){
                 // [self postNotification:@"FitnessPermissionGranted"];

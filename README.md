@@ -136,6 +136,10 @@ class ViewController: VisitVideoCallDelegate {
                 print("HRAQuestionAnswered,",current,"of",total)
             case "couponRedeemed":
                 print("couponRedeemed triggered")
+            case "EnableSyncing":
+                print("EnableSyncing triggered")
+            case "DisableSyncing":
+                print("DisableSyncing triggered")
                 
             case "ClosePWAEvent":
                 // show initial button again, in actual app this can be ignored
