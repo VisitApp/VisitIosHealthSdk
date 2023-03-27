@@ -51,7 +51,7 @@ API_AVAILABLE(ios(11.0))
         self->memberId = memberId;
         NSString *uatLastSyncTime = [params valueForKey:@"uatLastSyncTime"] ? [params valueForKey:@"uatLastSyncTime"]: [prefs stringForKey:@"uatLastSyncTime"];
         NSLog(@"initWithParams memberId and uatLastSyncTime obtained, %@ and %@", memberId, uatLastSyncTime);
-        [VisitIosHealthController canAccessHealthKit:^(BOOL value){
+        [self canAccessHealthKit:^(BOOL value){
             if(value && memberId!= NULL && uatLastSyncTime!= NULL){
                 NSTimeInterval gfHourlyLastSync = [uatLastSyncTime doubleValue];
                 NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
@@ -79,7 +79,7 @@ API_AVAILABLE(ios(11.0))
     [[VisitIosHealthController sharedManager] requestAuthorizationToShareTypes:[NSSet setWithArray:writeTypes] readTypes:[NSSet setWithArray:readTypes]
                                                                 completion:^(BOOL success, NSError *error) {
 //        NSLog(@"requestAuthorizationToShareTypes executed");
-        [VisitIosHealthController canAccessHealthKit:^(BOOL value){
+        [self canAccessHealthKit:^(BOOL value){
             if(value){
                 [self postNotification:@"FitnessPermissionGranted"];
                 NSLog(@"the health kit permission granted");
@@ -823,7 +823,7 @@ API_AVAILABLE(ios(11.0))
     [[VisitIosHealthController sharedManager] executeQuery:query];
 }
 
-+(void) canAccessHealthKit: (void(^)(BOOL))callback {
+-(void) canAccessHealthKit: (void(^)(BOOL))callback {
     double value = 1;
     NSDate *startDate = [NSDate date];
     NSDate *endDate = [NSDate date];
@@ -1536,20 +1536,10 @@ API_AVAILABLE(ios(11.0))
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     NSString *methodName = [json valueForKey:@"method"];
     NSLog(@"methodName is %@",methodName);
-    if([methodName isEqualToString:@"disableDataSyncing"]){
-        syncingEnabled = false;
-        [self postNotification:@"DisableSyncing"];
-        NSString *javascript = [NSString stringWithFormat:@"syncingEnabled(false)"];
-        [self injectJavascript:javascript];
-    }else if([methodName isEqualToString:@"enableDataSyncing"]){
-        syncingEnabled = true;
-        [self postNotification:@"EnableSyncing"];
-        NSString *javascript = [NSString stringWithFormat:@"syncingEnabled(true)"];
-        [self injectJavascript:javascript];
-    }else if([methodName isEqualToString:@"disconnectFromFitbit"]){
+    if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];
     }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
-        [VisitIosHealthController canAccessHealthKit:^(BOOL value){
+        [self canAccessHealthKit:^(BOOL value){
             if(value){
                 // [self postNotification:@"FitnessPermissionGranted"];
                 [self onHealthKitPermissionGranted];
@@ -1575,7 +1565,7 @@ API_AVAILABLE(ios(11.0))
     }else if([methodName isEqualToString:@"inHraEndPage"]){
         NSString *javascript = [NSString stringWithFormat:@"isIosUser(true)"];
         [self injectJavascript:javascript];
-        [VisitIosHealthController canAccessHealthKit:^(BOOL value){
+        [self canAccessHealthKit:^(BOOL value){
             if(value){
                 // [self postNotification:@"FitnessPermissionGranted"];
                 NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(false)"];
@@ -1597,14 +1587,7 @@ API_AVAILABLE(ios(11.0))
     }else if([methodName isEqualToString:@"inFitSelectScreen"]){
         NSString *javascript = [NSString stringWithFormat:@"isIosUser(true)"];
         [self injectJavascript:javascript];
-        if(syncingEnabled){
-            NSString *javascript = [NSString stringWithFormat:@"syncingEnabled(true)"];
-            [self injectJavascript:javascript];
-        }else{
-            NSString *javascript = [NSString stringWithFormat:@"syncingEnabled(false)"];
-            [self injectJavascript:javascript];
-        }
-        [VisitIosHealthController canAccessHealthKit:^(BOOL value){
+        [self canAccessHealthKit:^(BOOL value){
             if(value){
                 // [self postNotification:@"FitnessPermissionGranted"];
                 NSString *javascript = [NSString stringWithFormat:@"googleFitStatus(true)"];
@@ -1629,7 +1612,7 @@ API_AVAILABLE(ios(11.0))
         [prefs setObject:[json valueForKey:@"gfHourlyLastSync"] forKey:@"uatLastSyncTime"];
         
         if(syncingEnabled){
-            [VisitIosHealthController canAccessHealthKit:^(BOOL value){
+            [self canAccessHealthKit:^(BOOL value){
                 if(value){
                     // [self postNotification:@"FitnessPermissionGranted"];
                     NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(false)"];

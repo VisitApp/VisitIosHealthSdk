@@ -136,10 +136,6 @@ class ViewController: VisitVideoCallDelegate {
                 print("HRAQuestionAnswered,",current,"of",total)
             case "couponRedeemed":
                 print("couponRedeemed triggered")
-            case "EnableSyncing":
-                print("EnableSyncing triggered")
-            case "DisableSyncing":
-                print("DisableSyncing triggered")
                 
             case "ClosePWAEvent":
                 // show initial button again, in actual app this can be ignored
@@ -159,6 +155,15 @@ class ViewController: VisitVideoCallDelegate {
 
         // OPTIONAL : syncing is enabled by default but it can be toggled using this method
         visitHealthView.setSyncingEnabled(true)
+
+        // OPTIONAL : the health kit permission status can be obtained using the following callback
+        visitHealthView.canAccessHealthKit{(value) -> () in
+            if(value){
+                print("health kit can be accessed")
+            }else{
+                print("health kit can't be accessed")
+            }
+        }
         
         // presenting the viewcontroller vc
         self.present(vc, animated: true)

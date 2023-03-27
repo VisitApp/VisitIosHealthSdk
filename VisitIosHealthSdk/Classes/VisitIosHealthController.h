@@ -40,6 +40,7 @@
 - (void) callHraApi;
 - (void) urlOpened:(NSURL*) url;
 - (void) setSyncingEnabled:(BOOL)value;
+- (void) canAccessHealthKit: (void(^)(BOOL))callback;
 
 @end
 

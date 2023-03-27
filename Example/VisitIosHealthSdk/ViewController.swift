@@ -105,6 +105,15 @@ class ViewController: VisitVideoCallDelegate {
         
         // OPTIONAL : syncing is enabled by default but it can be toggled using this method
         visitHealthView.setSyncingEnabled(true)
+        
+        // OPTIONAL : the health kit permission status can be obtained using the following callback
+        visitHealthView.canAccessHealthKit{(value) -> () in
+            if(value){
+                print("health kit can be accessed")
+            }else{
+                print("health kit can't be accessed")
+            }
+        }
 
             // modal implementation
             self.present(vc, animated: true)
