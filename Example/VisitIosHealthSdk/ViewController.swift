@@ -123,7 +123,7 @@ class ViewController: VisitVideoCallDelegate {
 
         
         
-        visitHealthView.loadVisitWebUrl("https://tata-aig.getvisitapp.xyz/sso?userParams=OqoXUbWndvITFr1Fu_SJN_gz4UVTXpTecj13f-s1dSDg7S_TXjWwi5wz9nEBG6paqjl-uzWB1-2h7zUcd4srQw3-BZel8KLcQfQT_SZU7JNjbfR3DYllHFw4DOwdtpoRPCp_J4IjjU7nEefAvwdRQU5EiWPn0YT2YYmBIW0bgWI3B8szdYYW0H0l9T3Zxo3rFUWOGaSzMNk9FBDGIO1RkfcLR3GeG-RlPVpNukltKjjpUsDZAHWwuZva9XK4BKFmaQsztfoPS85gzCllCHiv26vfivXAJJjqihLoP3wBZk_PB1tt1EEYVuMCr-p58r7vPbJHkl5IBftHQsPTeKSfnnkhshJhNVbpHSBTMjbqHieyV5shZyTzO21hLED9OJra&clientId=tata-aig-a8b455")
+        visitHealthView.loadVisitWebUrl("--magic-link--")
         
     }
     

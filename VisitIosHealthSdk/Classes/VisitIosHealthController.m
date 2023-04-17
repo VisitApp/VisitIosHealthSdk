@@ -22,6 +22,7 @@ API_AVAILABLE(ios(11.0))
     [self.scrollView setMultipleTouchEnabled:NO];
     gender = @"Not Set";
     syncingEnabled = YES;
+    fitbitConnectionTriggered = FALSE;
     return self;
 }
 
@@ -1539,6 +1540,7 @@ API_AVAILABLE(ios(11.0))
     if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];
     }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
+         [self postNotification:@"AskForFitnessPermission"];
         [self canAccessHealthKit:^(BOOL value){
             if(value){
                 // [self postNotification:@"FitnessPermissionGranted"];
@@ -1554,6 +1556,7 @@ API_AVAILABLE(ios(11.0))
         NSDate *date = [self convertStringToDate:timestamp];
         [self renderGraphData:type frequency:frequency date:date];
     }else if([methodName isEqualToString:@"connectToFitbit"]) {
+        [self postNotification:@"AskForFitnessPermission"];
         NSString *urlString = [json valueForKey:@"url"];
         NSURL *url = [NSURL URLWithString:urlString];
         if([[UIApplication sharedApplication] canOpenURL:url]){
