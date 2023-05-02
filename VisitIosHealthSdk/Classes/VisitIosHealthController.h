@@ -32,15 +32,19 @@
     UIViewController* caller;
     BOOL fitbitConnectionTriggered;
     BOOL syncingEnabled;
+    BOOL isFitbitUser;
+    NSUserDefaults *userDefaults;
 }
 
 @property (nonatomic, weak) VisitVideoCallDelegate* videoCallDelegate;
 - (void) loadVisitWebUrl:(NSString*) magicLink;
 - (void) initialParams:(NSDictionary *)params;
 - (void) callHraApi;
+- (void) revokeFitbitPermissions;
 - (void) urlOpened:(NSURL*) url;
 - (void) setSyncingEnabled:(BOOL)value;
 - (void) canAccessHealthKit: (void(^)(BOOL))callback;
+- (BOOL) canAccessFitbit;
 
 @end
 

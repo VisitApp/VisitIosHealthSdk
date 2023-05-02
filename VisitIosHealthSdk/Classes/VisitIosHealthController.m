@@ -23,6 +23,13 @@ API_AVAILABLE(ios(11.0))
     gender = @"Not Set";
     syncingEnabled = YES;
     fitbitConnectionTriggered = FALSE;
+    userDefaults = [NSUserDefaults standardUserDefaults];
+    token = [userDefaults stringForKey:@"token"];
+    baseUrl = [userDefaults stringForKey:@"baseUrl"];
+    isFitbitUser = 0;
+    if([[userDefaults stringForKey:@"fitbitUser"] boolValue]){
+        isFitbitUser = 1;
+    }
     return self;
 }
 
@@ -47,10 +54,9 @@ API_AVAILABLE(ios(11.0))
         self->tataAIG_base_url = tataAIG_base_url;
         self->tataAIG_auth_token = tataAIG_auth_token;
     
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *memberId = [prefs stringForKey:@"memberId"];
+        NSString *memberId = [userDefaults stringForKey:@"memberId"];
         self->memberId = memberId;
-        NSString *uatLastSyncTime = [params valueForKey:@"uatLastSyncTime"] ? [params valueForKey:@"uatLastSyncTime"]: [prefs stringForKey:@"uatLastSyncTime"];
+        NSString *uatLastSyncTime = [params valueForKey:@"uatLastSyncTime"] ? [params valueForKey:@"uatLastSyncTime"]: [userDefaults stringForKey:@"uatLastSyncTime"];
         NSLog(@"initWithParams memberId and uatLastSyncTime obtained, %@ and %@", memberId, uatLastSyncTime);
         [self canAccessHealthKit:^(BOOL value){
             if(value && memberId!= NULL && uatLastSyncTime!= NULL){
@@ -527,6 +533,65 @@ API_AVAILABLE(ios(11.0))
         }];
 }
 
+-(void)getJson:(NSString *) endpoint query:(NSMutableArray*) query authToken:(NSString*) authToken{
+    NSLog(@"endpoint %@ and authToken %@",endpoint,authToken);
+    NSURLComponents *urlComponents = [NSURLComponents componentsWithString:endpoint];
+    if(query.count!=0){
+        urlComponents.queryItems = query;
+    }
+    
+    NSURL *url = urlComponents.URL;
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"GET";
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:authToken forHTTPHeaderField:@"Authorization"];
+    
+    // Set up the session configuration and session
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error in fitbit api: %@", error);
+        } else {
+            // Handle the response data
+            NSError* err = nil;
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
+                                                  options:NSUTF8StringEncoding
+                                                    error:&err];
+            if (err) {
+                NSLog(@"Error in fitbit api: %@", err);
+            }else{
+                if ([endpoint rangeOfString:@"fitness/current-progress/fitbit"].location == NSNotFound) {
+                    NSLog(@"Data in get api: %@", [json description]);
+                } else {
+                    
+                    NSDate *currentDate = [NSDate date];
+                    NSMutableArray *queryItems = [NSMutableArray array];
+
+                    // get the start of the current day
+                    NSDate *startOfDay;
+                    [self->calendar rangeOfUnit:NSCalendarUnitDay startDate:&startOfDay interval:NULL forDate:currentDate];
+                    NSTimeInterval startTimeStamp = [startOfDay timeIntervalSince1970];
+                    NSNumber *startTime = [NSNumber numberWithDouble:(startTimeStamp*1000)];
+                    
+                    [self->userDefaults setObject:startTime forKey:@"fitbitLastSyncTime"];
+                    NSLog(@"startTime in get api: %@", startTime);
+                    
+                    NSString *endpoint = [NSString stringWithFormat: @"%@/fitness-activity", self->tataAIG_base_url];
+                    NSDictionary *httpBody = @{
+                            @"data" : [json valueForKey:@"data"],
+                            @"member_id" : self->memberId,
+                    };
+                    NSLog(@"fitbit httpBody %@",httpBody);
+                    [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
+                }
+            }
+        }
+    }];
+    [task resume];
+}
+
 -(void)PostJson:(NSString*) endPoint body:(NSDictionary*) body authToken:(NSString*) authToken{
     NSString *downloadUrl = endPoint;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -535,7 +600,7 @@ API_AVAILABLE(ios(11.0))
         {
             // Convert the JSON object to NSData
             NSData * httpBodyData = [NSJSONSerialization dataWithJSONObject:body options:0 error:nil];
-//            NSLog(@"hitting api %@ with body=%@",downloadUrl, httpBodyData);
+            NSLog(@"hitting api %@ with body=%@",downloadUrl,  [[NSString alloc]initWithData:httpBodyData encoding:NSUTF8StringEncoding]);
             // set the http body
             [request setHTTPBody:httpBodyData];
             [request setHTTPMethod:@"POST"];
@@ -552,14 +617,17 @@ API_AVAILABLE(ios(11.0))
                     //
                     NSString *returnString = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
                     NSLog(@"Response:%@ for endpoint=%@",returnString,downloadUrl);
-                    if ([returnString rangeOfString:@"SUCCESS"].location == NSNotFound &&
+                    if([endPoint containsString:@"wearables/fitbit/revoke"]){
+                        self->isFitbitUser = 0;
+                        [self->userDefaults setObject:@"0" forKey:@"fitbitUser"];
+                        [self postNotification:@"FibitDisconnected"];
+                    } else if ([returnString rangeOfString:@"SUCCESS"].location == NSNotFound &&
                         [endPoint rangeOfString:@"uat"].location == NSNotFound) {
                       NSLog(@"not the uat api");
                     } else {
                         NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
                         NSString* currentTimeStamp = [timeInSeconds stringValue];
-                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                        [prefs setObject:currentTimeStamp forKey:@"uatLastSyncTime"];
+                        [self->userDefaults setObject:currentTimeStamp forKey:@"uatLastSyncTime"];
                         NSLog(@"uat api called successfully,%@",currentTimeStamp);
                     }
 
@@ -622,8 +690,7 @@ API_AVAILABLE(ios(11.0))
                     } else {
                         NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
                         NSString* currentTimeStamp = [timeInSeconds stringValue];
-                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                        [prefs setObject:currentTimeStamp forKey:@"uatLastSyncTime"];
+                        [userDefaults setObject:currentTimeStamp forKey:@"uatLastSyncTime"];
                         NSLog(@"uat api called successfully,%@",currentTimeStamp);
                     }
 
@@ -822,6 +889,15 @@ API_AVAILABLE(ios(11.0))
     };
 
     [[VisitIosHealthController sharedManager] executeQuery:query];
+}
+
+
+- (BOOL)canAccessFitbit {
+    if(isFitbitUser){
+        return YES;
+    }else{
+        return NO;
+    }
 }
 
 -(void) canAccessHealthKit: (void(^)(BOOL))callback {
@@ -1337,6 +1413,8 @@ API_AVAILABLE(ios(11.0))
         } else {
             NSLog(@"url matched");
             NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
+            isFitbitUser = 1;
+            [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
             [self postNotification:@"FitbitPermissionGranted"];
             [self injectJavascript:javascript];
             fitbitConnectionTriggered = FALSE;
@@ -1509,10 +1587,9 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void) callHraApi{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSString *isIncomplete = [prefs stringForKey:@"isIncomplete"];
+    NSString *isIncomplete = [userDefaults stringForKey:@"isIncomplete"];
     if(isIncomplete && (long)[isIncomplete integerValue]==0){
-        NSString *data = [prefs stringForKey:@"data"];
+        NSString *data = [userDefaults stringForKey:@"data"];
         NSError *jsonError;
         NSData *objectData = [data dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
@@ -1532,11 +1609,59 @@ API_AVAILABLE(ios(11.0))
     return [formatter dateFromString:date];
 }
 
+- (void) revokeFitbitPermissions{
+    NSString *urlString = [NSString stringWithFormat:@"%@/wearables/fitbit/revoke",baseUrl];
+    NSDictionary *body = [NSDictionary dictionary];
+    [self PostJson:urlString body:body authToken:token];
+}
+
+- (void) getFitbitData{
+    NSString *urlString = [NSString stringWithFormat:@"%@/fitness/current-progress/fitbit",baseUrl];
+    
+    NSDate *currentDate = [NSDate date];
+    NSMutableArray *queryItems = [NSMutableArray array];
+
+    // get the start of the current day
+    NSDate *startOfDay;
+    [calendar rangeOfUnit:NSCalendarUnitDay startDate:&startOfDay interval:NULL forDate:currentDate];
+    NSTimeInterval startTimeStamp = [startOfDay timeIntervalSince1970];
+    NSNumber *startTime = [NSNumber new];
+    NSString *fitbitLastSyncTime = [userDefaults stringForKey:@"fitbitLastSyncTime"];
+    NSLog(@"fitbitLastSyncTime is %@",fitbitLastSyncTime);
+    
+    if(fitbitLastSyncTime){
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        NSNumber *lastSyncTime = [f numberFromString:fitbitLastSyncTime];
+        startTime = lastSyncTime;
+    }else{
+        startTime = [NSNumber numberWithDouble:(startTimeStamp*1000)];
+    }
+
+    [queryItems addObject:[NSURLQueryItem queryItemWithName:@"start" value:[NSString stringWithFormat:@"%@", startTime]]];
+    
+    // get the end of the current day
+    NSDateComponents *components = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:[NSDate date]];
+    [components setHour:23];
+    [components setMinute:59];
+    [components setSecond:59];
+    NSDate *endOfDay = [calendar dateFromComponents:components];
+    NSTimeInterval endTimeStamp = [endOfDay timeIntervalSince1970];
+    NSNumber *endTime = [NSNumber numberWithDouble:(endTimeStamp*1000)];
+    
+    [queryItems addObject:[NSURLQueryItem queryItemWithName:@"end" value:[NSString stringWithFormat:@"%@", endTime]]];
+    
+    [queryItems addObject:[NSURLQueryItem queryItemWithName:@"version" value:@"1"]];
+    
+    [self getJson:urlString query:queryItems authToken:token];
+}
+
 - (void)userContentController:(nonnull WKUserContentController *)userContentController didReceiveScriptMessage:(nonnull WKScriptMessage *)message {
     NSData *data = [message.body dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    
     NSString *methodName = [json valueForKey:@"method"];
-    NSLog(@"methodName is %@",methodName);
+    NSLog(@"json is %@",[json description]);
     if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];
     }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
@@ -1554,7 +1679,9 @@ API_AVAILABLE(ios(11.0))
         NSString *frequency = [json valueForKey:@"frequency"];
         NSString *timestamp = [json valueForKey:@"timestamp"];
         NSDate *date = [self convertStringToDate:timestamp];
-        [self renderGraphData:type frequency:frequency date:date];
+        if(!isFitbitUser){
+            [self renderGraphData:type frequency:frequency date:date];
+        }
     }else if([methodName isEqualToString:@"connectToFitbit"]) {
         [self postNotification:@"AskForFitnessPermission"];
         NSString *urlString = [json valueForKey:@"url"];
@@ -1600,44 +1727,52 @@ API_AVAILABLE(ios(11.0))
                 [self injectJavascript:javascript];
             }
         }];
-    }else if([methodName isEqualToString:@"updateApiBaseUrl"]){
+    }else if([methodName isEqualToString:@"updateApiBaseUrlV2"]){
         baseUrl = [json valueForKey:@"apiBaseUrl"];
         token = [json valueForKey:@"authtoken"];
+        BOOL fitbitUser = [[json valueForKey:@"fitbitUser"] boolValue];
+        [userDefaults setObject:[json valueForKey:@"fitbitUser"] forKey:@"fitbitUser"];
         NSTimeInterval gfHourlyLastSync = [[json valueForKey:@"gfHourlyLastSync"] doubleValue];
         NSTimeInterval googleFitLastSync = [[json valueForKey:@"googleFitLastSync"] doubleValue];
         NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
         NSDate* dailyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: googleFitLastSync/1000];
         
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         if(![[json valueForKey:@"memberId"] isEqual:@"<null>"]){
             memberId = [json valueForKey:@"memberId"];
         }
-        [prefs setObject:[json valueForKey:@"gfHourlyLastSync"] forKey:@"uatLastSyncTime"];
+        [userDefaults setObject:[json valueForKey:@"gfHourlyLastSync"] forKey:@"uatLastSyncTime"];
+        [userDefaults setObject:token forKey:@"token"];
+        [userDefaults setObject:baseUrl forKey:@"baseUrl"];
         
         if(syncingEnabled){
-            [self canAccessHealthKit:^(BOOL value){
-                if(value){
-                    // [self postNotification:@"FitnessPermissionGranted"];
-                    NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(false)"];
-                    [self injectJavascript:javascript];
-                    [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
-                       if([dates count]>0){
-                           [self callEmbellishApi:dates];
-                           if(![self->memberId isEqual:@"<null>"]){
-                               [self callUatApi:dates];
+            if(fitbitUser){
+                NSLog(@"calling fitbit get api");
+                [self getFitbitData];
+            }else{
+                [self canAccessHealthKit:^(BOOL value){
+                    if(value){
+                        // [self postNotification:@"FitnessPermissionGranted"];
+                        NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(false)"];
+                        [self injectJavascript:javascript];
+                        [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
+                           if([dates count]>0){
+                               [self callEmbellishApi:dates];
+                               if(![self->memberId isEqual:@"<null>"]){
+                                   [self callUatApi:dates];
+                               }
                            }
-                       }
-                    }];
-                    [self getDateRanges:dailyDataSyncTime callback:^(NSMutableArray * dates) {
-                        if([dates count]>0){
-                            [self callSyncData:[dates count] dates:dates];
-                        }
-                    }];
-                }else{
-                    NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(true)"];
-                    [self injectJavascript:javascript];
-                }
-            }];
+                        }];
+                        [self getDateRanges:dailyDataSyncTime callback:^(NSMutableArray * dates) {
+                            if([dates count]>0){
+                                [self callSyncData:[dates count] dates:dates];
+                            }
+                        }];
+                    }else{
+                        NSString *javascript = [NSString stringWithFormat:@"showConnectToGoogleFit(true)"];
+                        [self injectJavascript:javascript];
+                    }
+                }];
+            }
         }
         
     }else if([methodName isEqualToString:@"closeView"]){
@@ -1680,11 +1815,10 @@ API_AVAILABLE(ios(11.0))
         NSString *javascript = [NSString stringWithFormat:@"updateHraToAig()"];
         [self injectJavascript:javascript];
     }else if([methodName isEqualToString:@"hraInComplete"]){
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSString *apiData = [json valueForKey:@"data"];
         NSString *isIncomplete = [json valueForKey:@"flag"];
-        [prefs setObject:apiData forKey:@"data"];
-        [prefs setObject:isIncomplete forKey:@"isIncomplete"];
+        [userDefaults setObject:apiData forKey:@"data"];
+        [userDefaults setObject:isIncomplete forKey:@"isIncomplete"];
         [self postNotification:@"hraInComplete"];
     }else if([methodName isEqualToString:@"askForGoogleFitGraphData"]){
         [self insertDataToCard];
