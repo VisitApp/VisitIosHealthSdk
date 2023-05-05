@@ -22,7 +22,6 @@ API_AVAILABLE(ios(11.0))
     [self.scrollView setMultipleTouchEnabled:NO];
     gender = @"Not Set";
     syncingEnabled = YES;
-    fitbitConnectionTriggered = FALSE;
     userDefaults = [NSUserDefaults standardUserDefaults];
     token = [userDefaults stringForKey:@"token"];
     baseUrl = [userDefaults stringForKey:@"baseUrl"];
@@ -1405,10 +1404,10 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void) urlOpened:(NSURL*) url{
-    NSLog(@"urlOpened triggered %@ %hhd",url.absoluteString,self->fitbitConnectionTriggered);
+//    NSLog(@"urlOpened triggered %@",url.absoluteString);
 
-    if(self->fitbitConnectionTriggered){
-        if ([url.absoluteString rangeOfString:@"fitbit"].location == NSNotFound) {
+    
+        if ([url.absoluteString rangeOfString:@"fitbit=true"].location == NSNotFound) {
             NSLog(@"url not matched");
         } else {
             NSLog(@"url matched");
@@ -1417,9 +1416,8 @@ API_AVAILABLE(ios(11.0))
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
             [self postNotification:@"FitbitPermissionGranted"];
             [self injectJavascript:javascript];
-            self->fitbitConnectionTriggered = FALSE;
         }
-    }
+
 }
 
 -(void)callSyncData:(NSInteger) days dates:(NSMutableArray*)dates{
@@ -1687,9 +1685,7 @@ API_AVAILABLE(ios(11.0))
         NSString *urlString = [json valueForKey:@"url"];
         NSURL *url = [NSURL URLWithString:urlString];
         if([[UIApplication sharedApplication] canOpenURL:url]){
-            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
-                self->fitbitConnectionTriggered = TRUE;
-            }];
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
         }else{
             NSLog(@"Cannot open url");
         }

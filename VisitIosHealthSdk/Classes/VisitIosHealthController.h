@@ -30,7 +30,6 @@
     HKHealthStore *healthStore;
     UIActivityIndicatorView *activityIndicator;
     UIViewController* caller;
-    BOOL fitbitConnectionTriggered;
     BOOL syncingEnabled;
     BOOL isFitbitUser;
     NSUserDefaults *userDefaults;
