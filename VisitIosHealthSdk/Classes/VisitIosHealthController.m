@@ -1405,9 +1405,9 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void) urlOpened:(NSURL*) url{
-//    NSLog(@"urlOpened triggered %@ %hhd",url.absoluteString,fitbitConnectionTriggered);
+    NSLog(@"urlOpened triggered %@ %hhd",url.absoluteString,self->fitbitConnectionTriggered);
 
-    if(fitbitConnectionTriggered){
+    if(self->fitbitConnectionTriggered){
         if ([url.absoluteString rangeOfString:@"fitbit"].location == NSNotFound) {
             NSLog(@"url not matched");
         } else {
@@ -1417,7 +1417,7 @@ API_AVAILABLE(ios(11.0))
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
             [self postNotification:@"FitbitPermissionGranted"];
             [self injectJavascript:javascript];
-            fitbitConnectionTriggered = FALSE;
+            self->fitbitConnectionTriggered = FALSE;
         }
     }
 }
@@ -1687,8 +1687,9 @@ API_AVAILABLE(ios(11.0))
         NSString *urlString = [json valueForKey:@"url"];
         NSURL *url = [NSURL URLWithString:urlString];
         if([[UIApplication sharedApplication] canOpenURL:url]){
-                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
-                fitbitConnectionTriggered = TRUE;
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+                self->fitbitConnectionTriggered = TRUE;
+            }];
         }else{
             NSLog(@"Cannot open url");
         }

@@ -29,24 +29,30 @@ class ViewController: VisitVideoCallDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // OPTIONAL : the health kit permission status can be obtained using the following callback
-        visitHealthView.canAccessHealthKit{(value) -> () in
-            if(value){
-                self.isHealthKitConnected = true;
-                print("health kit can be accessed")
-            }else{
-                self.isHealthKitConnected = false;
-                print("health kit can't be accessed")
-            }
-        }
-
         // modal implementation
         visitHealthView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
         
         vc.view = visitHealthView
+        
+        // OPTIONAL : the health kit permission status can be obtained using the following callback
+        visitHealthView.canAccessHealthKit{(value) -> () in
+            if(value){
+                self.isHealthKitConnected = true;
+                DispatchQueue.main.async {
+                    self.showButton()
+                }
+                print("health kit can be accessed")
+            }else{
+                self.isHealthKitConnected = false;
+                DispatchQueue.main.async {
+                    self.showButton()
+                }
+                print("health kit can't be accessed")
+            }
+        }
 
         // show button programattically, in actual app this can be ignored
-        self.showButton()
+
         
         // the notification observer
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: .customNotificationName, object: nil)
