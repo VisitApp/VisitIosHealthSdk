@@ -1416,10 +1416,10 @@ API_AVAILABLE(ios(11.0))
         } else {
             NSLog(@"url matched");
             NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
+            [self injectJavascript:javascript];
             isFitbitUser = 1;
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
             [self postNotification:@"FitbitPermissionGranted"];
-            [self injectJavascript:javascript];
         }
 
 }
@@ -1734,6 +1734,7 @@ API_AVAILABLE(ios(11.0))
         BOOL fitbitUser = [[json valueForKey:@"fitbitUser"] boolValue];
         if(fitbitUser){
             isFitbitUser = 1;
+            [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
             [self postNotification:@"FitbitPermissionGranted"];
         }
         [userDefaults setObject:[json valueForKey:@"fitbitUser"] forKey:@"fitbitUser"];
