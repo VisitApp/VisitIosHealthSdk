@@ -154,7 +154,7 @@ class ViewController: VisitVideoCallDelegate {
         // modal implementation
         self.present(vc, animated: true)
         
-        visitHealthView.loadVisitWebUrl("https://tata-aig.getvisitapp.xyz/sso?userParams=nAFZROLNXPCj7xNmss0IW_PVW5fdokQpiE1eGXq-QOt2u5mdob9QzrqloCAtZylQaksv_Ysd022sBP8dM2dHzFU88K-FFt-8YYsg-V_BPeXKx1ehcBEI_OxvVZ3QE4F6K_joR4nKmt2IAHeuxQpDVUHyD4LtoTDfwzFwQBjgkEy15c9v49Gswl55HFgLoETMM7lnWL48CDTQQoW3uNNnLEar-Zs7BsRhkD-Kb6wOl8s42VqT8LPPooBQqlVdxaSZDYjHj0NtLd_AVaSTLv0Y4T7HZz2OekZOejueslkjB5W_egyUCXZvLAYG9yp_cZaBOYYWnJUhqNdvcRQro5-CaA&clientId=tata-aig-a8b455")
+        visitHealthView.loadVisitWebUrl("--magic-link--")
         
     }
     

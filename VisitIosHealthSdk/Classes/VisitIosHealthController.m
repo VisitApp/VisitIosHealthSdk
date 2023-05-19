@@ -18,6 +18,9 @@ API_AVAILABLE(ios(11.0))
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
+    if (@available(iOS 16.4, *)) {
+        self.inspectable = true;
+    }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
     gender = @"Not Set";
@@ -575,15 +578,16 @@ API_AVAILABLE(ios(11.0))
                     NSNumber *startTime = [NSNumber numberWithDouble:(startTimeStamp*1000)];
                     
                     [self->userDefaults setObject:startTime forKey:@"fitbitLastSyncTime"];
-                    NSLog(@"startTime in get api: %@", startTime);
-                    
-                    NSString *endpoint = [NSString stringWithFormat: @"%@/fitness-activity", self->tataAIG_base_url];
-                    NSDictionary *httpBody = @{
-                            @"data" : [json valueForKey:@"data"],
-                            @"member_id" : self->memberId,
-                    };
-                    NSLog(@"fitbit httpBody %@",httpBody);
-                    [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
+
+                    if([[json valueForKey:@"message"] isEqualToString:@"success"]){
+                        NSString *endpoint = [NSString stringWithFormat: @"%@/fitness-activity", self->tataAIG_base_url];
+                        NSDictionary *httpBody = @{
+                                @"data" : [json valueForKey:@"data"],
+                                @"member_id" : self->memberId,
+                        };
+                        NSLog(@"fitbit httpBody %@",httpBody);
+                        [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
+                    }
                 }
             }
         }
@@ -1728,6 +1732,9 @@ API_AVAILABLE(ios(11.0))
         baseUrl = [json valueForKey:@"apiBaseUrl"];
         token = [json valueForKey:@"authtoken"];
         BOOL fitbitUser = [[json valueForKey:@"fitbitUser"] boolValue];
+        if(fitbitUser){
+            [self postNotification:@"FitbitPermissionGranted"];
+        }
         [userDefaults setObject:[json valueForKey:@"fitbitUser"] forKey:@"fitbitUser"];
         NSTimeInterval gfHourlyLastSync = [[json valueForKey:@"gfHourlyLastSync"] doubleValue];
         NSTimeInterval googleFitLastSync = [[json valueForKey:@"googleFitLastSync"] doubleValue];
