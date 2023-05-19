@@ -18,9 +18,9 @@ API_AVAILABLE(ios(11.0))
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
-    if (@available(iOS 16.4, *)) {
-        self.inspectable = true;
-    }
+//    if (@available(iOS 16.4, *)) {
+//        self.inspectable = true;
+//    }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
     gender = @"Not Set";
@@ -1733,6 +1733,7 @@ API_AVAILABLE(ios(11.0))
         token = [json valueForKey:@"authtoken"];
         BOOL fitbitUser = [[json valueForKey:@"fitbitUser"] boolValue];
         if(fitbitUser){
+            isFitbitUser = 1;
             [self postNotification:@"FitbitPermissionGranted"];
         }
         [userDefaults setObject:[json valueForKey:@"fitbitUser"] forKey:@"fitbitUser"];
