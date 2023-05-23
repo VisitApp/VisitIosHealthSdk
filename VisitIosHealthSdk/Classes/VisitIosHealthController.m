@@ -18,9 +18,9 @@ API_AVAILABLE(ios(11.0))
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
-//    if (@available(iOS 16.4, *)) {
-//        self.inspectable = true;
-//    }
+//     if (@available(iOS 16.4, *)) {
+//         self.inspectable = true;
+//     }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
     gender = @"Not Set";
@@ -1415,8 +1415,12 @@ API_AVAILABLE(ios(11.0))
             NSLog(@"url not matched");
         } else {
             NSLog(@"url matched");
+            double delayInSeconds = 2.0;
             NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
-            [self injectJavascript:javascript];
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self injectJavascript:javascript];
+            });
             isFitbitUser = 1;
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
             [self postNotification:@"FitbitPermissionGranted"];
