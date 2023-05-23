@@ -1209,7 +1209,7 @@ API_AVAILABLE(ios(11.0))
     dispatch_async(dispatch_get_main_queue(), ^{
         [self evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
             if(error != nil) {
-                NSLog(@"injectJavascript Error: %@",error);
+                NSLog(@"injectJavascript Error: %@ for string %@",error, javascript);
                 return;
             }
 //            NSLog(@"SomeFunction Success %@",result);
