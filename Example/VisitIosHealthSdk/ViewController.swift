@@ -30,9 +30,8 @@ class ViewController: VisitVideoCallDelegate {
         super.viewDidLoad()
         
         // modal implementation
-        visitHealthView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        
-        vc.view = visitHealthView
+        // visitHealthView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+        // vc.view = visitHealthView
         
         // OPTIONAL : the health kit permission status can be obtained using the following callback
         visitHealthView.canAccessHealthKit{(value) -> () in
@@ -152,10 +151,18 @@ class ViewController: VisitVideoCallDelegate {
         visitHealthView.initialParams(["tataAIG_base_url":external_api_base_url, "tataAIG_auth_token":external_api_base_url_auth_token]);
         
         // modal implementation
-        self.present(vc, animated: true)
+        // self.present(vc, animated: true)
+
+        // subview implementation
+        self.view.addSubview(visitHealthView)
+        visitHealthView.translatesAutoresizingMaskIntoConstraints = false
         
         visitHealthView.loadVisitWebUrl("--magic-link--")
-        
+
+        // subview implementation
+        let views = ["view" : visitHealthView]
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[view]|", options: NSLayoutFormatOptions.alignAllCenterX, metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|", options: NSLayoutFormatOptions.alignAllCenterY, metrics: nil, views: views))
     }
     
     override func didReceiveMemoryWarning() {
