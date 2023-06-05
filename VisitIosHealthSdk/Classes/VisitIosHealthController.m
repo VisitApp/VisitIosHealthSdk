@@ -18,9 +18,9 @@ API_AVAILABLE(ios(11.0))
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
-     if (@available(iOS 16.4, *)) {
-         self.inspectable = true;
-     }
+//     if (@available(iOS 16.4, *)) {
+//         self.inspectable = true;
+//     }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
     gender = @"Not Set";
@@ -1408,9 +1408,6 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void) urlOpened:(NSURL*) url{
-//    NSLog(@"urlOpened triggered %@",url.absoluteString);
-
-    
         if ([url.absoluteString rangeOfString:@"fitbit=true"].location == NSNotFound) {
             NSLog(@"url not matched");
         } else {
@@ -1422,7 +1419,6 @@ API_AVAILABLE(ios(11.0))
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
             [self postNotification:@"FitbitPermissionGranted"];
         }
-
 }
 
 -(void)callSyncData:(NSInteger) days dates:(NSMutableArray*)dates{
