@@ -1416,6 +1416,7 @@ API_AVAILABLE(ios(11.0))
             NSLog(@"url matched");
             isFitbitUser = 1;
             fitbitConnectionTriggered = 1;
+            [self reload];
             [self webView:self didFinishNavigation:self.navigationDelegate];
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
         }
