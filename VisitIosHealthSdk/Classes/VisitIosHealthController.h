@@ -10,7 +10,7 @@
 #import <HealthKit/HealthKit.h>
 #import "VisitVideoCallDelegate.h"
 
-@interface VisitIosHealthController : WKWebView<WKScriptMessageHandler, WKUIDelegate>{
+@interface VisitIosHealthController : WKWebView<WKScriptMessageHandler, WKNavigationDelegate>{
     // Member variables go here.
     NSString *baseUrl;
     NSString *token;
@@ -32,6 +32,7 @@
     UIViewController* caller;
     BOOL syncingEnabled;
     BOOL isFitbitUser;
+    BOOL fitbitConnectionTriggered;
     NSUserDefaults *userDefaults;
 }
 

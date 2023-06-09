@@ -18,6 +18,7 @@ API_AVAILABLE(ios(11.0))
     [config.userContentController
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
+    self.navigationDelegate = self;
 //     if (@available(iOS 16.4, *)) {
 //         self.inspectable = true;
 //     }
@@ -29,6 +30,7 @@ API_AVAILABLE(ios(11.0))
     token = [userDefaults stringForKey:@"token"];
     baseUrl = [userDefaults stringForKey:@"baseUrl"];
     isFitbitUser = 0;
+    fitbitConnectionTriggered = 0;
     if([[userDefaults stringForKey:@"fitbitUser"] boolValue]){
         isFitbitUser = 1;
     }
@@ -1412,13 +1414,25 @@ API_AVAILABLE(ios(11.0))
             NSLog(@"url not matched");
         } else {
             NSLog(@"url matched");
-            [self reload];
-            NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
-            [self injectJavascript:javascript];
             isFitbitUser = 1;
+            fitbitConnectionTriggered = 1;
+            [self webView:self didFinishNavigation:self.navigationDelegate];
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
-            [self postNotification:@"FitbitPermissionGranted"];
         }
+}
+    
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
+    if(isFitbitUser && fitbitConnectionTriggered){
+        NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
+        [self evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
+            if(error != nil) {
+                NSLog(@"injectJavascript Error: %@ for string %@",error, javascript);
+                return;
+            }
+        }];
+        [self postNotification:@"FitbitPermissionGranted"];
+        fitbitConnectionTriggered = 0;
+    }
 }
 
 -(void)callSyncData:(NSInteger) days dates:(NSMutableArray*)dates{
