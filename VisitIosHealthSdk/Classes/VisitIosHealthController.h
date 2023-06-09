@@ -10,7 +10,7 @@
 #import <HealthKit/HealthKit.h>
 #import "VisitVideoCallDelegate.h"
 
-@interface VisitIosHealthController : WKWebView<WKScriptMessageHandler>{
+@interface VisitIosHealthController : WKWebView<WKScriptMessageHandler, WKUIDelegate>{
     // Member variables go here.
     NSString *baseUrl;
     NSString *token;
