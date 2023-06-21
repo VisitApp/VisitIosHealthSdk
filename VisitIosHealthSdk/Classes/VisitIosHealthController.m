@@ -1431,6 +1431,7 @@ API_AVAILABLE(ios(11.0))
                 NSURL *url = [NSURL URLWithString:@"https://tata-aig.getvisitapp.xyz/stay-active?permissionGranted=true&fitbit=true"];
                 NSURLRequest* request = [NSURLRequest requestWithURL: url];
                 [super loadRequest:request];
+                [self reload];
             });
             [self postNotification:@"FitbitPermissionGranted"];
             self->fitbitConnectionTriggered = 0;
