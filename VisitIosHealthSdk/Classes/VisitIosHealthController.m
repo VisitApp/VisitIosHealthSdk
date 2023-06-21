@@ -1416,7 +1416,6 @@ API_AVAILABLE(ios(11.0))
             NSLog(@"url matched");
             isFitbitUser = 1;
             fitbitConnectionTriggered = 1;
-//            [self reload];
             [self webView:self didFinishNavigation:self.navigationDelegate];
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
         }
@@ -1428,9 +1427,11 @@ API_AVAILABLE(ios(11.0))
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             //code to be executed on the main queue after delay
-            NSURL *url = [NSURL URLWithString:@"https://tata-aig.getvisitapp.xyz/stay-active?permissionGranted=true&fitbit=true"];
-            NSURLRequest* request = [NSURLRequest requestWithURL: url];
-            [super loadRequest:request];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSURL *url = [NSURL URLWithString:@"https://tata-aig.getvisitapp.xyz/stay-active?permissionGranted=true&fitbit=true"];
+                NSURLRequest* request = [NSURLRequest requestWithURL: url];
+                [super loadRequest:request];
+            });
             [self postNotification:@"FitbitPermissionGranted"];
             self->fitbitConnectionTriggered = 0;
 
