@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'VisitIosHealthSdk'
-  s.version          = '0.5.8'
+  s.version          = '0.5.9'
   s.summary          = 'An SDK to inject the health kit data in Visit PWA'
   s.swift_versions   = '4.0'
 

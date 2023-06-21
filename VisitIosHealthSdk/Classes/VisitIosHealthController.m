@@ -30,6 +30,7 @@ API_AVAILABLE(ios(11.0))
     token = [userDefaults stringForKey:@"token"];
     baseUrl = [userDefaults stringForKey:@"baseUrl"];
     isFitbitUser = 0;
+    fitbitConnectionTriggered = 0;
     if([[userDefaults stringForKey:@"fitbitUser"] boolValue]){
         isFitbitUser = 1;
     }
@@ -1414,14 +1415,27 @@ API_AVAILABLE(ios(11.0))
         } else {
             NSLog(@"url matched");
             isFitbitUser = 1;
-
+            fitbitConnectionTriggered = 1;
+//            [self reload];
+            [self webView:self didFinishNavigation:self.navigationDelegate];
+            [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
+        }
+}
+    
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
+    if(isFitbitUser && fitbitConnectionTriggered){
+        double delayInSeconds = 2.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            //code to be executed on the main queue after delay
             NSURL *url = [NSURL URLWithString:@"https://tata-aig.getvisitapp.xyz/stay-active?permissionGranted=true&fitbit=true"];
             NSURLRequest* request = [NSURLRequest requestWithURL: url];
             [super loadRequest:request];
             [self postNotification:@"FitbitPermissionGranted"];
-            [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
-            
-        }
+            self->fitbitConnectionTriggered = 0;
+
+        });
+    }
 }
 
 -(void)callSyncData:(NSInteger) days dates:(NSMutableArray*)dates{
