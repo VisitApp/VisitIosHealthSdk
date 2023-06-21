@@ -32,7 +32,6 @@
     UIViewController* caller;
     BOOL syncingEnabled;
     BOOL isFitbitUser;
-    BOOL fitbitConnectionTriggered;
     NSUserDefaults *userDefaults;
 }
 

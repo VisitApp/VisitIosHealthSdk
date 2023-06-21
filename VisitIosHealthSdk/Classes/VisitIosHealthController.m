@@ -30,7 +30,6 @@ API_AVAILABLE(ios(11.0))
     token = [userDefaults stringForKey:@"token"];
     baseUrl = [userDefaults stringForKey:@"baseUrl"];
     isFitbitUser = 0;
-    fitbitConnectionTriggered = 0;
     if([[userDefaults stringForKey:@"fitbitUser"] boolValue]){
         isFitbitUser = 1;
     }
@@ -1415,25 +1414,14 @@ API_AVAILABLE(ios(11.0))
         } else {
             NSLog(@"url matched");
             isFitbitUser = 1;
-            fitbitConnectionTriggered = 1;
-            [self reload];
-            [self webView:self didFinishNavigation:self.navigationDelegate];
+
+            NSURL *url = [NSURL URLWithString:@"https://tata-aig.getvisitapp.xyz/stay-active?permissionGranted=true&fitbit=true"];
+            NSURLRequest* request = [NSURLRequest requestWithURL: url];
+            [super loadRequest:request];
+            [self postNotification:@"FitbitPermissionGranted"];
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
+            
         }
-}
-    
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
-    if(isFitbitUser && fitbitConnectionTriggered){
-        NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
-        [self evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
-            if(error != nil) {
-                NSLog(@"injectJavascript Error: %@ for string %@",error, javascript);
-                return;
-            }
-        }];
-        [self postNotification:@"FitbitPermissionGranted"];
-        fitbitConnectionTriggered = 0;
-    }
 }
 
 -(void)callSyncData:(NSInteger) days dates:(NSMutableArray*)dates{
