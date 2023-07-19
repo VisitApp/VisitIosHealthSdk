@@ -946,7 +946,28 @@ API_AVAILABLE(ios(11.0))
     return topVC;
 }
 
+- (void) receiveTestNotification:(NSNotification *) notification
+{
+    if ([[notification name] isEqualToString:@"VisitSDK"]){
+        NSURL *deepLink = [[notification userInfo] valueForKey:@"deepLink"];
+        NSString *link = deepLink.absoluteString;
+        if(self->fitbitConnectionTriggered && [link containsString:@"fitbit=true"]){
+            self->isFitbitUser = 1;
+            [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
+            NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
+            [self injectJavascript:javascript];
+            [self postNotification:@"FitbitPermissionGranted"];
+            self->fitbitConnectionTriggered = 0;
+        }
+    }
+}
+
 - (void)loadVisitWebUrl:(NSString*) magicLink{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(receiveTestNotification:)
+            name:@"VisitSDK"
+            object:nil];
+
     currentTopVC = [self currentTopViewController];
     calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierISO8601];
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"IST"];
@@ -1409,37 +1430,6 @@ API_AVAILABLE(ios(11.0))
     });
 }
 
-- (void) urlOpened:(NSURL*) url{
-        if ([url.absoluteString rangeOfString:@"fitbit=true"].location == NSNotFound) {
-            NSLog(@"url not matched");
-        } else {
-            NSLog(@"url matched");
-            isFitbitUser = 1;
-            fitbitConnectionTriggered = 1;
-            [self webView:self didFinishNavigation:self.navigationDelegate];
-            [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
-        }
-}
-    
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
-    if(isFitbitUser && fitbitConnectionTriggered){
-        double delayInSeconds = 2.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            //code to be executed on the main queue after delay
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSURL *url = [NSURL URLWithString:@"https://tata-aig.getvisitapp.xyz/stay-active?permissionGranted=true&fitbit=true"];
-                NSURLRequest* request = [NSURLRequest requestWithURL: url];
-                [super loadRequest:request];
-                [self reload];
-            });
-            [self postNotification:@"FitbitPermissionGranted"];
-            self->fitbitConnectionTriggered = 0;
-
-        });
-    }
-}
-
 -(void)callSyncData:(NSInteger) days dates:(NSMutableArray*)dates{
     dispatch_group_t syncDataGroup=dispatch_group_create();
     __block NSArray* steps;
@@ -1706,6 +1696,7 @@ API_AVAILABLE(ios(11.0))
         NSURL *url = [NSURL URLWithString:urlString];
         if([[UIApplication sharedApplication] canOpenURL:url]){
             [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+            fitbitConnectionTriggered = 1;
         }else{
             NSLog(@"Cannot open url");
         }
@@ -1852,6 +1843,8 @@ API_AVAILABLE(ios(11.0))
         NSString* link = [[json valueForKey:@"link"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         NSURL *url = [NSURL URLWithString:link];
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }else if([methodName isEqualToString:@"consultationBooked"]){
+        [self postNotification:@"consultationBooked"];
     }
     
 }

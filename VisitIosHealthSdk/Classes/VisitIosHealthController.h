@@ -41,7 +41,6 @@
 - (void) initialParams:(NSDictionary *)params;
 - (void) callHraApi;
 - (void) revokeFitbitPermissions;
-- (void) urlOpened:(NSURL*) url;
 - (void) setSyncingEnabled:(BOOL)value;
 - (void) canAccessHealthKit: (void(^)(BOOL))callback;
 - (BOOL) canAccessFitbit;

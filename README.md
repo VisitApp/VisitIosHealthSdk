@@ -47,11 +47,10 @@ import VisitIosHealthSdk
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    let visitHealthView = VisitIosHealthController.init();
 
-    // add urlOpened method in the delegate's open method like below
+    // add VisitSDK notification in the delegate's open method like below
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        visitHealthView.urlOpened(url);
+        NotificationCenter.default.post(name: Notification.Name("VisitSDK"), object: nil, userInfo: ["deepLink":url])
         return true
     }
 

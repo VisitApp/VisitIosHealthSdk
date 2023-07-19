@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        visitHealthView.urlOpened(url);
+        NotificationCenter.default.post(name: Notification.Name("VisitSDK"), object: nil, userInfo: ["deepLink":url])
         return true
     }
 

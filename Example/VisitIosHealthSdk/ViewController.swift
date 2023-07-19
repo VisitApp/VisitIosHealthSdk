@@ -125,6 +125,8 @@ class ViewController: VisitVideoCallDelegate {
                 print("EnableSyncing triggered")
             case "DisableSyncing":
                 print("DisableSyncing triggered")
+            case "consultationBooked":
+                print("consultationBooked triggered")
                 
             case "ClosePWAEvent":
                 // show initial button again, in actual app this can be ignored
