@@ -40,18 +40,18 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 		<key>NSAllowsArbitraryLoadsForMedia</key>
-    	<true/>
+		<true/>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
-    	<true/>
+		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to facilitate video calls on the app</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>App requires your permission to read health and fitness data.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>App requires your permission to store health and fitness data in HealthKit.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone to facilitate video calls on the app</string>
 	<key>UILaunchStoryboardName</key>

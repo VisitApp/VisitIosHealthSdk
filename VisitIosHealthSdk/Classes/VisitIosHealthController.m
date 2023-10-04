@@ -915,20 +915,24 @@ API_AVAILABLE(ios(11.0))
     HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     HKQuantitySample *sample = [HKQuantitySample quantitySampleWithType:type quantity:quantity startDate:startDate endDate:endDate];
     
-    [[VisitIosHealthController sharedManager] saveObject:sample withCompletion:^(BOOL success, NSError *error) {
-            if (!success) {
-                NSLog(@"An error occured saving the step count sample %@. The error was: %@.", sample, error);
-                callback(NO);
-            }else{
-                [[VisitIosHealthController sharedManager] deleteObject:sample withCompletion:^(BOOL success, NSError * _Nullable error) {
-                    if(!success){
-                        callback(NO);
-                    }else{
-                        callback(YES);
-                    }
-                }];
-            }
-        }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[VisitIosHealthController sharedManager] saveObject:sample withCompletion:^(BOOL success, NSError *error) {
+                if (!success) {
+                    NSLog(@"An error occured saving the step count sample %@. The error was: %@.", sample, error);
+                    callback(NO);
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                    [[VisitIosHealthController sharedManager] deleteObject:sample withCompletion:^(BOOL success, NSError * _Nullable error) {
+                        if(!success){
+                            callback(NO);
+                        }else{
+                            callback(YES);
+                        }
+                    }];
+                    });
+                }
+            }];
+    });
 }
 
 - (void)closeAddDependentView:(UIButton*)button
