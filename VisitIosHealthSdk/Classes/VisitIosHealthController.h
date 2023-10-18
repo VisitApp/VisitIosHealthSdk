@@ -33,6 +33,7 @@
     BOOL syncingEnabled;
     BOOL isFitbitUser;
     BOOL fitbitConnectionTriggered;
+    BOOL healthKitPermissionTriggered;
     NSUserDefaults *userDefaults;
 }
 

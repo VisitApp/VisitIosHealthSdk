@@ -99,6 +99,8 @@ class ViewController: VisitVideoCallDelegate {
         let event = notification.userInfo?["event"] as! String
         let current = notification.userInfo?["current"] ?? ""
         let total = notification.userInfo?["total"] ?? ""
+        let message = notification.userInfo?["message"] ?? ""
+        let code = notification.userInfo?["code"] ?? ""
         switch(event){
             case "HealthKitConnectedAndSavedInPWA":
                 print("health kit connected and saved")
@@ -127,7 +129,13 @@ class ViewController: VisitVideoCallDelegate {
                 print("DisableSyncing triggered")
             case "consultationBooked":
                 print("consultationBooked triggered")
-                
+            case "FitnessPermissionError":
+                print("FitnessPermissionError triggered,", message)
+            case "StepSyncError":
+                print("StepSyncError triggered,", message)
+            case "NetworkError":
+                print("NetworkError triggered,", message, code)
+
             case "ClosePWAEvent":
                 // show initial button again, in actual app this can be ignored
                 self.showButton();

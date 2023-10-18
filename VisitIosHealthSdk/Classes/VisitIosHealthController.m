@@ -31,6 +31,7 @@ API_AVAILABLE(ios(11.0))
     baseUrl = [userDefaults stringForKey:@"baseUrl"];
     isFitbitUser = 0;
     fitbitConnectionTriggered = 0;
+    healthKitPermissionTriggered = 0;
     if([[userDefaults stringForKey:@"fitbitUser"] boolValue]){
         isFitbitUser = 1;
     }
@@ -89,14 +90,18 @@ API_AVAILABLE(ios(11.0))
     
     [[VisitIosHealthController sharedManager] requestAuthorizationToShareTypes:[NSSet setWithArray:writeTypes] readTypes:[NSSet setWithArray:readTypes]
                                                                 completion:^(BOOL success, NSError *error) {
-//        NSLog(@"requestAuthorizationToShareTypes executed");
         [self canAccessHealthKit:^(BOOL value){
             if(value){
                 [self postNotification:@"FitnessPermissionGranted"];
                 NSLog(@"the health kit permission granted");
                 [self onHealthKitPermissionGranted];
+                self->healthKitPermissionTriggered = 0;
             }else{
                 NSLog(@"the health kit permission not granted");
+                if(self->healthKitPermissionTriggered == 1){
+                    [self postNotification:@"FitnessPermissionError" value:@"Health Kit permission denied"];
+                    self->healthKitPermissionTriggered = 0;
+                }
                 UIAlertController * alert = [UIAlertController
                                                  alertControllerWithTitle:@"Permission Denied"
                                                  message:@"Please go to Settings>Privacy>Health and approve the required permissions"
@@ -622,7 +627,14 @@ API_AVAILABLE(ios(11.0))
                     //
                     NSString *returnString = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
                     NSLog(@"Response:%@ for endpoint=%@",returnString,downloadUrl);
-                    if([endPoint containsString:@"wearables/fitbit/revoke"]){
+                    if([downloadUrl containsString:@"fitness-activity"]){
+                        NSData *fitnessActivityResponse = [returnString dataUsingEncoding:NSUTF8StringEncoding];
+                        id json = [NSJSONSerialization JSONObjectWithData:fitnessActivityResponse options:0 error:nil];
+                        NSString* action = [json objectForKey:@"action"];
+                        if([action rangeOfString:@"SUCCESS"].location == NSNotFound){
+                            [self postNotification:@"StepSyncError" value: [json objectForKey:@"message"]];
+                        }
+                    }else if([endPoint containsString:@"wearables/fitbit/revoke"]){
                         self->isFitbitUser = 0;
                         [self->userDefaults setObject:@"0" forKey:@"fitbitUser"];
                         [self postNotification:@"FibitDisconnected"];
@@ -922,13 +934,13 @@ API_AVAILABLE(ios(11.0))
                     callback(NO);
                 }else{
                     dispatch_async(dispatch_get_main_queue(), ^{
-                    [[VisitIosHealthController sharedManager] deleteObject:sample withCompletion:^(BOOL success, NSError * _Nullable error) {
-                        if(!success){
-                            callback(NO);
-                        }else{
-                            callback(YES);
-                        }
-                    }];
+                        [[VisitIosHealthController sharedManager] deleteObject:sample withCompletion:^(BOOL success, NSError * _Nullable error) {
+                                if(!success){
+                                    callback(NO);
+                                }else{
+                                    callback(YES);
+                                }
+                        }];
                     });
                 }
             }];
@@ -1582,7 +1594,7 @@ API_AVAILABLE(ios(11.0))
 -(void) postNotification:(NSString *) event value:(NSString*)value{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"VisitEventType" object:nil userInfo:@{
         @"event":event,
-        @"value1":value
+        @"message":value
     }];
 }
 
@@ -1591,6 +1603,14 @@ API_AVAILABLE(ios(11.0))
         @"event":@"HRAQuestionAnswered",
         @"current":value,
         @"total":total
+    }];
+}
+
+-(void) postNetworkErrorWithMessageAndCode:(NSString*)message code:(NSString*)code{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VisitEventType" object:nil userInfo:@{
+        @"event":@"NetworkError",
+        @"message":message,
+        @"code":code
     }];
 }
 
@@ -1677,6 +1697,7 @@ API_AVAILABLE(ios(11.0))
     if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];
     }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
+        healthKitPermissionTriggered = 1;
          [self postNotification:@"AskForFitnessPermission"];
         [self canAccessHealthKit:^(BOOL value){
             if(value){
@@ -1849,6 +1870,10 @@ API_AVAILABLE(ios(11.0))
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
     }else if([methodName isEqualToString:@"consultationBooked"]){
         [self postNotification:@"consultationBooked"];
+    }else if([methodName isEqualToString:@"internetErrorHandler"]){
+        NSString *errStatus = [json valueForKey:@"errStatus"];
+        NSString *error = [json valueForKey:@"error"];
+        [self postNetworkErrorWithMessageAndCode:error code:errStatus];
     }
     
 }
