@@ -15,6 +15,7 @@
     NSString *baseUrl;
     NSString *token;
     NSString *memberId;
+    NSString *fitnessActivityLastSyncTime;
     NSTimeInterval gfHourlyLastSync;
     NSTimeInterval googleFitLastSync;
     NSCalendar* calendar;

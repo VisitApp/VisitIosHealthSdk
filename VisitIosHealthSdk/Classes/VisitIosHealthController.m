@@ -59,13 +59,12 @@ API_AVAILABLE(ios(11.0))
         self->tataAIG_base_url = tataAIG_base_url;
         self->tataAIG_auth_token = tataAIG_auth_token;
     
-        NSString *memberId = [userDefaults stringForKey:@"memberId"];
-        self->memberId = memberId;
-        NSString *uatLastSyncTime = [params valueForKey:@"uatLastSyncTime"] ? [params valueForKey:@"uatLastSyncTime"]: [userDefaults stringForKey:@"uatLastSyncTime"];
-        NSLog(@"initWithParams memberId and uatLastSyncTime obtained, %@ and %@", memberId, uatLastSyncTime);
+        self->memberId = [userDefaults stringForKey:@"memberId"];;
+        self->fitnessActivityLastSyncTime = [params valueForKey:@"fitnessActivityLastSyncTime"] ? [params valueForKey:@"fitnessActivityLastSyncTime"]: [userDefaults stringForKey:@"fitnessActivityLastSyncTime"];
+    
         [self canAccessHealthKit:^(BOOL value){
-            if(value && memberId!= NULL && uatLastSyncTime!= NULL){
-                NSTimeInterval gfHourlyLastSync = [uatLastSyncTime doubleValue];
+            if(value && self->memberId!= NULL && self->fitnessActivityLastSyncTime!= NULL){
+                NSTimeInterval gfHourlyLastSync = [self->fitnessActivityLastSyncTime doubleValue];
                 NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
                 [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
                    if([dates count]>0){
@@ -593,7 +592,7 @@ API_AVAILABLE(ios(11.0))
                                 @"member_id" : self->memberId,
                         };
                         NSLog(@"fitbit httpBody %@",httpBody);
-                        [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
+                       [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
                     }
                 }
             }
@@ -619,6 +618,9 @@ API_AVAILABLE(ios(11.0))
             NSURLSessionDataTask * task= [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                 if (error) {
                     NSLog(@"Download Error:%@ for endpoint=%@",error.description,downloadUrl);
+                    if([downloadUrl containsString:@"fitness-activity"]){
+                        [self postNotification:@"StepSyncError" value: [error localizedDescription]];
+                    }
                 }
                 if (data) {
 
@@ -633,19 +635,16 @@ API_AVAILABLE(ios(11.0))
                         NSString* action = [json objectForKey:@"action"];
                         if([action rangeOfString:@"SUCCESS"].location == NSNotFound){
                             [self postNotification:@"StepSyncError" value: [json objectForKey:@"message"]];
+                        }else{
+                            NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
+                            NSString* currentTimeStamp = [timeInSeconds stringValue];
+                            [self->userDefaults setObject:currentTimeStamp forKey:@"fitnessActivityLastSyncTime"];
+//                            NSLog(@"uat api called successfully,%@",currentTimeStamp);
                         }
                     }else if([endPoint containsString:@"wearables/fitbit/revoke"]){
                         self->isFitbitUser = 0;
                         [self->userDefaults setObject:@"0" forKey:@"fitbitUser"];
                         [self postNotification:@"FibitDisconnected"];
-                    } else if ([returnString rangeOfString:@"SUCCESS"].location == NSNotFound &&
-                        [endPoint rangeOfString:@"uat"].location == NSNotFound) {
-                      NSLog(@"not the uat api");
-                    } else {
-                        NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
-                        NSString* currentTimeStamp = [timeInSeconds stringValue];
-                        [self->userDefaults setObject:currentTimeStamp forKey:@"uatLastSyncTime"];
-                        NSLog(@"uat api called successfully,%@",currentTimeStamp);
                     }
 
                     //PARSE JSON RESPONSE
@@ -701,15 +700,6 @@ API_AVAILABLE(ios(11.0))
                     //
                     NSString *returnString = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
                     NSLog(@"Response:%@ for endpoint=%@",returnString,downloadUrl);
-                    if ([returnString rangeOfString:@"SUCCESS"].location == NSNotFound &&
-                        [endPoint rangeOfString:@"uat"].location == NSNotFound) {
-                      NSLog(@"not the uat api");
-                    } else {
-                        NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
-                        NSString* currentTimeStamp = [timeInSeconds stringValue];
-                        [userDefaults setObject:currentTimeStamp forKey:@"uatLastSyncTime"];
-                        NSLog(@"uat api called successfully,%@",currentTimeStamp);
-                    }
 
                     //PARSE JSON RESPONSE
                     NSDictionary *json_response = [NSJSONSerialization JSONObjectWithData:data
@@ -806,7 +796,11 @@ API_AVAILABLE(ios(11.0))
                                                          options:0];
     
     NSInteger numberOfDays =[component day];
-    if(numberOfDays>30){
+    if(numberOfDays==0){
+        [component setDay:-1];
+        startingDate =[calendar dateByAddingComponents:component toDate:endOfToday options:0];
+        numberOfDays = 1;
+    }else if(numberOfDays>30){
         [component setDay:-30];
         startingDate =[calendar dateByAddingComponents:component toDate:endOfToday options:0];
         numberOfDays=30;
@@ -1302,7 +1296,7 @@ API_AVAILABLE(ios(11.0))
                         @"platform" : @"IOS",
                 };
                 
-                [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync?isPWA=yes",baseUrl] body:httpBody authToken:token];
+               [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync?isPWA=yes",baseUrl] body:httpBody authToken:token];
                 NSLog(@"embellish-sync data is, %@",httpBody.description);
 }
 
@@ -1365,7 +1359,7 @@ API_AVAILABLE(ios(11.0))
                 @"data" : uatData,
                 @"member_id" : self->memberId,
         };
-        [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
+       [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
     });
 
 }
@@ -1441,7 +1435,7 @@ API_AVAILABLE(ios(11.0))
                 @"bulkHealthData" : bulkHealthData,
                 @"platform" : @"IOS",
         };
-        [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync?isPWA=yes",self->baseUrl] body:body authToken:self->token];
+       [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync?isPWA=yes",self->baseUrl] body:body authToken:self->token];
         // NSLog(@"embellish-sync bulkHealthData is, %@",bulkHealthData.description);
     });
 }
@@ -1567,7 +1561,7 @@ API_AVAILABLE(ios(11.0))
                 @"fitnessData" : dailySyncData,
                 @"platform" : @"IOS",
         };
-           [self PostJson:[NSString stringWithFormat:@"%@/users/data-sync?isPWA=yes",self->baseUrl] body:httpBody authToken:self->token];
+          [self PostJson:[NSString stringWithFormat:@"%@/users/data-sync?isPWA=yes",self->baseUrl] body:httpBody authToken:self->token];
         NSLog(@"dailySyncData is, %@",httpBody);
            
        }
@@ -1778,7 +1772,6 @@ API_AVAILABLE(ios(11.0))
         if(![[json valueForKey:@"memberId"] isEqual:@"<null>"]){
             memberId = [json valueForKey:@"memberId"];
         }
-        [userDefaults setObject:[json valueForKey:@"gfHourlyLastSync"] forKey:@"uatLastSyncTime"];
         [userDefaults setObject:token forKey:@"token"];
         [userDefaults setObject:baseUrl forKey:@"baseUrl"];
         
@@ -1795,11 +1788,30 @@ API_AVAILABLE(ios(11.0))
                         [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
                            if([dates count]>0){
                                [self callEmbellishApi:dates];
-                               if(![self->memberId isEqual:@"<null>"]){
-                                   [self callUatApi:dates];
-                               }
                            }
                         }];
+                        
+                        if(self->fitnessActivityLastSyncTime){
+                            NSTimeInterval fitnessActivityLastSyncTimeInterval = [self->fitnessActivityLastSyncTime doubleValue];
+                            NSDate* fitnessActivityLastSyncDateTime = [NSDate dateWithTimeIntervalSince1970: fitnessActivityLastSyncTimeInterval/1000];
+                            [self getDateRanges:fitnessActivityLastSyncDateTime callback:^(NSMutableArray * dates) {
+                               if([dates count]>0 && ![self->memberId isEqual:@"<null>"]){
+                                       [self callUatApi:dates];
+                               }
+                            }];
+                        }else{
+                            NSDate *currentDate = [NSDate date];
+                            NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+                            [dateComponents setDay:-30];
+                            NSCalendar *calendar = [NSCalendar currentCalendar];
+                            NSDate *thirtyDaysAgo = [calendar dateByAddingComponents:dateComponents toDate:currentDate options:0];
+                            [self getDateRanges:thirtyDaysAgo callback:^(NSMutableArray * dates) {
+                               if([dates count]>0 && ![self->memberId isEqual:@"<null>"]){
+                                       [self callUatApi:dates];
+                               }
+                            }];
+                        }
+
                         [self getDateRanges:dailyDataSyncTime callback:^(NSMutableArray * dates) {
                             if([dates count]>0){
                                 [self callSyncData:[dates count] dates:dates];
