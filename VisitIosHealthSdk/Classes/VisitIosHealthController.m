@@ -53,26 +53,26 @@ API_AVAILABLE(ios(11.0))
 }
 
 -(void)initialParams:(NSDictionary *)params {
-        NSLog(@"initWithParams params %@",params);
-        NSString* tataAIG_base_url = [params valueForKey:@"tataAIG_base_url"];
-        NSString* tataAIG_auth_token = [params valueForKey:@"tataAIG_auth_token"];
-        self->tataAIG_base_url = tataAIG_base_url;
-        self->tataAIG_auth_token = tataAIG_auth_token;
+    NSLog(@"initWithParams params %@",params);
+    [self->userDefaults setObject:[params valueForKey:@"tataAIG_base_url"] forKey:@"tataAIG_base_url"];
+    [self->userDefaults setObject:[params valueForKey:@"tataAIG_auth_token"] forKey:@"tataAIG_auth_token"];
+    self->tataAIG_base_url = [params valueForKey:@"tataAIG_base_url"];
+    self->tataAIG_auth_token = [params valueForKey:@"tataAIG_auth_token"];
     
-        self->memberId = [userDefaults stringForKey:@"memberId"];;
-        self->fitnessActivityLastSyncTime = [params valueForKey:@"fitnessActivityLastSyncTime"] ? [params valueForKey:@"fitnessActivityLastSyncTime"]: [userDefaults stringForKey:@"fitnessActivityLastSyncTime"];
-    
-        [self canAccessHealthKit:^(BOOL value){
-            if(value && self->memberId!= NULL && self->fitnessActivityLastSyncTime!= NULL){
-                NSTimeInterval gfHourlyLastSync = [self->fitnessActivityLastSyncTime doubleValue];
-                NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
-                [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
-                   if([dates count]>0){
-                       [self callUatApi:dates];
-                   }
-                }];
-            }
-        }];
+    self->memberId = [userDefaults stringForKey:@"memberId"];;
+    self->fitnessActivityLastSyncTime = [params valueForKey:@"fitnessActivityLastSyncTime"] ? [params valueForKey:@"fitnessActivityLastSyncTime"]: [userDefaults stringForKey:@"fitnessActivityLastSyncTime"];
+
+    [self canAccessHealthKit:^(BOOL value){
+        if(value && self->memberId!= NULL && self->fitnessActivityLastSyncTime!= NULL){
+            NSTimeInterval gfHourlyLastSync = [self->fitnessActivityLastSyncTime doubleValue];
+            NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
+            [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
+               if([dates count]>0){
+                   [self callUatApi:dates];
+               }
+            }];
+        }
+    }];
 }
 
 - (void)requestAuthorization {
@@ -586,19 +586,30 @@ API_AVAILABLE(ios(11.0))
                     [self->userDefaults setObject:startTime forKey:@"fitbitLastSyncTime"];
 
                     if([[json valueForKey:@"message"] isEqualToString:@"success"]){
-                        NSString *endpoint = [NSString stringWithFormat: @"%@/fitness-activity", self->tataAIG_base_url];
+                        NSString *external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
+                        
+                        NSString *endpoint = [NSString stringWithFormat: @"%@/fitness-activity", external_base_url];
                         NSDictionary *httpBody = @{
                                 @"data" : [json valueForKey:@"data"],
                                 @"member_id" : self->memberId,
                         };
                         NSLog(@"fitbit httpBody %@",httpBody);
-                       [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
+                        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
+                       [self PostJson:endpoint body:httpBody authToken:external_auth_token];
                     }
                 }
             }
         }
     }];
     [task resume];
+}
+
+-(BOOL)isEmpty:(NSString *)str
+{
+    if(str.length==0 || [str isKindOfClass:[NSNull class]] || [str isEqualToString:@""]||[str  isEqualToString:NULL]||[str isEqualToString:@"(null)"]||str==nil || [str isEqualToString:@"<null>"]){
+        return YES;
+    }
+    return NO;
 }
 
 -(void)PostJson:(NSString*) endPoint body:(NSDictionary*) body authToken:(NSString*) authToken{
@@ -1354,12 +1365,14 @@ API_AVAILABLE(ios(11.0))
     }
     dispatch_group_notify(loadUatData,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         NSLog(@"the uat data in dispatch_group_notify is, %@",[uatData description]);
-        NSString *endpoint = [NSString stringWithFormat: @"%@/fitness-activity", self->tataAIG_base_url];
+        NSString* external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
+        NSString *endpoint = [NSString stringWithFormat: @"%@/fitness-activity", external_base_url];
         NSDictionary *httpBody = @{
                 @"data" : uatData,
                 @"member_id" : self->memberId,
         };
-       [self PostJson:endpoint body:httpBody authToken:self->tataAIG_auth_token];
+        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
+       [self PostJson:endpoint body:httpBody authToken:external_auth_token];
     });
 
 }
@@ -1623,7 +1636,9 @@ API_AVAILABLE(ios(11.0))
                                                 error:&jsonError];
         
         NSLog(@"the hra-fitness-details req, %@",json);
-        [self PutJson:[NSString stringWithFormat:@"%@/hra-fitness-details",self->tataAIG_base_url] body:json authToken:self->tataAIG_auth_token];
+        NSString* external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
+        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
+        [self PutJson:[NSString stringWithFormat:@"%@/hra-fitness-details",external_base_url] body:json authToken:external_auth_token];
     }
 }
 
