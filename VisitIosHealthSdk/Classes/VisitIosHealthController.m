@@ -61,16 +61,18 @@ API_AVAILABLE(ios(11.0))
     
     self->memberId = [userDefaults stringForKey:@"memberId"];;
     self->fitnessActivityLastSyncTime = [params valueForKey:@"fitnessActivityLastSyncTime"] ? [params valueForKey:@"fitnessActivityLastSyncTime"]: [userDefaults stringForKey:@"fitnessActivityLastSyncTime"];
-
+    
     [self canAccessHealthKit:^(BOOL value){
         if(value && self->memberId!= NULL && self->fitnessActivityLastSyncTime!= NULL){
             NSTimeInterval gfHourlyLastSync = [self->fitnessActivityLastSyncTime doubleValue];
             NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
-            [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
-               if([dates count]>0){
-                   [self callUatApi:dates];
-               }
-            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self getDateRanges:hourlyDataSyncTime callback:^(NSMutableArray * dates) {
+                   if([dates count]>0){
+                       [self callUatApi:dates];
+                   }
+                }];
+            });
         }
     }];
 }
@@ -1651,7 +1653,8 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void) revokeFitbitPermissions{
-    NSString *urlString = [NSString stringWithFormat:@"%@/wearables/fitbit/revoke",baseUrl];
+    NSString* external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/wearables/fitbit/revoke",external_base_url];
     NSDictionary *body = [NSDictionary dictionary];
     [self PostJson:urlString body:body authToken:token];
 }
