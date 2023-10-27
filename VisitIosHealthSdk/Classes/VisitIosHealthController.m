@@ -1328,7 +1328,7 @@ API_AVAILABLE(ios(11.0))
                 }
                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 dateFormatter.dateFormat = @"yyyy-MM-dd";
-                NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+                NSString *dateString = [dateFormatter stringFromDate:date];
 
 
                 NSDictionary *httpBody = @{
