@@ -680,6 +680,10 @@ API_AVAILABLE(ios(11.0))
                         NSLog(@"Error serializing JSON: %@", error);
                         NSLog(@"RAW RESPONSE: %@",data);
                         NSString *returnString2 = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
+                        if([downloadUrl containsString:@"fitness-activity"]){
+                            [self postNotification:@"StepSyncError" value: returnString2];
+                        }
+
                         NSLog(@"Response:%@  for endpoint=%@ where data is=%@",returnString2, downloadUrl,[body description]);
                     }
                 }
@@ -818,7 +822,7 @@ API_AVAILABLE(ios(11.0))
         startingDate =[calendar dateByAddingComponents:component toDate:endOfToday options:0];
         numberOfDays=30;
     }else{
-        [component setDay:-numberOfDays-1];
+        [component setDay:-numberOfDays];
         startingDate =[calendar dateByAddingComponents:component toDate:endOfToday options:0];
     }
 //    NSLog(@"numberOfDays are ,%ld, while startingDate is,%@",(long)numberOfDays,startDate);
@@ -1355,7 +1359,6 @@ API_AVAILABLE(ios(11.0))
         dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
             if([steps count]>0 && [calories count] > 0){
             [self preprocessUatRequest:steps calories:calories date:date callback:^(NSDictionary * data) {
-//                NSLog(@"the preprocessUatRequest data is==================>>> %@ <<<==================",[data description]);
                 [uatData addObject:data];
                 if([uatData count] == [dates count]){
                     dispatch_group_leave(loadUatData);
@@ -1654,7 +1657,7 @@ API_AVAILABLE(ios(11.0))
 
 - (void) revokeFitbitPermissions{
     NSString* external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
-    NSString *urlString = [NSString stringWithFormat:@"%@/wearables/fitbit/revoke",external_base_url];
+    NSString *urlString = [NSString stringWithFormat:@"%@wearables/fitbit/revoke",external_base_url];
     NSDictionary *body = [NSDictionary dictionary];
     [self PostJson:urlString body:body authToken:token];
 }
