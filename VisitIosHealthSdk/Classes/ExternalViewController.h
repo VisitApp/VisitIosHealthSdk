@@ -7,6 +7,7 @@
 
 #ifndef ExternalViewController_h
 #define ExternalViewController_h
+#import <WebKit/WebKit.h>
 
 @interface ExternalViewController : UIViewController<WKNavigationDelegate>
 
