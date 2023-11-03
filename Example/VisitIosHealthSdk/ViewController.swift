@@ -100,6 +100,7 @@ class ViewController: VisitVideoCallDelegate {
         let current = notification.userInfo?["current"] ?? ""
         let total = notification.userInfo?["total"] ?? ""
         let message = notification.userInfo?["message"] ?? ""
+        let reason = notification.userInfo?["reason"] ?? ""
         let code = notification.userInfo?["code"] ?? ""
         switch(event){
             case "HealthKitConnectedAndSavedInPWA":
@@ -129,10 +130,8 @@ class ViewController: VisitVideoCallDelegate {
                 print("DisableSyncing triggered")
             case "consultationBooked":
                 print("consultationBooked triggered")
-            case "FitnessPermissionError":
-                print("FitnessPermissionError triggered,", message)
-            case "StepSyncError":
-                print("StepSyncError triggered,", message)
+            case "visitCallback":
+                print("visitCallback triggered,", message)
             case "NetworkError":
                 print("NetworkError triggered,", message, code)
 

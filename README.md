@@ -178,10 +178,8 @@ class ViewController: VisitVideoCallDelegate {
                 print("DisableSyncing triggered")
             case "consultationBooked":
                 print("consultationBooked triggered")
-            case "FitnessPermissionError":
-                print("FitnessPermissionError triggered,", message)
-            case "StepSyncError":
-                print("StepSyncError triggered,", message)
+            case "visitCallback":
+                print("visitCallback triggered,", message, reason)
             case "NetworkError":
                 print("NetworkError triggered,", message, code)
                 

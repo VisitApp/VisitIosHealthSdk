@@ -7,6 +7,7 @@
 
 #import "VisitIosHealthController.h"
 #import "VisitVideoCallDelegate.h"
+#import "ExternalViewController.h"
 
 API_AVAILABLE(ios(11.0))
 @implementation VisitIosHealthController
@@ -100,7 +101,7 @@ API_AVAILABLE(ios(11.0))
             }else{
                 NSLog(@"the health kit permission not granted");
                 if(self->healthKitPermissionTriggered == 1){
-                    [self postNotification:@"FitnessPermissionError" value:@"Health Kit permission denied"];
+                    [self postVisitCallback:@"Apple health kit failed" reason:@"Health Kit permission denied"];
                     self->healthKitPermissionTriggered = 0;
                 }
                 UIAlertController * alert = [UIAlertController
@@ -608,7 +609,7 @@ API_AVAILABLE(ios(11.0))
 
 -(BOOL)isEmpty:(NSString *)str
 {
-    if(str.length==0 || [str isKindOfClass:[NSNull class]] || [str isEqualToString:@""]||[str  isEqualToString:NULL]||[str isEqualToString:@"(null)"]||str==nil || [str isEqualToString:@"<null>"]){
+    if(str.length==0 || [str isKindOfClass:[NSNull class]] || [str isEqualToString:@""]||[str isEqualToString:NULL]||[str isEqualToString:@"(null)"]||str==nil || [str isEqualToString:@"<null>"]){
         return YES;
     }
     return NO;
@@ -623,6 +624,9 @@ API_AVAILABLE(ios(11.0))
             // Convert the JSON object to NSData
             NSData * httpBodyData = [NSJSONSerialization dataWithJSONObject:body options:0 error:nil];
             NSLog(@"hitting api %@ with body=%@",downloadUrl,  [[NSString alloc]initWithData:httpBodyData encoding:NSUTF8StringEncoding]);
+            if([downloadUrl containsString:@"fitness-activity"]){
+                [self postVisitCallback:@"Sync steps and calories api called" reason:@""];
+            }
             // set the http body
             [request setHTTPBody:httpBodyData];
             [request setHTTPMethod:@"POST"];
@@ -632,7 +636,7 @@ API_AVAILABLE(ios(11.0))
                 if (error) {
                     NSLog(@"Download Error:%@ for endpoint=%@",error.description,downloadUrl);
                     if([downloadUrl containsString:@"fitness-activity"]){
-                        [self postNotification:@"StepSyncError" value: [error localizedDescription]];
+                        [self postVisitCallback:@"Sync steps and calories api failed" reason:[error localizedDescription]];
                     }
                 }
                 if (data) {
@@ -647,7 +651,7 @@ API_AVAILABLE(ios(11.0))
                         id json = [NSJSONSerialization JSONObjectWithData:fitnessActivityResponse options:0 error:nil];
                         NSString* action = [json objectForKey:@"action"];
                         if([action rangeOfString:@"SUCCESS"].location == NSNotFound){
-                            [self postNotification:@"StepSyncError" value: [json objectForKey:@"message"]];
+                            [self postVisitCallback:@"Sync steps and calories api failed" reason:[json objectForKey:@"message"]];
                         }else{
                             NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
                             NSString* currentTimeStamp = [timeInSeconds stringValue];
@@ -681,7 +685,7 @@ API_AVAILABLE(ios(11.0))
                         NSLog(@"RAW RESPONSE: %@",data);
                         NSString *returnString2 = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
                         if([downloadUrl containsString:@"fitness-activity"]){
-                            [self postNotification:@"StepSyncError" value: returnString2];
+                            [self postVisitCallback:@"Sync steps and calories api failed" reason:returnString2];
                         }
 
                         NSLog(@"Response:%@  for endpoint=%@ where data is=%@",returnString2, downloadUrl,[body description]);
@@ -822,7 +826,8 @@ API_AVAILABLE(ios(11.0))
         startingDate =[calendar dateByAddingComponents:component toDate:endOfToday options:0];
         numberOfDays=30;
     }else{
-        [component setDay:-numberOfDays];
+        [component setDay:-numberOfDays-1];
+        numberOfDays+=1;
         startingDate =[calendar dateByAddingComponents:component toDate:endOfToday options:0];
     }
 //    NSLog(@"numberOfDays are ,%ld, while startingDate is,%@",(long)numberOfDays,startDate);
@@ -978,12 +983,18 @@ API_AVAILABLE(ios(11.0))
     if ([[notification name] isEqualToString:@"VisitSDK"]){
         NSURL *deepLink = [[notification userInfo] valueForKey:@"deepLink"];
         NSString *link = deepLink.absoluteString;
-        if(self->fitbitConnectionTriggered && [link containsString:@"fitbit=true"]){
+        if(self->fitbitConnectionTriggered && [link containsString:@"message=success&fitbit=true"]){
             self->isFitbitUser = 1;
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
             NSString *javascript = [NSString stringWithFormat:@"fitbitConnectSuccessfully(true)"];
             [self injectJavascript:javascript];
             [self postNotification:@"FitbitPermissionGranted"];
+            self->fitbitConnectionTriggered = 0;
+        }else if(self->fitbitConnectionTriggered && [link containsString:@"message=failed&fitbit=true"]){
+            [self postVisitCallback:@"Fitbit connection failed" reason:@"Failed to connect Fitbit device. Please retry or contact support"];
+            self->fitbitConnectionTriggered = 0;
+        }else if(self->fitbitConnectionTriggered && [link containsString:@"message=accessDenied&fitbit=true"]){
+            [self postVisitCallback:@"Fitbit connection failed" reason:@"Failed to connect Fitbit. Access Denied"];
             self->fitbitConnectionTriggered = 0;
         }
     }
@@ -1626,6 +1637,14 @@ API_AVAILABLE(ios(11.0))
     }];
 }
 
+-(void) postVisitCallback:(NSString*)message reason:(NSString*)reason{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VisitEventType" object:nil userInfo:@{
+        @"event":@"visitCallback",
+        @"message":message,
+        @"reason":reason
+    }];
+}
+
 - (void)setSyncingEnabled:(BOOL)value {
     syncingEnabled = value;
 }
@@ -1709,11 +1728,18 @@ API_AVAILABLE(ios(11.0))
     
     NSString *methodName = [json valueForKey:@"method"];
     NSLog(@"json is %@",[json description]);
-    if([methodName isEqualToString:@"disconnectFromFitbit"]){
+    if([methodName isEqualToString:@"visitCallback"]){
+        if([json valueForKey:@"failureReason"] != nil){
+            [self postVisitCallback:[json valueForKey:@"message"] reason:[json valueForKey:@"failureReason"]];
+        }else{
+            [self postVisitCallback:[json valueForKey:@"message"] reason:@""];
+        }
+    }else if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];
     }else if([methodName isEqualToString:@"connectToGoogleFit"]) {
         healthKitPermissionTriggered = 1;
          [self postNotification:@"AskForFitnessPermission"];
+        [self postVisitCallback:@"Apple health kit clicked" reason:@""];
         [self canAccessHealthKit:^(BOOL value){
             if(value){
                 // [self postNotification:@"FitnessPermissionGranted"];
@@ -1732,6 +1758,7 @@ API_AVAILABLE(ios(11.0))
         }
     }else if([methodName isEqualToString:@"connectToFitbit"]) {
         [self postNotification:@"AskForFitnessPermission"];
+        [self postVisitCallback:@"Fitbit clicked" reason:@""];
         NSString *urlString = [json valueForKey:@"url"];
         NSURL *url = [NSURL URLWithString:urlString];
         if([[UIApplication sharedApplication] canOpenURL:url]){
@@ -1907,6 +1934,10 @@ API_AVAILABLE(ios(11.0))
         NSString *errStatus = [json valueForKey:@"errStatus"];
         NSString *error = [json valueForKey:@"error"];
         [self postNetworkErrorWithMessageAndCode:error code:errStatus];
+    }else if([methodName isEqualToString:@"openExternalLink"]){
+        ExternalViewController *webViewController = [[ExternalViewController alloc] init];
+        webViewController.link = [json valueForKey:@"link"];
+        [currentTopVC presentViewController:webViewController animated:false completion:nil];
     }
     
 }
