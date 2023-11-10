@@ -25,7 +25,6 @@ API_AVAILABLE(ios(11.0))
 //     }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
-    gender = @"Not Set";
     syncingEnabled = YES;
     userDefaults = [NSUserDefaults standardUserDefaults];
     token = [userDefaults stringForKey:@"token"];
@@ -87,7 +86,7 @@ API_AVAILABLE(ios(11.0))
     NSArray *writeTypes = @[[HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
     NSArray *readTypes = @[[HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount],
                            [HKSampleType categoryTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis],
-                           [HKSampleType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
+                           [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned],
                            [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning]];
     
     [[VisitIosHealthController sharedManager] requestAuthorizationToShareTypes:[NSSet setWithArray:writeTypes] readTypes:[NSSet setWithArray:readTypes]
@@ -141,12 +140,6 @@ API_AVAILABLE(ios(11.0))
 }
 
 -(void) onHealthKitPermissionGranted{
-    self->gender= [self readGender];
-    if([self->gender isEqualToString:@"Male"]){
-        self->bmrCaloriesPerHour = 1662 / 24;
-    }else{
-        self->bmrCaloriesPerHour = 1493 / 24;
-    }
     NSString *javascript = [NSString stringWithFormat:@"googleFitnessConnectedSuccessfully(true)"];
     [self injectJavascript:javascript];
 }
@@ -155,14 +148,14 @@ API_AVAILABLE(ios(11.0))
     dispatch_group_t loadDetailsGroup=dispatch_group_create();
     __block NSString* numberOfSteps = 0;
     __block NSTimeInterval totalSleepTime = 0;
-    NSLog(@"gender is, %@",gender);
     for (int i = 0; i<2; i++) {
         dispatch_group_enter(loadDetailsGroup);
         if(i==0){
             //  getting steps for current day
             [self fetchSteps:@"day" endDate:[NSDate date] days:0 callback:^(NSArray * result) {
-                if([[result objectAtIndex:0] count]>0){
-                    numberOfSteps = [[result objectAtIndex:0] objectAtIndex:0];
+                NSLog(@"fetchSteps result in insertDataToCard %@",result.description);
+                if([result count]>0){
+                    numberOfSteps = [result objectAtIndex:0];
                 }
                 dispatch_group_leave(loadDetailsGroup);
             }];
@@ -341,6 +334,81 @@ API_AVAILABLE(ios(11.0))
     [[VisitIosHealthController sharedManager] executeQuery:query];
 }
 
+-(void) fetchActiveEnergyBurned:(NSString*) frequency endDate:(NSDate*) endDate days:(NSInteger) days callback:(void(^)(NSArray*))callback{
+    NSDateComponents *interval = [[NSDateComponents alloc] init];
+    NSDate *startDate;
+    interval.day = 1;
+    NSDate *endDatePeriod;
+    HKUnit *distanceUnit = [HKUnit kilocalorieUnit];
+    if([frequency isEqualToString:@"day"]){
+        endDatePeriod = endDate;
+        startDate = [calendar dateByAddingUnit:NSCalendarUnitDay
+                                                 value:0
+                                                toDate:endDatePeriod
+                                               options:0];
+    }else if ([frequency isEqualToString:@"week"]){
+        NSTimeInterval interval;
+        [calendar rangeOfUnit:NSCalendarUnitWeekOfYear
+                           startDate:&startDate
+                            interval:&interval
+                             forDate:endDate];
+        endDatePeriod = [startDate dateByAddingTimeInterval:interval-1];
+    }else if ([frequency isEqualToString:@"month"]){
+        NSTimeInterval interval;
+        [calendar rangeOfUnit:NSCalendarUnitMonth
+                           startDate:&startDate
+                            interval:&interval
+                             forDate:endDate];
+        endDatePeriod = [startDate dateByAddingTimeInterval:interval-1];
+    }else if([frequency isEqualToString:@"custom"]){
+        endDatePeriod = endDate;
+        startDate = [calendar dateByAddingUnit:NSCalendarUnitDay
+                                                 value:1-days
+                                                toDate:endDatePeriod
+                                               options:0];
+//        NSLog(@"startDate and endDate in custom fetchDistanceWalkingRunning is, %@, %@",startDate,endDatePeriod);
+    }
+//    NSLog(@"startDate and endDate in fetchDistanceWalkingRunning is, %@, %@",startDate,endDatePeriod);
+    NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
+                                                     fromDate:[NSDate date]];
+    anchorComponents.hour = 0;
+    NSDate *anchorDate = [calendar dateFromComponents:anchorComponents];
+    HKQuantityType *quantityType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
+    // Create the query
+    HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:quantityType
+                                                                           quantitySamplePredicate:nil
+                                                                                           options:HKStatisticsOptionCumulativeSum
+                                                                                        anchorDate:anchorDate
+                                                                                intervalComponents:interval];
+
+    // Set the results handler
+    query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+        if (error) {
+            // Perform proper error handling here
+            NSLog(@"*** An error occurred while calculating the statistics: %@ ***",error.localizedDescription);
+        }
+        NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
+        
+        [results enumerateStatisticsFromDate:startDate
+                                      toDate:endDatePeriod
+                                   withBlock:^(HKStatistics *result, BOOL *stop) {
+
+                                       HKQuantity *quantity = result.sumQuantity;
+                                       if (quantity) {
+                                           int value = [[NSNumber numberWithInt:[quantity doubleValueForUnit:distanceUnit]] intValue];
+//                                           NSLog(@"in fetchDistanceWalkingRunning %d", value);
+                                           
+                                           [data addObject:[NSNumber numberWithInt:value]];
+                                       }else{
+                                           [data addObject:[NSNumber numberWithInt:0]];
+                                       }
+                                   }];
+        callback(data);
+    };
+
+    [[VisitIosHealthController sharedManager] executeQuery:query];
+}
+
 -(void) fetchHourlyDistanceWalkingRunning:(NSDate*) endDate callback:(void(^)(NSArray*))callback{
     HKQuantityType *distanceType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -348,14 +416,14 @@ API_AVAILABLE(ios(11.0))
         HKUnit *distanceUnit = [HKUnit meterUnit];
         NSDateComponents *interval = [[NSDateComponents alloc] init];
         interval.hour = 1;
-        
-        NSDate *anchorDate = [calendar startOfDayForDate:startDate];
-        NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+    NSDate *startOfNextDay = [[NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601] dateByAddingUnit:NSCalendarUnitDay value:1 toDate:startDate options:0];
+        NSDate *endOfDay = [[NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601] dateByAddingUnit:NSCalendarUnitSecond value:-1 toDate:startOfNextDay options:0];
+        NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endOfDay options:HKQueryOptionStrictStartDate];
         NSPredicate *userEnteredValuePredicate = [HKQuery predicateForObjectsWithMetadataKey:HKMetadataKeyWasUserEntered operatorType: NSNotEqualToPredicateOperatorType value: @YES];
         
         NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicate, userEnteredValuePredicate]];
         
-        HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:distanceType quantitySamplePredicate:compoundPredicate options:HKStatisticsOptionCumulativeSum anchorDate:anchorDate intervalComponents:interval];
+        HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:distanceType quantitySamplePredicate:compoundPredicate options:HKStatisticsOptionCumulativeSum anchorDate:startDate intervalComponents:interval];
         
         query.initialResultsHandler = ^(HKStatisticsCollectionQuery * _Nonnull query, HKStatisticsCollection * _Nullable result, NSError * _Nullable error) {
             if (error) {
@@ -364,7 +432,7 @@ API_AVAILABLE(ios(11.0))
             }
             
             NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
-            [result enumerateStatisticsFromDate:startDate toDate:endDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
+            [result enumerateStatisticsFromDate:startDate toDate:endOfDay withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
                 HKQuantity *quantity = result.sumQuantity;
                 if (quantity) {
                     int value =(int) [quantity doubleValueForUnit:distanceUnit];
@@ -379,6 +447,46 @@ API_AVAILABLE(ios(11.0))
         
         [[VisitIosHealthController sharedManager] executeQuery:query];
 }
+
+-(void) fetchHourlyActiveEnergyBurned:(NSDate*) endDate callback:(void(^)(NSArray*))callback{
+    HKQuantityType *distanceType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *startDate = [[NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601] startOfDayForDate:endDate];
+        HKUnit *distanceUnit = [HKUnit kilocalorieUnit];
+        NSDateComponents *interval = [[NSDateComponents alloc] init];
+        interval.hour = 1;
+    NSDate *startOfNextDay = [[NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601] dateByAddingUnit:NSCalendarUnitDay value:1 toDate:startDate options:0];
+    NSDate *endOfDay = [[NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601] dateByAddingUnit:NSCalendarUnitSecond value:-1 toDate:startOfNextDay options:0];
+        NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endOfDay options:HKQueryOptionStrictStartDate];
+        NSPredicate *userEnteredValuePredicate = [HKQuery predicateForObjectsWithMetadataKey:HKMetadataKeyWasUserEntered operatorType: NSNotEqualToPredicateOperatorType value: @YES];
+        
+        NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicate, userEnteredValuePredicate]];
+        
+        HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:distanceType quantitySamplePredicate:compoundPredicate options:HKStatisticsOptionCumulativeSum anchorDate:startDate intervalComponents:interval];
+        
+        query.initialResultsHandler = ^(HKStatisticsCollectionQuery * _Nonnull query, HKStatisticsCollection * _Nullable result, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"*** An error occurred while calculating the statistics: %@ ***", error.localizedDescription);
+                return;
+            }
+            
+            NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
+            [result enumerateStatisticsFromDate:startDate toDate:endOfDay withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
+                HKQuantity *quantity = result.sumQuantity;
+                if (quantity) {
+                    int value =(int) [quantity doubleValueForUnit:distanceUnit];
+                    [data addObject:[NSNumber numberWithInt:value]];
+                } else {
+                    [data addObject:[NSNumber numberWithInt:0]];
+                }
+            }];
+            callback(data);
+//            NSLog(@"fetchDistanceWalkingRunning is,%@",data);
+        };
+        
+        [[VisitIosHealthController sharedManager] executeQuery:query];
+}
+
 
 -(void) fetchSleepPattern:(NSDate *) endDate frequency:(NSString*) frequency days:(NSInteger) days callback:(void(^)(NSArray*))callback{
     NSDate *startDate;
@@ -757,13 +865,15 @@ API_AVAILABLE(ios(11.0))
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.hour = 1;
     NSDate *startDate = [[NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601] startOfDayForDate:endDate];
-    NSDate *anchorDate = [calendar startOfDayForDate:startDate];
-    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+//    NSDate *anchorDate = [calendar startOfDayForDate:startDate];
+    NSDate *startOfNextDay = [[NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601] dateByAddingUnit:NSCalendarUnitDay value:1 toDate:startDate options:0];
+    NSDate *endOfDay = [[NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601] dateByAddingUnit:NSCalendarUnitSecond value:-1 toDate:startOfNextDay options:0];
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endOfDay options:HKQueryOptionStrictStartDate];
     NSPredicate *userEnteredValuePredicate = [HKQuery predicateForObjectsWithMetadataKey:HKMetadataKeyWasUserEntered operatorType: NSNotEqualToPredicateOperatorType value: @YES];
     
     NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicate, userEnteredValuePredicate]];
     
-    HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:stepCountType quantitySamplePredicate:compoundPredicate options:HKStatisticsOptionCumulativeSum anchorDate:anchorDate intervalComponents:interval];
+    HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:stepCountType quantitySamplePredicate:compoundPredicate options:HKStatisticsOptionCumulativeSum anchorDate:startDate intervalComponents:interval];
     
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery * _Nonnull query, HKStatisticsCollection * _Nullable result, NSError * _Nullable error) {
         if (error) {
@@ -773,19 +883,13 @@ API_AVAILABLE(ios(11.0))
         
         NSMutableArray *data = [NSMutableArray arrayWithCapacity:24];
         NSMutableArray *stepsData = [NSMutableArray arrayWithCapacity:24];
-        NSMutableArray *calorieData = [NSMutableArray arrayWithCapacity:24];
-        [result enumerateStatisticsFromDate:startDate toDate:endDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
+        [result enumerateStatisticsFromDate:startDate toDate:endOfDay withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
             HKQuantity *quantity = result.sumQuantity;
-            
             if (quantity) {
                 int value = (int)[quantity doubleValueForUnit:stepsUnit];
                 [data addObject:[NSNumber numberWithInt:value]];
-                int calories = value/21;
-                calories+=self->bmrCaloriesPerHour;
-                [calorieData addObject:[NSNumber numberWithInt:calories]];
             } else {
                 [data addObject:[NSNumber numberWithInt:0]];
-                [calorieData addObject:[NSNumber numberWithInt:0]];
             }
         }];
         int count = 0;
@@ -793,8 +897,8 @@ API_AVAILABLE(ios(11.0))
             [stepsData insertObject:steps atIndex:count];
             count++;
         }
-        NSArray* finalData = @[stepsData, calorieData];
-        callback(finalData);
+        NSLog(@"stepsData in fetchHourlySteps is %@",stepsData.description);
+        callback(stepsData);
     };
    
     [[VisitIosHealthController sharedManager] executeQuery:query];
@@ -899,7 +1003,6 @@ API_AVAILABLE(ios(11.0))
             NSLog(@"*** An error occurred while calculating the statistics: %@ ***",error.localizedDescription);
         }
         NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
-        NSMutableArray *calorieData = [NSMutableArray arrayWithCapacity:1];
         [results enumerateStatisticsFromDate:startDate
                                       toDate:endDatePeriod
                                    withBlock:^(HKStatistics *result, BOOL *stop) {
@@ -907,18 +1010,13 @@ API_AVAILABLE(ios(11.0))
                                        HKQuantity *quantity = result.sumQuantity;
                                        if (quantity) {
                                            int value = [[NSNumber numberWithInt:[quantity doubleValueForUnit:[HKUnit countUnit]]] intValue];
-                                           int calories = value/21;
-                                           calories+=self->bmrCaloriesPerHour;
-                                           [calorieData addObject:[NSNumber numberWithInt:calories]];
                                            [data addObject:[NSNumber numberWithInt:value]];
                                        }else{
                                            [data addObject:[NSNumber numberWithInt:0]];
-                                           [calorieData addObject:[NSNumber numberWithInt:0]];
                                        }
                                    }];
 //        NSLog(@"in stepsData and calorieData is %@,%@", data, calorieData);
-        NSArray* finalData = @[data, calorieData];
-        callback(finalData);
+        callback(data);
     };
 
     [[VisitIosHealthController sharedManager] executeQuery:query];
@@ -1017,27 +1115,6 @@ API_AVAILABLE(ios(11.0))
     [super loadRequest:request];
 }
 
-- (NSString *)readGender
-{
-    NSError *error;
-    HKBiologicalSexObject *gen=[[VisitIosHealthController sharedManager] biologicalSexWithError:&error];
-    if (gen.biologicalSex==HKBiologicalSexMale)
-    {
-        return(@"Male");
-    }
-    else if (gen.biologicalSex==HKBiologicalSexFemale)
-    {
-        return (@"Female");
-    }
-    else if (gen.biologicalSex==HKBiologicalSexOther)
-    {
-        return (@"Other");
-    }
-    else{
-        return (@"Not Set");
-    }
-}
-
 - (NSData *) arrayToJSON:(NSArray *) inputArray
 {
     NSError *error = nil;
@@ -1073,15 +1150,7 @@ API_AVAILABLE(ios(11.0))
     }else if ([frequency isEqualToString:@"month"]){
         samples=daysInMonth;
     }
-    if([type isEqualToString:@"steps"] || [type isEqualToString:@"calories"]){
-        if([type isEqualToString:@"steps"]){
-            jsonArrayData = [[data objectAtIndex:0] componentsJoinedByString:@","];
-        }else{
-            jsonArrayData = [[data objectAtIndex:1] componentsJoinedByString:@","];
-        }
-    }else{
-         jsonArrayData = [data componentsJoinedByString:@","];
-    }
+    jsonArrayData = [data componentsJoinedByString:@","];
     NSString *javascript = [NSString stringWithFormat:@"DetailedGraph.updateData(%@,[%@],'%@','%@','%@')", samples, jsonArrayData, type,frequency, activityTime];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self evaluateJavaScript:javascript completionHandler:^(NSString *result, NSError *error) {
@@ -1124,7 +1193,7 @@ API_AVAILABLE(ios(11.0))
 -(void) renderGraphData:(NSString *) type frequency:(NSString *) frequency date:(NSDate *) date{
     if([type isEqualToString:@"steps"] || [type isEqualToString:@"distance"]||[type isEqualToString:@"calories"]){
         dispatch_group_t loadDetailsGroup=dispatch_group_create();
-        __block NSArray* stepsOrDistance = 0;
+        __block NSArray* stepsOrDistanceOrCalories = 0;
         __block NSString* totalActivityDuration = 0;
         for (int i = 0; i<2; i++) {
             dispatch_group_enter(loadDetailsGroup);
@@ -1134,27 +1203,39 @@ API_AVAILABLE(ios(11.0))
                     dispatch_group_leave(loadDetailsGroup);
                 }];
             }else if(i==1){
-                if([type isEqualToString:@"steps"] || [type isEqualToString:@"calories"]){
+                if([type isEqualToString:@"steps"]){
                     if([frequency isEqualToString:@"day"]){
                         [self fetchHourlySteps:date callback:^(NSArray * result) {
-                            stepsOrDistance = result;
+                            stepsOrDistanceOrCalories = result;
                             dispatch_group_leave(loadDetailsGroup);
                         }];
                     }else{
                         [self fetchSteps:frequency endDate: date days:0 callback:^(NSArray * result) {
-                            stepsOrDistance = result;
+                            stepsOrDistanceOrCalories = result;
                             dispatch_group_leave(loadDetailsGroup);
                         }];
                     }
                 }else if ([type isEqualToString:@"distance"]){
                     if([frequency isEqualToString:@"day"]){
                         [self fetchHourlyDistanceWalkingRunning:date callback:^(NSArray * result) {
-                            stepsOrDistance = result;
+                            stepsOrDistanceOrCalories = result;
                             dispatch_group_leave(loadDetailsGroup);
                         }];
                     }else{
                         [self fetchDistanceWalkingRunning:frequency endDate: date days:0 callback:^(NSArray * result) {
-                            stepsOrDistance = result;
+                            stepsOrDistanceOrCalories = result;
+                            dispatch_group_leave(loadDetailsGroup);
+                        }];
+                    }
+                }else if ([type isEqualToString:@"calories"]){
+                    if([frequency isEqualToString:@"day"]){
+                        [self fetchHourlyActiveEnergyBurned:date callback:^(NSArray * result) {
+                            stepsOrDistanceOrCalories = result;
+                            dispatch_group_leave(loadDetailsGroup);
+                        }];
+                    }else{
+                        [self fetchActiveEnergyBurned:frequency endDate: date days:0 callback:^(NSArray * result) {
+                            stepsOrDistanceOrCalories = result;
                             dispatch_group_leave(loadDetailsGroup);
                         }];
                     }
@@ -1162,7 +1243,7 @@ API_AVAILABLE(ios(11.0))
             }
         }
         dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-            [self injectJavascript:stepsOrDistance type:type frequency:frequency activityTime:totalActivityDuration];
+            [self injectJavascript:stepsOrDistanceOrCalories type:type frequency:frequency activityTime:totalActivityDuration];
         });
     }else if([type isEqualToString:@"sleep"]){
             if([frequency isEqualToString:@"day"]){
@@ -1361,12 +1442,21 @@ API_AVAILABLE(ios(11.0))
         dispatch_group_t loadDetailsGroup=dispatch_group_create();
         __block NSArray* steps;
         __block NSArray* calories;
-        dispatch_group_enter(loadDetailsGroup);
-        [self fetchHourlySteps:date callback:^(NSArray * data) {
-            steps = [data objectAtIndex:0];
-            calories = [data objectAtIndex:1];
-            dispatch_group_leave(loadDetailsGroup);
-        }];
+        for(int i = 0; i<2;i++){
+            dispatch_group_enter(loadDetailsGroup);
+            if(i==0){
+                [self fetchHourlySteps:date callback:^(NSArray * data) {
+                    steps = data;
+                    dispatch_group_leave(loadDetailsGroup);
+                }];
+            }else if(i==1){
+                [self fetchHourlyActiveEnergyBurned:date callback:^(NSArray * data) {
+                    calories = data;
+                    dispatch_group_leave(loadDetailsGroup);
+                }];
+            }
+        }
+        
         dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
             if([steps count]>0 && [calories count] > 0){
             [self preprocessUatRequest:steps calories:calories date:date callback:^(NSDictionary * data) {
@@ -1404,15 +1494,19 @@ API_AVAILABLE(ios(11.0))
         __block NSArray* steps;
         __block NSArray* calories;
         __block NSArray* distance;
-        for(int i = 0; i<2;i++){
+        for(int i = 0; i<3;i++){
             dispatch_group_enter(loadDetailsGroup);
             if(i==0){
                 [self fetchHourlySteps:date callback:^(NSArray * data) {
-                    steps = [data objectAtIndex:0];
-                    calories = [data objectAtIndex:1];
+                    steps = data;
                     dispatch_group_leave(loadDetailsGroup);
                 }];
             }else if(i==1){
+                [self fetchHourlyActiveEnergyBurned:date callback:^(NSArray * data) {
+                    calories = data;
+                    dispatch_group_leave(loadDetailsGroup);
+                }];
+            }else if(i==2){
                 [self fetchHourlyDistanceWalkingRunning:date callback:^(NSArray * dist) {
                     distance = dist;
                     dispatch_group_leave(loadDetailsGroup);
@@ -1477,29 +1571,34 @@ API_AVAILABLE(ios(11.0))
     __block NSArray* activityData;
     __block NSArray* sleep;
 //    NSLog(@"days are %ld",(long)days);
-    for (int i = 0; i<4; i++) {
+    for (int i = 0; i<5; i++) {
         dispatch_group_enter(syncDataGroup);
         if(i==0){
             [self fetchSteps:@"custom" endDate:[NSDate date] days:days callback:^(NSArray * data) {
 //                NSLog(@"steps data for custom range is, %@ length %lu",[data objectAtIndex:0],[[data objectAtIndex:0] count]);
-                steps = [data objectAtIndex:0];
-                calorie = [data objectAtIndex:1];
+                steps = data;
                 dispatch_group_leave(syncDataGroup);
             }];
         }else if(i==1){
+            [self fetchActiveEnergyBurned:@"custom" endDate:[NSDate date] days:days callback:^(NSArray * data){
+                //                NSLog(@"distance data for custom range is, %@ length %lu",distance, [distance count]);
+                calorie=data;
+                dispatch_group_leave(syncDataGroup);
+            }];
+        }else if(i==2){
             [self fetchDistanceWalkingRunning:@"custom" endDate:[NSDate date] days:days callback:^(NSArray * distance) {
 //                NSLog(@"distance data for custom range is, %@ length %lu",distance, [distance count]);
                 distanceData=distance;
                 dispatch_group_leave(syncDataGroup);
             }];
-        }else if(i==2){
+        }else if(i==3){
             [self getActivityTime:[NSDate date] frequency:@"custom" days:days callback:^(NSMutableArray * activity) {
                 NSMutableArray* arr = [activity objectAtIndex:1];
 //                NSLog(@"activity data for custom range is, %@ length %lu",activity, [arr count]);
                 activityData = arr;
                 dispatch_group_leave(syncDataGroup);
             }];
-        }else if(i==3){
+        }else if(i==4){
             [self fetchSleepPattern:[NSDate date] frequency:@"custom" days:days callback:^(NSArray * sleepData) {
                 NSMutableArray *data = [[NSMutableArray alloc]init];
                 for (NSDictionary* item in sleepData) {
