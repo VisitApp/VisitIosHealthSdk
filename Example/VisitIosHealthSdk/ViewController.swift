@@ -17,6 +17,8 @@ extension Notification.Name {
 class ViewController: VisitVideoCallDelegate {
     // required
     let visitHealthView = AppDelegate.shared().visitHealthView
+    let external_api_base_url = "https://uathealthvas.tataaig.com"
+    let external_api_base_url_auth_token = "Basic Z2V0X3Zpc2l0OkZoNjh2JHdqaHU4WWd3NiQ="
     
     // initializing a view controller which would be presented
     let vc = UIViewController()
@@ -37,6 +39,8 @@ class ViewController: VisitVideoCallDelegate {
         visitHealthView.canAccessHealthKit{(value) -> () in
             if(value){
                 self.isHealthKitConnected = true;
+                // passing tataAIG_base_url and tataAIG_auth_token in form of a dictionary
+                self.visitHealthView.initialParams(["tataAIG_base_url":self.external_api_base_url, "tataAIG_auth_token":self.external_api_base_url_auth_token]);
                 DispatchQueue.main.async {
                     self.showButton()
                 }
@@ -149,9 +153,6 @@ class ViewController: VisitVideoCallDelegate {
     @objc func buttonTapped(sender : UIButton) {
         // since both UIs share same view the button needs to be hidden, in actual app this can be ignored
         self.hideButton()
-        let external_api_base_url = "https://uathealthvas.tataaig.com"
-        let external_api_base_url_auth_token = "Basic Z2V0X3Zpc2l0OkZoNjh2JHdqaHU4WWd3NiQ="
-        
         
         // OPTIONAL : syncing is enabled by default but it can be toggled using this method
         visitHealthView.setSyncingEnabled(true)

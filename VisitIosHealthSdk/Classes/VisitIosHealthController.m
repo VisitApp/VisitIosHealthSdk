@@ -25,7 +25,7 @@ API_AVAILABLE(ios(11.0))
 //     }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
-    syncingEnabled = YES;
+    syncingEnabled = [[userDefaults stringForKey:@"syncingEnabled"] isEqualToString:@"false"] ? NO : YES;
     userDefaults = [NSUserDefaults standardUserDefaults];
     token = [userDefaults stringForKey:@"token"];
     baseUrl = [userDefaults stringForKey:@"baseUrl"];
@@ -53,17 +53,16 @@ API_AVAILABLE(ios(11.0))
 }
 
 -(void)initialParams:(NSDictionary *)params {
-    NSLog(@"initWithParams params %@",params);
     [self->userDefaults setObject:[params valueForKey:@"tataAIG_base_url"] forKey:@"tataAIG_base_url"];
     [self->userDefaults setObject:[params valueForKey:@"tataAIG_auth_token"] forKey:@"tataAIG_auth_token"];
     self->tataAIG_base_url = [params valueForKey:@"tataAIG_base_url"];
     self->tataAIG_auth_token = [params valueForKey:@"tataAIG_auth_token"];
     
-    self->memberId = [userDefaults stringForKey:@"memberId"];;
+    self->memberId = [userDefaults stringForKey:@"memberId"];
     self->fitnessActivityLastSyncTime = [params valueForKey:@"fitnessActivityLastSyncTime"] ? [params valueForKey:@"fitnessActivityLastSyncTime"]: [userDefaults stringForKey:@"fitnessActivityLastSyncTime"];
     
     [self canAccessHealthKit:^(BOOL value){
-        if(value && self->memberId!= NULL && self->fitnessActivityLastSyncTime!= NULL){
+        if(value && self->memberId!= NULL && self->fitnessActivityLastSyncTime!= NULL && self->syncingEnabled){
             NSTimeInterval gfHourlyLastSync = [self->fitnessActivityLastSyncTime doubleValue];
             NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -1746,6 +1745,7 @@ API_AVAILABLE(ios(11.0))
 
 - (void)setSyncingEnabled:(BOOL)value {
     syncingEnabled = value;
+    [self->userDefaults setObject: value ? @"true" : @"false" forKey:@"syncingEnabled"];
 }
 
 - (void) callHraApi{
@@ -1915,9 +1915,10 @@ API_AVAILABLE(ios(11.0))
         NSTimeInterval googleFitLastSync = [[json valueForKey:@"googleFitLastSync"] doubleValue];
         NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
         NSDate* dailyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: googleFitLastSync/1000];
-        
+
         if(![[json valueForKey:@"memberId"] isEqual:@"<null>"]){
             memberId = [json valueForKey:@"memberId"];
+            [self->userDefaults setObject:[json valueForKey:@"memberId"] forKey:@"memberId"];
         }
         [userDefaults setObject:token forKey:@"token"];
         [userDefaults setObject:baseUrl forKey:@"baseUrl"];
