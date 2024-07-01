@@ -20,9 +20,9 @@ API_AVAILABLE(ios(11.0))
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
     self.navigationDelegate = self;
-//     if (@available(iOS 16.4, *)) {
-//         self.inspectable = true;
-//     }
+     if (@available(iOS 16.4, *)) {
+         self.inspectable = true;
+     }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
     syncingEnabled = [[userDefaults stringForKey:@"syncingEnabled"] isEqualToString:@"false"] ? NO : YES;
@@ -1543,11 +1543,6 @@ API_AVAILABLE(ios(11.0))
                     NSLog(@"embellish-sync this happened");
                     dispatch_group_leave(loadBulkHealthData);
                 }
-                
-//                [self PostJson:[NSString stringWithFormat:@"%@/users/embellish-sync?isPWA=yes",self->baseUrl] body:httpBody authToken:self->token];
-//                NSLog(@"embellish-sync data is, %@",httpBody.description);
-                
-//            [self preprocessEmbellishRequest:steps calories:calories distance:distance date:date];
             }
         });
     }
@@ -1774,8 +1769,8 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void) revokeFitbitPermissions{
-    NSString* external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
-    NSString *urlString = [NSString stringWithFormat:@"%@wearables/fitbit/revoke",external_base_url];
+    NSString* base_url = [self isEmpty:[self->userDefaults stringForKey:@"baseUrl"]] ? self->baseUrl: [self->userDefaults stringForKey:@"baseUrl"];
+    NSString *urlString = [NSString stringWithFormat:@"%@wearables/fitbit/revoke",base_url];
     NSDictionary *body = [NSDictionary dictionary];
     [self PostJson:urlString body:body authToken:token];
 }
@@ -1819,6 +1814,60 @@ API_AVAILABLE(ios(11.0))
     [queryItems addObject:[NSURLQueryItem queryItemWithName:@"version" value:@"1"]];
     
     [self getJson:urlString query:queryItems authToken:token];
+}
+
+- (void) downloadPdf:(NSString *)url {
+    // URL of the PDF file to download
+    NSURL *pdfURL = [NSURL URLWithString:url];
+
+    // Create a NSMutableURLRequest
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pdfURL];
+
+    // Add the token to the request headers
+    [request setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+
+    // Create a NSURLSession
+    NSURLSession *session = [NSURLSession sharedSession];
+
+    // Create a data task to download the PDF file
+    NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        // Handle completion
+        
+        if (error) {
+            NSLog(@"Error downloading PDF: %@", error);
+            [self postVisitCallback:@"Error downloading PDF" reason:@""];
+            return;
+        }
+        
+        // Check if the response is a HTTP response
+        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+            
+            // Check if the response status code is 200 (OK)
+            if (httpResponse.statusCode == 200) {
+                NSData *pdfData = [NSData dataWithContentsOfURL:location];
+                UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[pdfData] applicationActivities:nil];
+                activityViewController.excludedActivityTypes = @[
+                    UIActivityTypeCopyToPasteboard,
+                    UIActivityTypePrint,
+                    UIActivityTypeMarkupAsPDF,
+                ];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self->currentTopVC presentViewController:activityViewController animated:YES completion:nil];
+                });
+            } else {
+//                NSLog(@"HTTP response status code: %ld", (long)httpResponse.statusCode);
+                NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+                NSString *errorText = [formatter stringFromNumber:@(httpResponse.statusCode)];
+                [self postVisitCallback:@"Error downloading PDF" reason:errorText];
+
+            }
+        } else {
+            [self postVisitCallback:@"Invalid HTTP response" reason:@""];
+        }
+    }];
+    // Start the download task
+    [downloadTask resume];
 }
 
 - (void)userContentController:(nonnull WKUserContentController *)userContentController didReceiveScriptMessage:(nonnull WKScriptMessage *)message {
@@ -1904,6 +1953,9 @@ API_AVAILABLE(ios(11.0))
     }else if([methodName isEqualToString:@"updateApiBaseUrlV2"]){
         baseUrl = [json valueForKey:@"apiBaseUrl"];
         token = [json valueForKey:@"authtoken"];
+        [userDefaults setObject:token forKey:@"token"];
+        [userDefaults setObject:baseUrl forKey:@"baseUrl"];
+
         BOOL fitbitUser = [[json valueForKey:@"fitbitUser"] boolValue];
         if(fitbitUser){
             isFitbitUser = 1;
@@ -1920,8 +1972,6 @@ API_AVAILABLE(ios(11.0))
             memberId = [json valueForKey:@"memberId"];
             [self->userDefaults setObject:[json valueForKey:@"memberId"] forKey:@"memberId"];
         }
-        [userDefaults setObject:token forKey:@"token"];
-        [userDefaults setObject:baseUrl forKey:@"baseUrl"];
         
         if(syncingEnabled){
             if(fitbitUser){
@@ -2038,8 +2088,15 @@ API_AVAILABLE(ios(11.0))
         ExternalViewController *webViewController = [[ExternalViewController alloc] init];
         webViewController.link = [json valueForKey:@"link"];
         [currentTopVC presentViewController:webViewController animated:false completion:nil];
+    }else if([methodName isEqualToString:@"setAuthToken"]){
+        if(token==nil || token.length==0){
+            token = [json valueForKey:@"token"];
+            [userDefaults setObject:token forKey:@"token"];
+        }
+    }else if([methodName isEqualToString:@"downloadPdf"]){
+        NSString* pdfUrl = [json valueForKey:@"link"];
+        [self downloadPdf:pdfUrl];
     }
-    
 }
 
 @end
