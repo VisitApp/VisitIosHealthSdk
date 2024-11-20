@@ -1,6 +1,6 @@
 {
   "name": "VisitIosHealthSdk",
-  "version": "0.6.2",
+  "version": "0.7.4",
   "summary": "An SDK to inject the health kit data in Visit PWA",
   "swift_versions": "4.0",
   "description": "An iOS SDK to inject the health kit data in Visit PWA",
@@ -14,7 +14,7 @@
   },
   "source": {
     "git": "https://github.com/VisitApp/VisitIosHealthSdk.git",
-    "tag": "0.6.2"
+    "tag": "0.7.4"
   },
   "platforms": {
     "ios": "12.0"
@@ -22,7 +22,7 @@
   "source_files": "VisitIosHealthSdk/Classes/**/*.{swift,h,m}",
   "dependencies": {
     "TwilioVideo": [
-      "~> 4.4"
+      "~> 5.5.0"
     ]
   },
   "public_header_files": "VisitIosHealthSdk/Classes/**/*.h",

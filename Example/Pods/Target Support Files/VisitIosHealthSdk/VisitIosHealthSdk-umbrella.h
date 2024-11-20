@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "ExternalViewController.h"
 #import "VisitIosHealthController.h"
 #import "VisitVideoCallDelegate.h"
 

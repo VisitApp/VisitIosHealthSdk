@@ -3,7 +3,7 @@ This application makes use of the following third party libraries:
 
 ## TwilioVideo
 
-Copyright 2011-2021 Twilio, Inc. All rights reserved. Use of this software is subject to the terms and conditions of the Twilio Terms of Service located at http://www.twilio.com/legal/tos
+Copyright 2011-2023 Twilio, Inc. All rights reserved. Use of this software is subject to the terms and conditions of the Twilio Terms of Service located at http://www.twilio.com/legal/tos
 
 ## VisitIosHealthSdk
 
