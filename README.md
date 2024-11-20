@@ -11,7 +11,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-- Supports iOS version >=12.0
+- Supports iOS version >=13.0
 - Please ensure that you have added permission texts for the following usages in your Info.plist file - Privacy - Health Share Usage Description, Privacy - Health Update Usage Description, Privacy - Camera Usage Description, Privacy - Local Network Usage Description, Privacy - Microphone Usage Description
 - Add HealthKit in Signing & Capabilities
 - Enable the "Background modes" capability for Audio, Airplay, and Picture in Picture in your Signings and Capabilites tab for your target
