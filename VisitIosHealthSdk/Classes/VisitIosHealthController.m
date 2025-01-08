@@ -1791,6 +1791,34 @@ API_AVAILABLE(ios(11.0))
     [self PostJson:endpoint body:httpBody authToken:token];
 }
 
+- (void)getFitbitDataForCurrentTime {
+    NSString *urlString = [NSString stringWithFormat:@"%@/fitness/current-progress/fitbit", baseUrl];
+    
+    NSMutableArray *queryItems = [NSMutableArray array];
+    
+    NSDate *currentDate = [NSDate date];
+    NSTimeInterval currentTimeStamp = [currentDate timeIntervalSince1970];
+    NSNumber *currentTime = [NSNumber numberWithDouble:(currentTimeStamp * 1000)]; // Convert to milliseconds
+
+    NSDateComponents *components = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:[NSDate date]];
+    [components setHour:23];
+    [components setMinute:59];
+    [components setSecond:59];
+    NSDate *endOfDay = [calendar dateFromComponents:components];
+    NSTimeInterval endTimeStamp = [endOfDay timeIntervalSince1970];
+    NSNumber *endTime = [NSNumber numberWithDouble:(endTimeStamp*1000)];
+    
+    [queryItems addObject:[NSURLQueryItem queryItemWithName:@"start" value:[NSString stringWithFormat:@"%@", currentTime]]];
+
+    [queryItems addObject:[NSURLQueryItem queryItemWithName:@"end" value:[NSString stringWithFormat:@"%@", endTime]]];
+    
+    [queryItems addObject:[NSURLQueryItem queryItemWithName:@"version" value:@"1"]];
+    
+    NSLog(@"Fetching Fitbit data for current time: %@", currentTime);
+    
+    [self getJson:urlString query:queryItems authToken:token];
+}
+
 - (void)getFitbitDataWithStartTime:(NSNumber *)startTime endTime:(NSNumber *)endTime {
     NSString *urlString = [NSString stringWithFormat:@"%@/fitness/current-progress/fitbit", baseUrl];
 
@@ -1806,7 +1834,7 @@ API_AVAILABLE(ios(11.0))
 
     [queryItems addObject:[NSURLQueryItem queryItemWithName:@"version" value:@"1"]];
     
-    NSLog(@"time update for previous days");
+    NSLog(@"time update for previous days %@",queryItems);
 
     [self getJson:urlString query:queryItems authToken:token];
 }
@@ -1948,16 +1976,16 @@ API_AVAILABLE(ios(11.0))
         NSTimeInterval googleFitLastSync = [[json valueForKey:@"googleFitLastSync"] doubleValue];
         NSNumber *fitbitLastSync = (NSNumber *)fitbitLastSyncValue;
         
+        // Convert NSNumber to NSDate
+        NSTimeInterval timeInterval = [fitbitLastSync doubleValue] / 1000.0; // Assuming the value is in milliseconds
+        NSDate *fitbitLastSyncDate = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+        
         NSLog(@"fitbitLastSync :::  %@", fitbitLastSync);
         
         NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
         NSDate* dailyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: googleFitLastSync/1000];
         
         NSDate *currentDate = [NSDate date];
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-        [dateComponents setDay:-30];
-        
         // Set to 12:00 AM (start of the day)
         NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:currentDate];
         components.hour = 0;
@@ -1969,40 +1997,38 @@ API_AVAILABLE(ios(11.0))
         NSNumber *formattedTimestamp = [NSNumber numberWithDouble:(midnightTimeStamp * 1000)]; // Convert to milliseconds
         
         if (![[json valueForKey:@"fitbitLastSync"] isEqual:@"<null>"] && ![[json valueForKey:@"fitbitLastSync"] isEqual:@0]) {
-              NSLog(@"calling fitbit get api");
-              [self getFitbitData];
+            NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:currentDate];
+                [components setHour:23];
+                [components setMinute:59];
+                [components setSecond:59];
+                NSDate *endOfDay = [calendar dateFromComponents:components];
+                NSTimeInterval endTimeStamp = [endOfDay timeIntervalSince1970];
+                NSNumber *endTime = [NSNumber numberWithDouble:(endTimeStamp * 1000)];
+            NSLog(@"calling fitbit get api");
+            [self getFitbitDataWithStartTime:fitbitLastSync endTime:endTime];
 
-              NSDate *thirtyDaysAgo = [calendar dateByAddingComponents:dateComponents toDate:currentDate options:0];
-              [self getDateRanges:thirtyDaysAgo callback:^(NSMutableArray * dates) {
-                 if([dates count]>0 && ![self->memberId isEqual:@"<null>"]){
-                         [self callUatApi:dates];
-                 }
-              }];
+            [self getDateRanges:fitbitLastSyncDate callback:^(NSMutableArray * dates) {
+                if([dates count]>0 && ![self->memberId isEqual:@"<null>"]){
+                    [self callUatApi:dates];
+                }
+            }];
 
-              NSLog(@"calling sync last fibit data get api");
-              [self logFitbitLastSync:formattedTimestamp];
-          } 
-          else {
-           NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:currentDate];
-              [components setHour:23];
-              [components setMinute:59];
-              [components setSecond:59];
-              NSDate *endOfDay = [calendar dateFromComponents:components];
-              NSTimeInterval endTimeStamp = [endOfDay timeIntervalSince1970];
-              NSNumber *endTime = [NSNumber numberWithDouble:(endTimeStamp * 1000)];
-           NSLog(@"calling fitbit get api");
-           [self getFitbitDataWithStartTime:fitbitLastSync endTime:endTime];
+            NSLog(@"calling sync last fibit data get api");
+            [self logFitbitLastSync:formattedTimestamp];
+        } 
+        else {
+            NSLog(@"FitbitDataForCurrentTime get api");
+            [self getFitbitDataForCurrentTime];
 
-           NSDate *thirtyDaysAgo = [calendar dateByAddingComponents:dateComponents toDate:currentDate options:0];
-           [self getDateRanges:thirtyDaysAgo callback:^(NSMutableArray * dates) {
-              if([dates count]>0 && ![self->memberId isEqual:@"<null>"]){
-                      [self callUatApi:dates];
-              }
-           }];
-           
-           NSLog(@"not null action ");
-           [self logFitbitLastSync:formattedTimestamp];
-       }
+            [self getDateRanges:currentDate callback:^(NSMutableArray * dates) {
+                if([dates count]>0 && ![self->memberId isEqual:@"<null>"]){
+                    [self callUatApi:dates];
+                }
+            }];
+            
+            NSLog(@"not null action ");
+            [self logFitbitLastSync:formattedTimestamp];
+        }
 
         if(![[json valueForKey:@"memberId"] isEqual:@"<null>"]){
             memberId = [json valueForKey:@"memberId"];
