@@ -765,7 +765,7 @@ API_AVAILABLE(ios(11.0))
                             [self->userDefaults setObject:currentTimeStamp forKey:@"fitnessActivityLastSyncTime"];
 //                            NSLog(@"uat api called successfully,%@",currentTimeStamp);
                         }
-                    }else if([endPoint containsString:@"wearables/fitbit/revoke"]){
+                    }else if([endPoint containsString:@"/wearables/fitbit/revoke"]){
                         self->isFitbitUser = 0;
                         [self->userDefaults setObject:@"0" forKey:@"fitbitUser"];
                         [self postNotification:@"FibitDisconnected"];
@@ -1774,8 +1774,8 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void) revokeFitbitPermissions{
-    NSString* external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
-    NSString *urlString = [NSString stringWithFormat:@"%@wearables/fitbit/revoke",external_base_url];
+    NSString* base_url = [self isEmpty:[self->userDefaults stringForKey:@"baseUrl"]] ? self->baseUrl: [self->userDefaults stringForKey:@"baseUrl"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/wearables/fitbit/revoke",base_url];
     NSDictionary *body = [NSDictionary dictionary];
     [self PostJson:urlString body:body authToken:token];
 }
