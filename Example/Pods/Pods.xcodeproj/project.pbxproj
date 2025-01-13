@@ -20,79 +20,79 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		00EA07ACB2DD11341EAB55589169EE04 /* Pods-VisitIosHealthSdk_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 03ECA3D3EC0CD21994AAB272C0951BDC /* Pods-VisitIosHealthSdk_Tests-dummy.m */; };
-		02911406F4461ECB6E683FC1F39347D4 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 49AE356601664E6C9A671D98CBE163D5 /* back@2x.png */; };
-		096311E61E52AFEA6444A47A4E2972D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		0C918EAB72CF33C4218DDFF6FD5832F4 /* VisitIosHealthSdk-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA4437AC8B4F1163A3FCBAAAEE1243E /* VisitIosHealthSdk-dummy.m */; };
-		13670EE272A79CF31CD6C0DC24E662CE /* disconnect@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33711EFDC69D3F2C9A7984E83E2F5F0B /* disconnect@3x.png */; };
-		13F113A2C25F6CF3E464752492DA617D /* VisitVideoCallDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E746C3425D3CAEA75AA6761434D5EB /* VisitVideoCallDelegate.m */; };
-		155A6132059D0330F6AC0251D93E8EE1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		1A30AD38E1B0BD6A4E3C198CF32F19F9 /* mute.png in Resources */ = {isa = PBXBuildFile; fileRef = CF9B3C800FD6F789D350C1ED33BF7180 /* mute.png */; };
-		22518FBA5F8E9F2A97E0B6446AEB233A /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = BF750450F53219A6724FE442F0007FC9 /* back.png */; };
-		22AB9300BFD5378064FB4067796D7D98 /* mute@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A55DE6CCE98A5F58F9E702754D97FBC /* mute@2x.png */; };
-		2690DBAD3106B43BF92E6C0872C7207D /* VideoCallView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C60123D736321ADB4990FEBB354152D /* VideoCallView.xib */; };
-		335835EF9693E98B154238F5C69E3DC4 /* ExternalViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C3BA67156AC58F31B9287E7D0A923C4 /* ExternalViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B513EE91C992168084DF55935418A7D /* video-off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F880C08A98D611FE342B94B74A9EFC9D /* video-off@2x.png */; };
-		5229E229B312182E081680216F553599 /* VideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1858E38670BC1580835AC9408BB4C0 /* VideoCallViewController.swift */; };
-		5F8883884BE261803C6A13FFC4A8077B /* Pods-VisitIosHealthSdk_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 10A52D3259E83F081309ABE408E95056 /* Pods-VisitIosHealthSdk_Example-dummy.m */; };
-		6BE61E40E54A93D856173B309B7DD9DB /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FFB9D9B6D325715A08AD000EB5C7E2 /* Utils.swift */; };
-		6F083746D69F519E77CC5C86BC0F17B3 /* ExternalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A42EA59DAD68F3673A3F9175103756 /* ExternalViewController.m */; };
-		7016DCEBC4C2326B046FAA812C65E866 /* mute@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D0AA4D59967B850A55E6C5B5202A23AC /* mute@3x.png */; };
-		75F245E9D5E9E7A2816C00C64DB8BB2C /* switch-camera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F47EF507B500AD2D2681B006D08CC6 /* switch-camera@3x.png */; };
-		765C228D4D0A45E6682E5CB9603A77CA /* back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CCE3730493D86F768943DA0EF8D50D8 /* back@3x.png */; };
-		7D8A9A697651B86E53D1E51212A4330E /* disconnect.png in Resources */ = {isa = PBXBuildFile; fileRef = DA69C8246027D3B54738DA35AB68DA75 /* disconnect.png */; };
-		7E0092E32148570380FB8E12123B761D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42430BB59CD8FC9292C468E3E86F3B96 /* Settings.swift */; };
-		83C79CE919D1C646CBAD44F354ABC576 /* VisitIosHealthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03506A04FD87B03F618A217E2FAA9283 /* VisitIosHealthController.m */; };
-		869E0352C7AF12FE16D455D8948B6EE8 /* Pods-VisitIosHealthSdk_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0A887A08553A1F02A0C63E706B8FF3 /* Pods-VisitIosHealthSdk_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8E88CFF25DFA3BD39F872A3213FBC09F /* Camera_On@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = ED85E07C103AE73835CBD814734AB175 /* Camera_On@3x.png */; };
-		8FE9BCBB7E9C1624B15FB5EE15131C57 /* switch-camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74BADF8898F221123A0613D447E02A84 /* switch-camera@2x.png */; };
-		9281654186F54874A2DCF875CD64CD19 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		92A4D73A66D4B6FFBA6E9FC666F36945 /* Camera_On@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54FD4586073F957D0944415EC10CCBD2 /* Camera_On@2x.png */; };
-		9D76DAE416B467846062670B29773B9C /* video-off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4E6775B8D8FF28219DD2ABE0C71497 /* video-off@3x.png */; };
-		CA1B182B93E751998AD1B27E6D12A53C /* Mic_On@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6433D95C0BF51FF619B3AEC891AC9FE /* Mic_On@3x.png */; };
-		CF835FD5A9F22C25EA475852FC94ED53 /* disconnect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06CF976D32D3674A25E1FDC3EFD8835B /* disconnect@2x.png */; };
-		D20BF4916FC9C3C49B613FE6287DA60B /* switch-camera.png in Resources */ = {isa = PBXBuildFile; fileRef = D9DC74682B026BB33BC1DB20B752F20B /* switch-camera.png */; };
-		D448EACFE032123A56458EE5C874070F /* VisitIosHealthController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5617D274AA05FEC0EE4EDB2D68608F10 /* VisitIosHealthController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8C76A2BFDAE3DE75F75DA2C18DA07BA /* Camera_On.png in Resources */ = {isa = PBXBuildFile; fileRef = 94058FC5997270142C12ADFAFE5FB81C /* Camera_On.png */; };
-		D8DDE77A52310D5FCF2D14FE8AA4BCA2 /* Mic_On@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68260935255940C0974676FD118A8D40 /* Mic_On@2x.png */; };
-		E31AE74B91DC731C5E7CCD715381DBF7 /* VisitVideoCallDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AE03B8D6E3ACC37123991C8D36F2BA /* VisitVideoCallDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EB90CDF54EB9BDAA268EC16955EB1D73 /* Mic_On.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BA95EB19F9D88A781073424A2363159 /* Mic_On.png */; };
-		EB9427686C81E801CC0179C1083E2C82 /* video-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 3698FB1F0ABAFD45FD3095189328F378 /* video-off.png */; };
-		F1D0CA054557016259720F73F0DF9D8B /* Pods-VisitIosHealthSdk_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BE1E0EABA74A8B2C12B01A3090F40D35 /* Pods-VisitIosHealthSdk_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4ECC22261D5840F31F1E40D48A4778C /* VisitIosHealthSdk-VisitIosHealthSdk in Resources */ = {isa = PBXBuildFile; fileRef = 3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk-VisitIosHealthSdk */; };
-		FF204690564404C877725796B522554C /* VisitIosHealthSdk-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 424E0EC93D8A407427B8FED861590BD0 /* VisitIosHealthSdk-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02E7580D3C3D5356A5FE0524F9814CF5 /* switch-camera.png in Resources */ = {isa = PBXBuildFile; fileRef = D9DC74682B026BB33BC1DB20B752F20B /* switch-camera.png */; };
+		0E652AA78DD7C5798F170C37ACA5ACCB /* mute@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A55DE6CCE98A5F58F9E702754D97FBC /* mute@2x.png */; };
+		172CAE387032FDE5A029EFE5EA821FB5 /* Pods-VisitIosHealthSdk_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 10A52D3259E83F081309ABE408E95056 /* Pods-VisitIosHealthSdk_Example-dummy.m */; };
+		1934DE3E51E3ECDADD621441A193D652 /* disconnect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06CF976D32D3674A25E1FDC3EFD8835B /* disconnect@2x.png */; };
+		1A3EE23C855F29B0CF21209A7B7E3CE8 /* Camera_On@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54FD4586073F957D0944415EC10CCBD2 /* Camera_On@2x.png */; };
+		1FEBCCC70A3EC585B2979C0A65499E61 /* switch-camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74BADF8898F221123A0613D447E02A84 /* switch-camera@2x.png */; };
+		227C2B0D1E9A91B614BA06BC691865C1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
+		22E3E029B00D5E7F8BB16F2D700F8032 /* back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CCE3730493D86F768943DA0EF8D50D8 /* back@3x.png */; };
+		28DFCCA5D4F3E7BE61C8571ED7BB608F /* video-off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4E6775B8D8FF28219DD2ABE0C71497 /* video-off@3x.png */; };
+		2FEB260EAE0A22FAFADADB1A007404BB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
+		328DA531116A838DE06BA51DDF17C793 /* VisitVideoCallDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AE03B8D6E3ACC37123991C8D36F2BA /* VisitVideoCallDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		386F57AED09EEE896D8109BEEABB1FBC /* ExternalViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C3BA67156AC58F31B9287E7D0A923C4 /* ExternalViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		430AFED4A50A173BD1AE8FE7478DD415 /* switch-camera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F47EF507B500AD2D2681B006D08CC6 /* switch-camera@3x.png */; };
+		4BFA4AE7CFE3EA4506798EB48870E1BC /* disconnect@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33711EFDC69D3F2C9A7984E83E2F5F0B /* disconnect@3x.png */; };
+		597C95C4B716DF8EDC6973F78B7DE763 /* disconnect.png in Resources */ = {isa = PBXBuildFile; fileRef = DA69C8246027D3B54738DA35AB68DA75 /* disconnect.png */; };
+		5C7A236692FB18987E725C7031D8B6CE /* VideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1858E38670BC1580835AC9408BB4C0 /* VideoCallViewController.swift */; };
+		6E053D73E203892186885F383400A395 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42430BB59CD8FC9292C468E3E86F3B96 /* Settings.swift */; };
+		70731A9C3A7B63D59AD6BE6C938FF382 /* VisitIosHealthSdk-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 424E0EC93D8A407427B8FED861590BD0 /* VisitIosHealthSdk-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8495C0EC54EF79FAE9507C8C241B6A1E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FFB9D9B6D325715A08AD000EB5C7E2 /* Utils.swift */; };
+		8FF5AC4AA1FA986E8852989E8B58FB46 /* Pods-VisitIosHealthSdk_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BE1E0EABA74A8B2C12B01A3090F40D35 /* Pods-VisitIosHealthSdk_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		92C994D68F02BBD5CC148EA9EC335F92 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = BF750450F53219A6724FE442F0007FC9 /* back.png */; };
+		97762D86660788793428C84DF44C8ED7 /* VisitIosHealthController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5617D274AA05FEC0EE4EDB2D68608F10 /* VisitIosHealthController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A1D4E6EF965F296488113F5D99B23EE /* Mic_On.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BA95EB19F9D88A781073424A2363159 /* Mic_On.png */; };
+		9D683E7A7A720A6847237674578C37E7 /* VisitIosHealthSdk-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA4437AC8B4F1163A3FCBAAAEE1243E /* VisitIosHealthSdk-dummy.m */; };
+		9EC6D79C3F9BBE1E8E20BE6809B8C674 /* Mic_On@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6433D95C0BF51FF619B3AEC891AC9FE /* Mic_On@3x.png */; };
+		A0736BDB3737BFE057C4663BC957BA4D /* VisitIosHealthSdk-VisitIosHealthSdk in Resources */ = {isa = PBXBuildFile; fileRef = 3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk-VisitIosHealthSdk */; };
+		A11660BB633B007038135CF49B63A257 /* Camera_On.png in Resources */ = {isa = PBXBuildFile; fileRef = 94058FC5997270142C12ADFAFE5FB81C /* Camera_On.png */; };
+		B1E1ED14549DA2CA5D4705B896EA19C5 /* ExternalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A42EA59DAD68F3673A3F9175103756 /* ExternalViewController.m */; };
+		B42BF8369D1BB9B9257386C825220D18 /* mute@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D0AA4D59967B850A55E6C5B5202A23AC /* mute@3x.png */; };
+		B868938F43B1D2DBF8818DEB3F1B5C15 /* Mic_On@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68260935255940C0974676FD118A8D40 /* Mic_On@2x.png */; };
+		BAD83059234B885719A3E53A97A9E995 /* Pods-VisitIosHealthSdk_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 03ECA3D3EC0CD21994AAB272C0951BDC /* Pods-VisitIosHealthSdk_Tests-dummy.m */; };
+		BE9EED7CAD5E701BCA89F6508F43FFEC /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 49AE356601664E6C9A671D98CBE163D5 /* back@2x.png */; };
+		CA281BD4C53B953DBA1F682EB82301BD /* video-off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F880C08A98D611FE342B94B74A9EFC9D /* video-off@2x.png */; };
+		CC3FCBE5F8A14E25EDF90106809EF768 /* Pods-VisitIosHealthSdk_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0A887A08553A1F02A0C63E706B8FF3 /* Pods-VisitIosHealthSdk_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E3BDF94A108701B387E595519239F463 /* video-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 3698FB1F0ABAFD45FD3095189328F378 /* video-off.png */; };
+		ECCD8F5F4BCF6FC48AF355A6828BF5F6 /* VideoCallView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C60123D736321ADB4990FEBB354152D /* VideoCallView.xib */; };
+		EFE176E521D69E726CD56759CE7D7A09 /* VisitIosHealthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03506A04FD87B03F618A217E2FAA9283 /* VisitIosHealthController.m */; };
+		F7BC920E76A950C25146BD7B9133565A /* mute.png in Resources */ = {isa = PBXBuildFile; fileRef = CF9B3C800FD6F789D350C1ED33BF7180 /* mute.png */; };
+		FB7BDF703972A5B4C7D7D38F5B05AF73 /* Camera_On@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = ED85E07C103AE73835CBD814734AB175 /* Camera_On@3x.png */; };
+		FC4A285B539BBB15FA0C9D2D832F311C /* VisitVideoCallDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E746C3425D3CAEA75AA6761434D5EB /* VisitVideoCallDelegate.m */; };
+		FF10B5A63C6722C2A2880C64721C19F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		1B3964C14B7A07F9C1907FD1914E1D9D /* PBXContainerItemProxy */ = {
+		2C1EC50FD65900F93452F21C37E6F0D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C4062493E1D20306F1EA4108871D1ED7;
+			remoteInfo = TwilioVideo;
+		};
+		3EDEC47FA9458F483E6F7B8F5FC54841 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 1268F850B51C45248BDE5EF66FEB7F04;
 			remoteInfo = "VisitIosHealthSdk-VisitIosHealthSdk";
 		};
-		20FE8B62C1DFFD4E037989E323D708B1 /* PBXContainerItemProxy */ = {
+		82EED8CE9C5B6513BE423E53179767AC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C4062493E1D20306F1EA4108871D1ED7;
 			remoteInfo = TwilioVideo;
 		};
-		3102E54C90FD34AA5136FA5F9EE91A7C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C4062493E1D20306F1EA4108871D1ED7;
-			remoteInfo = TwilioVideo;
-		};
-		643910DCB477D903EAA2F183AFB53B1B /* PBXContainerItemProxy */ = {
+		D4334ECE38F7FA432FF4F6785DDA58B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 649FDAA2D14611EE19879A5C49F8A955;
 			remoteInfo = "Pods-VisitIosHealthSdk_Example";
 		};
-		A7AD27CF5301B9A42FE0A05C19ABC848 /* PBXContainerItemProxy */ = {
+		DCBB81946A1EC24F141EA4F047DC596B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -117,6 +117,7 @@
 		3179921F4F4C9CF6EE9253850DDFF6D4 /* VisitIosHealthSdk-VisitIosHealthSdk */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "VisitIosHealthSdk-VisitIosHealthSdk"; path = VisitIosHealthSdk.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		33711EFDC69D3F2C9A7984E83E2F5F0B /* disconnect@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "disconnect@3x.png"; path = "VisitIosHealthSdk/Assets/disconnect@3x.png"; sourceTree = "<group>"; };
 		3698FB1F0ABAFD45FD3095189328F378 /* video-off.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "video-off.png"; path = "VisitIosHealthSdk/Assets/video-off.png"; sourceTree = "<group>"; };
+		384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3C60123D736321ADB4990FEBB354152D /* VideoCallView.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = VideoCallView.xib; path = VisitIosHealthSdk/Assets/VideoCallView.xib; sourceTree = "<group>"; };
 		3C6E5936A5D5BC94E0A54BCB351E76DF /* Pods-VisitIosHealthSdk_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-VisitIosHealthSdk_Example-frameworks.sh"; sourceTree = "<group>"; };
 		3CA1734516F0BEC9C83B138DCCD16051 /* VisitIosHealthSdk */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = VisitIosHealthSdk; path = VisitIosHealthSdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,7 +135,6 @@
 		67FFB9D9B6D325715A08AD000EB5C7E2 /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = VisitIosHealthSdk/Classes/Utils.swift; sourceTree = "<group>"; };
 		68260935255940C0974676FD118A8D40 /* Mic_On@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Mic_On@2x.png"; path = "VisitIosHealthSdk/Assets/Mic_On@2x.png"; sourceTree = "<group>"; };
 		70F4266B2B22FA22B6FB9E8689144842 /* TwilioVideo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TwilioVideo.debug.xcconfig; sourceTree = "<group>"; };
-		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		739EF9AA12CA74FE0F3A4FA6651F41C0 /* VisitIosHealthSdk.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = VisitIosHealthSdk.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		74BADF8898F221123A0613D447E02A84 /* switch-camera@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "switch-camera@2x.png"; path = "VisitIosHealthSdk/Assets/switch-camera@2x.png"; sourceTree = "<group>"; };
 		7C3BA67156AC58F31B9287E7D0A923C4 /* ExternalViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExternalViewController.h; path = VisitIosHealthSdk/Classes/ExternalViewController.h; sourceTree = "<group>"; };
@@ -174,34 +174,34 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		595A5F7895C868BD56567D273AED9354 /* Frameworks */ = {
+		0108DE90651EC986D3F228528A84ED7E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				155A6132059D0330F6AC0251D93E8EE1 /* Foundation.framework in Frameworks */,
+				2FEB260EAE0A22FAFADADB1A007404BB /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5C8B433DD94A6C3D5FC692582D78DE28 /* Frameworks */ = {
+		3DEF0C6365E1F5BC077C576123E9BBBE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				096311E61E52AFEA6444A47A4E2972D4 /* Foundation.framework in Frameworks */,
+				227C2B0D1E9A91B614BA06BC691865C1 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B24F7CDF3F34EAAE3B1BB6B68CE8B815 /* Frameworks */ = {
+		4F17E4B71F784F8CB12A77B8277DD2A1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9281654186F54874A2DCF875CD64CD19 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B475CF10DFB16D6D0FA87C9F595ECF16 /* Frameworks */ = {
+		CF071AB9811CA75D9FABE1E04F5F9102 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF10B5A63C6722C2A2880C64721C19F0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,14 +282,6 @@
 				110120833F2D1CB6AA4B70D2EE436F07 /* TwilioVideo.xcframework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
-			);
-			name = iOS;
 			sourceTree = "<group>";
 		};
 		60E901619CF68C7FDB592951AAA5B0A3 /* TwilioVideo */ = {
@@ -377,7 +369,7 @@
 		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				578452D2E740E91742655AC8F1636D1F /* iOS */,
+				E4801F62A6B08CD9B5410329F1A18FDE /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -388,6 +380,14 @@
 				A09DCCC7182D5234C572EFF130C15449 /* VisitIosHealthSdk */,
 			);
 			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		E4801F62A6B08CD9B5410329F1A18FDE /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		F08FD53D2796575F333D38687F2724B9 /* Support Files */ = {
@@ -404,30 +404,30 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		2EC130B9C8E7D75699451D87C4DC66C0 /* Headers */ = {
+		87BEB7E47C4C1640EA4ADA3550E36E5E /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F1D0CA054557016259720F73F0DF9D8B /* Pods-VisitIosHealthSdk_Example-umbrella.h in Headers */,
+				386F57AED09EEE896D8109BEEABB1FBC /* ExternalViewController.h in Headers */,
+				97762D86660788793428C84DF44C8ED7 /* VisitIosHealthController.h in Headers */,
+				70731A9C3A7B63D59AD6BE6C938FF382 /* VisitIosHealthSdk-umbrella.h in Headers */,
+				328DA531116A838DE06BA51DDF17C793 /* VisitVideoCallDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		499D79D29B11961F5AF12A1C1913A1A6 /* Headers */ = {
+		A0CCA64CED6D7EAF0CA9EE7E408F8555 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				869E0352C7AF12FE16D455D8948B6EE8 /* Pods-VisitIosHealthSdk_Tests-umbrella.h in Headers */,
+				8FF5AC4AA1FA986E8852989E8B58FB46 /* Pods-VisitIosHealthSdk_Example-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A84BCCA656D80958D8D51E35CE6EF3CB /* Headers */ = {
+		E6E54CAE9B512B6D45609F284DB7B971 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				335835EF9693E98B154238F5C69E3DC4 /* ExternalViewController.h in Headers */,
-				D448EACFE032123A56458EE5C874070F /* VisitIosHealthController.h in Headers */,
-				FF204690564404C877725796B522554C /* VisitIosHealthSdk-umbrella.h in Headers */,
-				E31AE74B91DC731C5E7CCD715381DBF7 /* VisitVideoCallDelegate.h in Headers */,
+				CC3FCBE5F8A14E25EDF90106809EF768 /* Pods-VisitIosHealthSdk_Tests-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,11 +436,11 @@
 /* Begin PBXNativeTarget section */
 		1268F850B51C45248BDE5EF66FEB7F04 /* VisitIosHealthSdk-VisitIosHealthSdk */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4F5500A6CCF8B1C23D4A9EB4968E6637 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk-VisitIosHealthSdk" */;
+			buildConfigurationList = 7C903C3542F1ECA50047DCD7E0A1CBF4 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk-VisitIosHealthSdk" */;
 			buildPhases = (
-				A6C35A1FF857CA52279FB1EB5DBC0AA7 /* Sources */,
-				B475CF10DFB16D6D0FA87C9F595ECF16 /* Frameworks */,
-				B447DACFBA4C7B0CCC95EBC16B3AB8E0 /* Resources */,
+				3FBDE5B498E366FCD278A34C52D86E04 /* Sources */,
+				4F17E4B71F784F8CB12A77B8277DD2A1 /* Frameworks */,
+				B57344CF46BDCF6E61E923587E158248 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -453,17 +453,17 @@
 		};
 		334DA38700BDF9A254D1BB80A8E28211 /* Pods-VisitIosHealthSdk_Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D13D648B1923D7FE76A44FF3472979A4 /* Build configuration list for PBXNativeTarget "Pods-VisitIosHealthSdk_Tests" */;
+			buildConfigurationList = 1AAFB0ABB8A10A136ADADA0C293AA994 /* Build configuration list for PBXNativeTarget "Pods-VisitIosHealthSdk_Tests" */;
 			buildPhases = (
-				499D79D29B11961F5AF12A1C1913A1A6 /* Headers */,
-				C125477CA14A16971FE0ABB8FCD42362 /* Sources */,
-				5C8B433DD94A6C3D5FC692582D78DE28 /* Frameworks */,
-				2EEDE1474E63659F1379BA45A4311EE1 /* Resources */,
+				E6E54CAE9B512B6D45609F284DB7B971 /* Headers */,
+				E52ECCBB10AD8A6004DBD4F3CA578CF6 /* Sources */,
+				CF071AB9811CA75D9FABE1E04F5F9102 /* Frameworks */,
+				D60EA4E7A9246AADC92CBFF081C4976B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				30ABCD6DED5D5F007386D34AA1A0270F /* PBXTargetDependency */,
+				584737F52AC233F1A0BC15E68640F991 /* PBXTargetDependency */,
 			);
 			name = "Pods-VisitIosHealthSdk_Tests";
 			productName = Pods_VisitIosHealthSdk_Tests;
@@ -472,18 +472,18 @@
 		};
 		649FDAA2D14611EE19879A5C49F8A955 /* Pods-VisitIosHealthSdk_Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7916D4A4960EE8158637513E0804008B /* Build configuration list for PBXNativeTarget "Pods-VisitIosHealthSdk_Example" */;
+			buildConfigurationList = 46ABDAE8A55007B1F85C768EFA57D9F4 /* Build configuration list for PBXNativeTarget "Pods-VisitIosHealthSdk_Example" */;
 			buildPhases = (
-				2EC130B9C8E7D75699451D87C4DC66C0 /* Headers */,
-				952840CC28B617EF0684FFEF61F71B52 /* Sources */,
-				595A5F7895C868BD56567D273AED9354 /* Frameworks */,
-				D8F906BF074A1A246AF8A8E38F31D6BE /* Resources */,
+				A0CCA64CED6D7EAF0CA9EE7E408F8555 /* Headers */,
+				9F43352594B493C5EE2E8F5160AF2139 /* Sources */,
+				3DEF0C6365E1F5BC077C576123E9BBBE /* Frameworks */,
+				AD636401F0C24F183093C20142258FC7 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				591496F7F73710D5BBCCCF3A3D5B87BF /* PBXTargetDependency */,
-				BA59CCD8CF7E4A85BD3FA55D6E31A113 /* PBXTargetDependency */,
+				C78F99BF6D6001D3F40839BA8F17C351 /* PBXTargetDependency */,
+				1D298A7588D8B9F4F9F3053426449E92 /* PBXTargetDependency */,
 			);
 			name = "Pods-VisitIosHealthSdk_Example";
 			productName = Pods_VisitIosHealthSdk_Example;
@@ -492,18 +492,18 @@
 		};
 		A087C9943B721BA1E7053065954100A2 /* VisitIosHealthSdk */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 99DB42B6BD32FC3BD30D7C44DF673044 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk" */;
+			buildConfigurationList = 315E3144A98F31D809D53102E80BD2E4 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk" */;
 			buildPhases = (
-				A84BCCA656D80958D8D51E35CE6EF3CB /* Headers */,
-				FE5EB6B719B10C3A092629F773B7EF68 /* Sources */,
-				B24F7CDF3F34EAAE3B1BB6B68CE8B815 /* Frameworks */,
-				C6AB0BB9875BFFEB81630B3437BABB5B /* Resources */,
+				87BEB7E47C4C1640EA4ADA3550E36E5E /* Headers */,
+				17FC546BBD64911B897AF81BA1A8787C /* Sources */,
+				0108DE90651EC986D3F228528A84ED7E /* Frameworks */,
+				8B52D8C0053A7048CABE723632B2ED50 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				B5D39A95162DE8055B13FF7E0AA559D3 /* PBXTargetDependency */,
-				48FA30935F4697F8655D07C477D5B273 /* PBXTargetDependency */,
+				7B5CCF791F660125A709D46E4F903FCE /* PBXTargetDependency */,
+				E9E8D377E13CBAEBE0569C1C5AD6C3A1 /* PBXTargetDependency */,
 			);
 			name = VisitIosHealthSdk;
 			productName = VisitIosHealthSdk;
@@ -516,8 +516,8 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -528,6 +528,8 @@
 				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 88737593D3064190BBA77301B9CF9B9C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -542,51 +544,51 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2EEDE1474E63659F1379BA45A4311EE1 /* Resources */ = {
+		8B52D8C0053A7048CABE723632B2ED50 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0736BDB3737BFE057C4663BC957BA4D /* VisitIosHealthSdk-VisitIosHealthSdk in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD636401F0C24F183093C20142258FC7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B447DACFBA4C7B0CCC95EBC16B3AB8E0 /* Resources */ = {
+		B57344CF46BDCF6E61E923587E158248 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22518FBA5F8E9F2A97E0B6446AEB233A /* back.png in Resources */,
-				02911406F4461ECB6E683FC1F39347D4 /* back@2x.png in Resources */,
-				765C228D4D0A45E6682E5CB9603A77CA /* back@3x.png in Resources */,
-				D8C76A2BFDAE3DE75F75DA2C18DA07BA /* Camera_On.png in Resources */,
-				92A4D73A66D4B6FFBA6E9FC666F36945 /* Camera_On@2x.png in Resources */,
-				8E88CFF25DFA3BD39F872A3213FBC09F /* Camera_On@3x.png in Resources */,
-				7D8A9A697651B86E53D1E51212A4330E /* disconnect.png in Resources */,
-				CF835FD5A9F22C25EA475852FC94ED53 /* disconnect@2x.png in Resources */,
-				13670EE272A79CF31CD6C0DC24E662CE /* disconnect@3x.png in Resources */,
-				EB90CDF54EB9BDAA268EC16955EB1D73 /* Mic_On.png in Resources */,
-				D8DDE77A52310D5FCF2D14FE8AA4BCA2 /* Mic_On@2x.png in Resources */,
-				CA1B182B93E751998AD1B27E6D12A53C /* Mic_On@3x.png in Resources */,
-				1A30AD38E1B0BD6A4E3C198CF32F19F9 /* mute.png in Resources */,
-				22AB9300BFD5378064FB4067796D7D98 /* mute@2x.png in Resources */,
-				7016DCEBC4C2326B046FAA812C65E866 /* mute@3x.png in Resources */,
-				D20BF4916FC9C3C49B613FE6287DA60B /* switch-camera.png in Resources */,
-				8FE9BCBB7E9C1624B15FB5EE15131C57 /* switch-camera@2x.png in Resources */,
-				75F245E9D5E9E7A2816C00C64DB8BB2C /* switch-camera@3x.png in Resources */,
-				EB9427686C81E801CC0179C1083E2C82 /* video-off.png in Resources */,
-				4B513EE91C992168084DF55935418A7D /* video-off@2x.png in Resources */,
-				9D76DAE416B467846062670B29773B9C /* video-off@3x.png in Resources */,
-				2690DBAD3106B43BF92E6C0872C7207D /* VideoCallView.xib in Resources */,
+				92C994D68F02BBD5CC148EA9EC335F92 /* back.png in Resources */,
+				BE9EED7CAD5E701BCA89F6508F43FFEC /* back@2x.png in Resources */,
+				22E3E029B00D5E7F8BB16F2D700F8032 /* back@3x.png in Resources */,
+				A11660BB633B007038135CF49B63A257 /* Camera_On.png in Resources */,
+				1A3EE23C855F29B0CF21209A7B7E3CE8 /* Camera_On@2x.png in Resources */,
+				FB7BDF703972A5B4C7D7D38F5B05AF73 /* Camera_On@3x.png in Resources */,
+				597C95C4B716DF8EDC6973F78B7DE763 /* disconnect.png in Resources */,
+				1934DE3E51E3ECDADD621441A193D652 /* disconnect@2x.png in Resources */,
+				4BFA4AE7CFE3EA4506798EB48870E1BC /* disconnect@3x.png in Resources */,
+				9A1D4E6EF965F296488113F5D99B23EE /* Mic_On.png in Resources */,
+				B868938F43B1D2DBF8818DEB3F1B5C15 /* Mic_On@2x.png in Resources */,
+				9EC6D79C3F9BBE1E8E20BE6809B8C674 /* Mic_On@3x.png in Resources */,
+				F7BC920E76A950C25146BD7B9133565A /* mute.png in Resources */,
+				0E652AA78DD7C5798F170C37ACA5ACCB /* mute@2x.png in Resources */,
+				B42BF8369D1BB9B9257386C825220D18 /* mute@3x.png in Resources */,
+				02E7580D3C3D5356A5FE0524F9814CF5 /* switch-camera.png in Resources */,
+				1FEBCCC70A3EC585B2979C0A65499E61 /* switch-camera@2x.png in Resources */,
+				430AFED4A50A173BD1AE8FE7478DD415 /* switch-camera@3x.png in Resources */,
+				E3BDF94A108701B387E595519239F463 /* video-off.png in Resources */,
+				CA281BD4C53B953DBA1F682EB82301BD /* video-off@2x.png in Resources */,
+				28DFCCA5D4F3E7BE61C8571ED7BB608F /* video-off@3x.png in Resources */,
+				ECCD8F5F4BCF6FC48AF355A6828BF5F6 /* VideoCallView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C6AB0BB9875BFFEB81630B3437BABB5B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F4ECC22261D5840F31F1E40D48A4778C /* VisitIosHealthSdk-VisitIosHealthSdk in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D8F906BF074A1A246AF8A8E38F31D6BE /* Resources */ = {
+		D60EA4E7A9246AADC92CBFF081C4976B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -617,99 +619,118 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		952840CC28B617EF0684FFEF61F71B52 /* Sources */ = {
+		17FC546BBD64911B897AF81BA1A8787C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F8883884BE261803C6A13FFC4A8077B /* Pods-VisitIosHealthSdk_Example-dummy.m in Sources */,
+				B1E1ED14549DA2CA5D4705B896EA19C5 /* ExternalViewController.m in Sources */,
+				6E053D73E203892186885F383400A395 /* Settings.swift in Sources */,
+				8495C0EC54EF79FAE9507C8C241B6A1E /* Utils.swift in Sources */,
+				5C7A236692FB18987E725C7031D8B6CE /* VideoCallViewController.swift in Sources */,
+				EFE176E521D69E726CD56759CE7D7A09 /* VisitIosHealthController.m in Sources */,
+				9D683E7A7A720A6847237674578C37E7 /* VisitIosHealthSdk-dummy.m in Sources */,
+				FC4A285B539BBB15FA0C9D2D832F311C /* VisitVideoCallDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A6C35A1FF857CA52279FB1EB5DBC0AA7 /* Sources */ = {
+		3FBDE5B498E366FCD278A34C52D86E04 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C125477CA14A16971FE0ABB8FCD42362 /* Sources */ = {
+		9F43352594B493C5EE2E8F5160AF2139 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00EA07ACB2DD11341EAB55589169EE04 /* Pods-VisitIosHealthSdk_Tests-dummy.m in Sources */,
+				172CAE387032FDE5A029EFE5EA821FB5 /* Pods-VisitIosHealthSdk_Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FE5EB6B719B10C3A092629F773B7EF68 /* Sources */ = {
+		E52ECCBB10AD8A6004DBD4F3CA578CF6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F083746D69F519E77CC5C86BC0F17B3 /* ExternalViewController.m in Sources */,
-				7E0092E32148570380FB8E12123B761D /* Settings.swift in Sources */,
-				6BE61E40E54A93D856173B309B7DD9DB /* Utils.swift in Sources */,
-				5229E229B312182E081680216F553599 /* VideoCallViewController.swift in Sources */,
-				83C79CE919D1C646CBAD44F354ABC576 /* VisitIosHealthController.m in Sources */,
-				0C918EAB72CF33C4218DDFF6FD5832F4 /* VisitIosHealthSdk-dummy.m in Sources */,
-				13F113A2C25F6CF3E464752492DA617D /* VisitVideoCallDelegate.m in Sources */,
+				BAD83059234B885719A3E53A97A9E995 /* Pods-VisitIosHealthSdk_Tests-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		30ABCD6DED5D5F007386D34AA1A0270F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Pods-VisitIosHealthSdk_Example";
-			target = 649FDAA2D14611EE19879A5C49F8A955 /* Pods-VisitIosHealthSdk_Example */;
-			targetProxy = 643910DCB477D903EAA2F183AFB53B1B /* PBXContainerItemProxy */;
-		};
-		48FA30935F4697F8655D07C477D5B273 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "VisitIosHealthSdk-VisitIosHealthSdk";
-			target = 1268F850B51C45248BDE5EF66FEB7F04 /* VisitIosHealthSdk-VisitIosHealthSdk */;
-			targetProxy = 1B3964C14B7A07F9C1907FD1914E1D9D /* PBXContainerItemProxy */;
-		};
-		591496F7F73710D5BBCCCF3A3D5B87BF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = TwilioVideo;
-			target = C4062493E1D20306F1EA4108871D1ED7 /* TwilioVideo */;
-			targetProxy = 3102E54C90FD34AA5136FA5F9EE91A7C /* PBXContainerItemProxy */;
-		};
-		B5D39A95162DE8055B13FF7E0AA559D3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = TwilioVideo;
-			target = C4062493E1D20306F1EA4108871D1ED7 /* TwilioVideo */;
-			targetProxy = 20FE8B62C1DFFD4E037989E323D708B1 /* PBXContainerItemProxy */;
-		};
-		BA59CCD8CF7E4A85BD3FA55D6E31A113 /* PBXTargetDependency */ = {
+		1D298A7588D8B9F4F9F3053426449E92 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = VisitIosHealthSdk;
 			target = A087C9943B721BA1E7053065954100A2 /* VisitIosHealthSdk */;
-			targetProxy = A7AD27CF5301B9A42FE0A05C19ABC848 /* PBXContainerItemProxy */;
+			targetProxy = DCBB81946A1EC24F141EA4F047DC596B /* PBXContainerItemProxy */;
+		};
+		584737F52AC233F1A0BC15E68640F991 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-VisitIosHealthSdk_Example";
+			target = 649FDAA2D14611EE19879A5C49F8A955 /* Pods-VisitIosHealthSdk_Example */;
+			targetProxy = D4334ECE38F7FA432FF4F6785DDA58B7 /* PBXContainerItemProxy */;
+		};
+		7B5CCF791F660125A709D46E4F903FCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TwilioVideo;
+			target = C4062493E1D20306F1EA4108871D1ED7 /* TwilioVideo */;
+			targetProxy = 82EED8CE9C5B6513BE423E53179767AC /* PBXContainerItemProxy */;
+		};
+		C78F99BF6D6001D3F40839BA8F17C351 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TwilioVideo;
+			target = C4062493E1D20306F1EA4108871D1ED7 /* TwilioVideo */;
+			targetProxy = 2C1EC50FD65900F93452F21C37E6F0D7 /* PBXContainerItemProxy */;
+		};
+		E9E8D377E13CBAEBE0569C1C5AD6C3A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "VisitIosHealthSdk-VisitIosHealthSdk";
+			target = 1268F850B51C45248BDE5EF66FEB7F04 /* VisitIosHealthSdk-VisitIosHealthSdk */;
+			targetProxy = 3EDEC47FA9458F483E6F7B8F5FC54841 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		1A7A6AC8488C414E729B8409A0ECA04A /* Release */ = {
+		0AFA9F6479AFA0BBA8875566470D7EE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2CAE7B6B1BA04D7DDC2C11334D4BE9A7 /* VisitIosHealthSdk.release.xcconfig */;
+			baseConfigurationReference = F447ABD06881E38C2F64933446D9FE99 /* Pods-VisitIosHealthSdk_Example.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/VisitIosHealthSdk";
-				IBSC_MODULE = VisitIosHealthSdk;
-				INFOPLIST_FILE = "Target Support Files/VisitIosHealthSdk/ResourceBundle-VisitIosHealthSdk-VisitIosHealthSdk-Info.plist";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				PRODUCT_NAME = VisitIosHealthSdk;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
-		5CA1370FE97B94B41D481B653DE46994 /* Release */ = {
+		41248A28F49DAE89070A078B9D7CC753 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2CAE7B6B1BA04D7DDC2C11334D4BE9A7 /* VisitIosHealthSdk.release.xcconfig */;
+			baseConfigurationReference = F59C742860B6C29281FE8C776004AB9A /* VisitIosHealthSdk.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -721,7 +742,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PREFIX_HEADER = "Target Support Files/VisitIosHealthSdk/VisitIosHealthSdk-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Target Support Files/VisitIosHealthSdk/VisitIosHealthSdk-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -732,7 +756,97 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4172730A441FE25AE8DE722F1BFAF326 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 425FD12EF201C699045310809206E8ED /* Pods-VisitIosHealthSdk_Tests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		44A9CEC00848DC5A72B7A8FB94F00A63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7F08779451994A2C8F68BEF97C222663 /* TwilioVideo.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4BAE6AEC72FC705C2BD4F71BFCF0FDDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 940637C859962DC38FD10FEA5712AB77 /* Pods-VisitIosHealthSdk_Example.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -740,7 +854,7 @@
 			};
 			name = Release;
 		};
-		635B9B5EE8037B44078C39C12BE3F596 /* Release */ = {
+		85B239C37E1D5A0FDC076AA967E89860 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 64F7588CD3E444CBC53209C713228434 /* Pods-VisitIosHealthSdk_Tests.release.xcconfig */;
 			buildSettings = {
@@ -755,6 +869,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -774,6 +890,23 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
+		};
+		8B0F130A72C9543B4FBD19CF79418593 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F59C742860B6C29281FE8C776004AB9A /* VisitIosHealthSdk.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/VisitIosHealthSdk";
+				IBSC_MODULE = VisitIosHealthSdk;
+				INFOPLIST_FILE = "Target Support Files/VisitIosHealthSdk/ResourceBundle-VisitIosHealthSdk-VisitIosHealthSdk-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_NAME = VisitIosHealthSdk;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
 		};
 		8DE5143C03248BB6CD542DE3963D6F3A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -841,73 +974,6 @@
 			};
 			name = Debug;
 		};
-		9039176C19B00FF90119D64D9AEBC15F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F59C742860B6C29281FE8C776004AB9A /* VisitIosHealthSdk.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/VisitIosHealthSdk/VisitIosHealthSdk-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/VisitIosHealthSdk/VisitIosHealthSdk-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/VisitIosHealthSdk/VisitIosHealthSdk.modulemap";
-				PRODUCT_MODULE_NAME = VisitIosHealthSdk;
-				PRODUCT_NAME = VisitIosHealthSdk;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		929FE48F628504F806C7FB8854CA987A /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 940637C859962DC38FD10FEA5712AB77 /* Pods-VisitIosHealthSdk_Example.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		9E406C6AAF85E580207CD97B0044DEAB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -970,93 +1036,9 @@
 			};
 			name = Release;
 		};
-		BEC6411562341BE75D2B10334FD0622A /* Debug */ = {
+		A3AF26A4E8A33CE5A40C74DADF3F6B0C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F447ABD06881E38C2F64933446D9FE99 /* Pods-VisitIosHealthSdk_Example.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Example/Pods-VisitIosHealthSdk_Example.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		C395C82C63A57965D4D0788463ADB577 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F08779451994A2C8F68BEF97C222663 /* TwilioVideo.release.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		E403C649FF300D71C053B9CF4EF42723 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 425FD12EF201C699045310809206E8ED /* Pods-VisitIosHealthSdk_Tests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-VisitIosHealthSdk_Tests/Pods-VisitIosHealthSdk_Tests.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		EC2C4AE3970E7E6511744377B5C564FA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F59C742860B6C29281FE8C776004AB9A /* VisitIosHealthSdk.debug.xcconfig */;
+			baseConfigurationReference = 2CAE7B6B1BA04D7DDC2C11334D4BE9A7 /* VisitIosHealthSdk.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGNING_ALLOWED = NO;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/VisitIosHealthSdk";
@@ -1069,9 +1051,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = bundle;
 			};
-			name = Debug;
+			name = Release;
 		};
-		F2FA786AFABF36CC006776230AE14E32 /* Debug */ = {
+		A6526834659801E80E3B88B4BBE332BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 70F4266B2B22FA22B6FB9E8689144842 /* TwilioVideo.debug.xcconfig */;
 			buildSettings = {
@@ -1079,6 +1061,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				SDKROOT = iphoneos;
@@ -1086,9 +1069,73 @@
 			};
 			name = Debug;
 		};
+		C6DA34526D8DB816C67454E56E697BDA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2CAE7B6B1BA04D7DDC2C11334D4BE9A7 /* VisitIosHealthSdk.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/VisitIosHealthSdk/VisitIosHealthSdk-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Target Support Files/VisitIosHealthSdk/VisitIosHealthSdk-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/VisitIosHealthSdk/VisitIosHealthSdk.modulemap";
+				PRODUCT_MODULE_NAME = VisitIosHealthSdk;
+				PRODUCT_NAME = VisitIosHealthSdk;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1AAFB0ABB8A10A136ADADA0C293AA994 /* Build configuration list for PBXNativeTarget "Pods-VisitIosHealthSdk_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4172730A441FE25AE8DE722F1BFAF326 /* Debug */,
+				85B239C37E1D5A0FDC076AA967E89860 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		315E3144A98F31D809D53102E80BD2E4 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				41248A28F49DAE89070A078B9D7CC753 /* Debug */,
+				C6DA34526D8DB816C67454E56E697BDA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		46ABDAE8A55007B1F85C768EFA57D9F4 /* Build configuration list for PBXNativeTarget "Pods-VisitIosHealthSdk_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AFA9F6479AFA0BBA8875566470D7EE0 /* Debug */,
+				4BAE6AEC72FC705C2BD4F71BFCF0FDDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1098,29 +1145,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4F5500A6CCF8B1C23D4A9EB4968E6637 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk-VisitIosHealthSdk" */ = {
+		7C903C3542F1ECA50047DCD7E0A1CBF4 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk-VisitIosHealthSdk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EC2C4AE3970E7E6511744377B5C564FA /* Debug */,
-				1A7A6AC8488C414E729B8409A0ECA04A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7916D4A4960EE8158637513E0804008B /* Build configuration list for PBXNativeTarget "Pods-VisitIosHealthSdk_Example" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BEC6411562341BE75D2B10334FD0622A /* Debug */,
-				929FE48F628504F806C7FB8854CA987A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		99DB42B6BD32FC3BD30D7C44DF673044 /* Build configuration list for PBXNativeTarget "VisitIosHealthSdk" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9039176C19B00FF90119D64D9AEBC15F /* Debug */,
-				5CA1370FE97B94B41D481B653DE46994 /* Release */,
+				8B0F130A72C9543B4FBD19CF79418593 /* Debug */,
+				A3AF26A4E8A33CE5A40C74DADF3F6B0C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1128,17 +1157,8 @@
 		A45B7F2B0916096067BC48AE7307F1CA /* Build configuration list for PBXAggregateTarget "TwilioVideo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F2FA786AFABF36CC006776230AE14E32 /* Debug */,
-				C395C82C63A57965D4D0788463ADB577 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D13D648B1923D7FE76A44FF3472979A4 /* Build configuration list for PBXNativeTarget "Pods-VisitIosHealthSdk_Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E403C649FF300D71C053B9CF4EF42723 /* Debug */,
-				635B9B5EE8037B44078C39C12BE3F596 /* Release */,
+				A6526834659801E80E3B88B4BBE332BB /* Debug */,
+				44A9CEC00848DC5A72B7A8FB94F00A63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
