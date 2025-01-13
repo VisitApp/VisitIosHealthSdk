@@ -1780,13 +1780,15 @@ API_AVAILABLE(ios(11.0))
     [self PostJson:urlString body:body authToken:token];
 }
 
-- (void)logFitbitLastSync:(NSNumber *)formattedTimestamp {
-    NSLog(@"param : formattedTimestamp %@ ",formattedTimestamp);
+- (void)logFitbitLastSync:(NSNumber *)formattedTimestamp policyNumber:(NSNumber *)policyNumber {
+    NSLog(@"param : formattedTimestamp %@, policyNumber %@", formattedTimestamp, policyNumber);
+    
     NSString *endpoint = [NSString stringWithFormat:@"%@/new-auth/log-fitbit-lastsync", baseUrl];
     NSDictionary *httpBody = @{
-            @"lastSyncTimeStamp" : formattedTimestamp,
+        @"lastSyncTimeStamp" : formattedTimestamp,
+        @"policyNumber" : policyNumber
     };
-    NSLog(@"lastSyncTimeStamp httpBody %@",httpBody);
+    NSLog(@"lastSyncTimeStamp httpBody %@", httpBody);
     
     [self PostJson:endpoint body:httpBody authToken:token];
 }
@@ -1966,6 +1968,7 @@ API_AVAILABLE(ios(11.0))
         token = [json valueForKey:@"authtoken"];
         BOOL fitbitUser = [[json valueForKey:@"fitbitUser"] boolValue];
         id fitbitLastSyncValue = [json valueForKey:@"fitbitLastSync"];
+        id policyNumber = [json valueForKey:@"policyNumber"];
         if(fitbitUser){
             isFitbitUser = 1;
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
@@ -2014,8 +2017,8 @@ API_AVAILABLE(ios(11.0))
             }];
 
             NSLog(@"calling sync last fibit data get api");
-            [self logFitbitLastSync:formattedTimestamp];
-        } 
+            [self logFitbitLastSync:formattedTimestamp policyNumber:policyNumber];
+        }
         else {
             NSLog(@"FitbitDataForCurrentTime get api");
             [self getFitbitDataForCurrentTime];
@@ -2027,7 +2030,7 @@ API_AVAILABLE(ios(11.0))
             }];
             
             NSLog(@"not null action ");
-            [self logFitbitLastSync:formattedTimestamp];
+            [self logFitbitLastSync:formattedTimestamp policyNumber:policyNumber];
         }
 
         if(![[json valueForKey:@"memberId"] isEqual:@"<null>"]){
