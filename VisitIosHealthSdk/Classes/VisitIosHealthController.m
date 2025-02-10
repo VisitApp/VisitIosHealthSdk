@@ -1967,8 +1967,9 @@ API_AVAILABLE(ios(11.0))
         baseUrl = [json valueForKey:@"apiBaseUrl"];
         token = [json valueForKey:@"authtoken"];
         BOOL fitbitUser = [[json valueForKey:@"fitbitUser"] boolValue];
-        id fitbitLastSyncValue = [json valueForKey:@"fitbitLastSync"];
+        id fitbitLastSync = [json valueForKey:@"fitbitLastSync"];
         id policyNumber = [json valueForKey:@"policyNumber"];
+        
         if(fitbitUser){
             isFitbitUser = 1;
             [self->userDefaults setObject:@"1" forKey:@"fitbitUser"];
@@ -1977,13 +1978,6 @@ API_AVAILABLE(ios(11.0))
         [userDefaults setObject:[json valueForKey:@"fitbitUser"] forKey:@"fitbitUser"];
         NSTimeInterval gfHourlyLastSync = [[json valueForKey:@"gfHourlyLastSync"] doubleValue];
         NSTimeInterval googleFitLastSync = [[json valueForKey:@"googleFitLastSync"] doubleValue];
-        NSNumber *fitbitLastSync = (NSNumber *)fitbitLastSyncValue;
-        
-        // Convert NSNumber to NSDate
-        NSTimeInterval timeInterval = [fitbitLastSync doubleValue] / 1000.0; // Assuming the value is in milliseconds
-        NSDate *fitbitLastSyncDate = [NSDate dateWithTimeIntervalSince1970:timeInterval];
-        
-        NSLog(@"fitbitLastSync :::  %@", fitbitLastSync);
         
         NSDate* hourlyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: gfHourlyLastSync/1000];
         NSDate* dailyDataSyncTime = [NSDate dateWithTimeIntervalSince1970: googleFitLastSync/1000];
@@ -1997,9 +1991,14 @@ API_AVAILABLE(ios(11.0))
         
         NSDate *midnightDate = [calendar dateFromComponents:components];
         NSTimeInterval midnightTimeStamp = [midnightDate timeIntervalSince1970];
-        NSNumber *formattedTimestamp = [NSNumber numberWithDouble:(midnightTimeStamp * 1000)]; // Convert to milliseconds
+        NSNumber *formattedTimestamp = [NSNumber numberWithDouble:(midnightTimeStamp * 1000)];
         
-        if (![[json valueForKey:@"fitbitLastSync"] isEqual:@"<null>"] && ![[json valueForKey:@"fitbitLastSync"] isEqual:@0]) {
+        if (fitbitLastSync && ![fitbitLastSync isKindOfClass:[NSNull class]] && [fitbitLastSync doubleValue] != 0) {
+            NSTimeInterval timeInterval = [fitbitLastSync doubleValue] / 1000.0;
+            NSDate *fitbitLastSyncDate = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+            
+            NSLog(@"fitbitLastSync :::  %@", fitbitLastSync);
+
             NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:currentDate];
                 [components setHour:23];
                 [components setMinute:59];
