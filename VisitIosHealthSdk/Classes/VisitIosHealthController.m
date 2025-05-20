@@ -2154,8 +2154,10 @@ API_AVAILABLE(ios(11.0))
         ExternalViewController *webViewController = [[ExternalViewController alloc] init];
         webViewController.link = [json valueForKey:@"link"];
         [currentTopVC presentViewController:webViewController animated:false completion:nil];
+    }else if([methodName isEqualToString:@"startManualSync"]){
+        NSString *javascript = [NSString stringWithFormat:@"window.manualSyncSuccess()"];
+        [self injectJavascript:javascript];
     }
-    
 }
 
 @end
