@@ -743,6 +743,10 @@ API_AVAILABLE(ios(11.0))
                 if (error) {
                     NSLog(@"Download Error:%@ for endpoint=%@",error.description,downloadUrl);
                     if([downloadUrl containsString:@"fitness-activity"]){
+                        NSString *errorMessage = error.description.length > 0 ? error.description : @"Sync failed";
+                        NSString *escapedErrorMessage = [errorMessage stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+                        NSString *javascript = [NSString stringWithFormat:@"window.manualSyncFailure('%@')", escapedErrorMessage];
+                        [self injectJavascript:javascript];
                         [self postVisitCallback:@"Sync steps and calories api failed" reason:[error localizedDescription]];
                     }
                 }
@@ -765,6 +769,8 @@ API_AVAILABLE(ios(11.0))
                             [self->userDefaults setObject:currentTimeStamp forKey:@"fitnessActivityLastSyncTime"];
 //                            NSLog(@"uat api called successfully,%@",currentTimeStamp);
                         }
+                        NSString *javascript = [NSString stringWithFormat:@"window.manualSyncSuccess()"];
+                        [self injectJavascript:javascript];
                     }else if([endPoint containsString:@"/wearables/fitbit/revoke"]){
                         self->isFitbitUser = 0;
                         [self->userDefaults setObject:@"0" forKey:@"fitbitUser"];
