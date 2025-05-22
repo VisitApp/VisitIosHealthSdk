@@ -769,8 +769,6 @@ API_AVAILABLE(ios(11.0))
                             [self->userDefaults setObject:currentTimeStamp forKey:@"fitnessActivityLastSyncTime"];
 //                            NSLog(@"uat api called successfully,%@",currentTimeStamp);
                         }
-                        NSString *javascript = [NSString stringWithFormat:@"window.manualSyncSuccess()"];
-                        [self injectJavascript:javascript];
                     }else if([endPoint containsString:@"/wearables/fitbit/revoke"]){
                         self->isFitbitUser = 0;
                         [self->userDefaults setObject:@"0" forKey:@"fitbitUser"];
@@ -792,12 +790,18 @@ API_AVAILABLE(ios(11.0))
                         else if ( [json_response isKindOfClass:[NSArray class]] ) {
                             NSLog(@"%@",json_response);
                         }
+                        NSString *javascript = [NSString stringWithFormat:@"window.manualSyncSuccess()"];
+                        [self injectJavascript:javascript];
                     }
                     else {
                         NSLog(@"Error serializing JSON: %@", error);
                         NSLog(@"RAW RESPONSE: %@",data);
                         NSString *returnString2 = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
                         if([downloadUrl containsString:@"fitness-activity"]){
+                            NSString *errorMessage = error.description.length > 0 ? error.description : @"Sync failed";
+                            NSString *escapedErrorMessage = [errorMessage stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+                            NSString *javascript = [NSString stringWithFormat:@"window.manualSyncFailure('%@')", escapedErrorMessage];
+                            [self injectJavascript:javascript];
                             [self postVisitCallback:@"Sync steps and calories api failed" reason:returnString2];
                         }
 
@@ -1893,6 +1897,8 @@ API_AVAILABLE(ios(11.0))
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     
     NSString *methodName = [json valueForKey:@"method"];
+    NSNumber *startTimeStamp = [json valueForKey:@"starTimeStamp"];
+    NSNumber *endTimeStamp = [json valueForKey:@"endTimeStamp"];
     NSLog(@"json is %@",[json description]);
     NSLog(@"methodName is :::: %@", methodName);
     if([methodName isEqualToString:@"visitCallback"]){
@@ -1958,7 +1964,9 @@ API_AVAILABLE(ios(11.0))
         [self closePWA];
     }else if([methodName isEqualToString:@"inFitSelectScreen"]){
         NSString *javascript = [NSString stringWithFormat:@"isIosUser(true)"];
+        NSString *javascriptShowManualSyncButton = [NSString stringWithFormat:@"window.showManualSyncButton()"];
         [self injectJavascript:javascript];
+        [self injectJavascript:javascriptShowManualSyncButton];
         [self canAccessHealthKit:^(BOOL value){
             if(value){
                 // [self postNotification:@"FitnessPermissionGranted"];
@@ -2161,7 +2169,19 @@ API_AVAILABLE(ios(11.0))
         webViewController.link = [json valueForKey:@"link"];
         [currentTopVC presentViewController:webViewController animated:false completion:nil];
     }else if([methodName isEqualToString:@"startManualSync"]){
-        NSString *javascript = [NSString stringWithFormat:@"window.manualSyncSuccess()"];
+        NSMutableArray *dates = [NSMutableArray array];
+        NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(startTimeStamp.doubleValue / 1000)];
+        NSDate *endDate = [NSDate dateWithTimeIntervalSince1970:(endTimeStamp.doubleValue / 1000)];
+        
+        NSLog(@"Date start: %@", startDate);
+        NSLog(@"Date end: %@", endDate);
+        
+        [dates addObject:startDate];
+        [dates addObject:endDate];
+        // Pass the array to the method
+        [self callUatApi:dates];
+    }else if([methodName isEqualToString:@"inFitSelectScreen"]){
+        NSString *javascript = [NSString stringWithFormat:@"window.showManualSyncButton()"];
         [self injectJavascript:javascript];
     }
 }
