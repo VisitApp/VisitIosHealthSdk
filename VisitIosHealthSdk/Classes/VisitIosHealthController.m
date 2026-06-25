@@ -1743,6 +1743,16 @@ API_AVAILABLE(ios(11.0))
     }];
 }
 
+-(void) postVisitAnalyticsEvent:(NSString*)eventName properties:(NSDictionary*)properties{
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[@"event"] = @"VisitAnalyticsEvent";
+    userInfo[@"eventName"] = eventName ?: @"";
+    if (properties) {
+        userInfo[@"properties"] = properties;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VisitEventType" object:nil userInfo:userInfo];
+}
+
 - (void)setSyncingEnabled:(BOOL)value {
     syncingEnabled = value;
     [self->userDefaults setObject: value ? @"true" : @"false" forKey:@"syncingEnabled"];
@@ -1883,8 +1893,21 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void)userContentController:(nonnull WKUserContentController *)userContentController didReceiveScriptMessage:(nonnull WKScriptMessage *)message {
-    NSData *data = [message.body dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    NSDictionary *json = nil;
+    if ([message.body isKindOfClass:[NSDictionary class]]) {
+        json = (NSDictionary *)message.body;
+    } else if ([message.body isKindOfClass:[NSString class]]) {
+        NSData *data = [(NSString *)message.body dataUsingEncoding:NSUTF8StringEncoding];
+        if (data) {
+            id parsed = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            if ([parsed isKindOfClass:[NSDictionary class]]) {
+                json = (NSDictionary *)parsed;
+            }
+        }
+    }
+    if (json == nil) {
+        return;
+    }
     
     NSString *methodName = [json valueForKey:@"method"];
     NSLog(@"json is %@",[json description]);
@@ -1894,6 +1917,25 @@ API_AVAILABLE(ios(11.0))
             [self postVisitCallback:[json valueForKey:@"message"] reason:[json valueForKey:@"failureReason"]];
         }else{
             [self postVisitCallback:[json valueForKey:@"message"] reason:@""];
+        }
+    }else if([methodName isEqualToString:@"VISIT_EVENT"]){
+        id eventNameValue = [json valueForKey:@"eventName"];
+        NSString *eventName = ([eventNameValue isKindOfClass:[NSString class]]) ? (NSString *)eventNameValue : nil;
+        id propsValue = [json valueForKey:@"props"];
+        NSDictionary *properties = nil;
+        if ([propsValue isKindOfClass:[NSDictionary class]]) {
+            properties = (NSDictionary *)propsValue;
+        } else if ([propsValue isKindOfClass:[NSString class]] && ![(NSString *)propsValue isEqualToString:@"null"]) {
+            NSData *propData = [(NSString *)propsValue dataUsingEncoding:NSUTF8StringEncoding];
+            if (propData) {
+                id parsed = [NSJSONSerialization JSONObjectWithData:propData options:0 error:nil];
+                if ([parsed isKindOfClass:[NSDictionary class]]) {
+                    properties = (NSDictionary *)parsed;
+                }
+            }
+        }
+        if (eventName.length > 0) {
+            [self postVisitAnalyticsEvent:eventName properties:properties];
         }
     }else if([methodName isEqualToString:@"disconnectFromFitbit"]){
         [self postNotification:@"FibitDisconnected"];

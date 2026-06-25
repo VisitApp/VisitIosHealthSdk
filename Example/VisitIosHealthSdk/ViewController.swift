@@ -136,6 +136,10 @@ class ViewController: VisitVideoCallDelegate {
                 print("consultationBooked triggered")
             case "visitCallback":
                 print("visitCallback triggered,", message)
+            case "VisitAnalyticsEvent":
+                let eventName = notification.userInfo?["eventName"] ?? ""
+                let properties = notification.userInfo?["properties"] ?? [:]
+                print("VisitAnalyticsEvent triggered, eventName:", eventName, "properties:", properties)
             case "NetworkError":
                 print("NetworkError triggered,", message, code)
 
