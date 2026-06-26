@@ -20,9 +20,9 @@ API_AVAILABLE(ios(11.0))
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
     self.navigationDelegate = self;
-//     if (@available(iOS 16.4, *)) {
-//         self.inspectable = true;
-//     }
+    // if (@available(iOS 16.4, *)) {
+    //     self.inspectable = true;
+    // }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
     syncingEnabled = [[userDefaults stringForKey:@"syncingEnabled"] isEqualToString:@"false"] ? NO : YES;
@@ -32,6 +32,7 @@ API_AVAILABLE(ios(11.0))
     isFitbitUser = 0;
     fitbitConnectionTriggered = 0;
     healthKitPermissionTriggered = 0;
+    manualSyncInProgress = NO;
     if([[userDefaults stringForKey:@"fitbitUser"] boolValue]){
         isFitbitUser = 1;
     }
@@ -704,7 +705,7 @@ API_AVAILABLE(ios(11.0))
                                 @"member_id" : self->memberId,
                         };
                         NSLog(@"fitbit httpBody %@",httpBody);
-                        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
+                        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_auth_token: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
                        [self PostJson:endpoint body:httpBody authToken:external_auth_token];
                     }
                 }
@@ -712,6 +713,14 @@ API_AVAILABLE(ios(11.0))
         }
     }];
     [task resume];
+}
+
+-(void)notifyManualSyncResult:(BOOL)success {
+    if (!self->manualSyncInProgress) {
+        return;
+    }
+    self->manualSyncInProgress = NO;
+    [self injectJavascript:success ? @"window.syncingCompleted()" : @"window.syncingFailed()"];
 }
 
 -(BOOL)isEmpty:(NSString *)str
@@ -740,29 +749,32 @@ API_AVAILABLE(ios(11.0))
             [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
             [request setValue:authToken forHTTPHeaderField:@"Authorization"];
             NSURLSessionDataTask * task= [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                BOOL isFitnessActivity = [downloadUrl containsString:@"fitness-activity"];
                 if (error) {
                     NSLog(@"Download Error:%@ for endpoint=%@",error.description,downloadUrl);
-                    if([downloadUrl containsString:@"fitness-activity"]){
+                    if(isFitnessActivity){
                         [self postVisitCallback:@"Sync steps and calories api failed" reason:[error localizedDescription]];
+                        [self notifyManualSyncResult:NO];
                     }
-                }
-                if (data) {
+                } else if (data) {
 
                     //
                     // THIS CODE IS FOR PRINTING THE RESPONSE
                     //
                     NSString *returnString = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
                     NSLog(@"Response:%@ for endpoint=%@",returnString,downloadUrl);
-                    if([downloadUrl containsString:@"fitness-activity"]){
+                    if(isFitnessActivity){
                         NSData *fitnessActivityResponse = [returnString dataUsingEncoding:NSUTF8StringEncoding];
                         id json = [NSJSONSerialization JSONObjectWithData:fitnessActivityResponse options:0 error:nil];
                         NSString* action = [json objectForKey:@"action"];
-                        if([action rangeOfString:@"SUCCESS"].location == NSNotFound){
+                        if(![action isKindOfClass:[NSString class]] || [action rangeOfString:@"SUCCESS"].location == NSNotFound){
                             [self postVisitCallback:@"Sync steps and calories api failed" reason:[json objectForKey:@"message"]];
+                            [self notifyManualSyncResult:NO];
                         }else{
                             NSNumber *timeInSeconds = [NSNumber numberWithDouble: [@(floor([[NSDate date] timeIntervalSince1970] * 1000)) longLongValue]];
                             NSString* currentTimeStamp = [timeInSeconds stringValue];
                             [self->userDefaults setObject:currentTimeStamp forKey:@"fitnessActivityLastSyncTime"];
+                            [self notifyManualSyncResult:YES];
 //                            NSLog(@"uat api called successfully,%@",currentTimeStamp);
                         }
                     }else if([endPoint containsString:@"/wearables/fitbit/revoke"]){
@@ -791,8 +803,9 @@ API_AVAILABLE(ios(11.0))
                         NSLog(@"Error serializing JSON: %@", error);
                         NSLog(@"RAW RESPONSE: %@",data);
                         NSString *returnString2 = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
-                        if([downloadUrl containsString:@"fitness-activity"]){
+                        if(isFitnessActivity){
                             [self postVisitCallback:@"Sync steps and calories api failed" reason:returnString2];
+                            [self notifyManualSyncResult:NO];
                         }
 
                         NSLog(@"Response:%@  for endpoint=%@ where data is=%@",returnString2, downloadUrl,[body description]);
@@ -1434,52 +1447,116 @@ API_AVAILABLE(ios(11.0))
 }
 
 -(void)callUatApi:(NSMutableArray*) dates{
+    if(dates.count == 0){
+        if(self->manualSyncInProgress){
+            [self notifyManualSyncResult:NO];
+        }
+        return;
+    }
+
     __block NSMutableArray *uatData = [NSMutableArray new];
-    dispatch_group_t loadUatData=dispatch_group_create();
-    dispatch_group_enter(loadUatData);
+    dispatch_group_t loadUatData = dispatch_group_create();
+
     for (NSDate* date in dates) {
-        dispatch_group_t loadDetailsGroup=dispatch_group_create();
+        dispatch_group_enter(loadUatData);
+        dispatch_group_t loadDetailsGroup = dispatch_group_create();
         __block NSArray* steps;
         __block NSArray* calories;
-        for(int i = 0; i<2;i++){
+        for(int i = 0; i < 2; i++){
             dispatch_group_enter(loadDetailsGroup);
-            if(i==0){
+            if(i == 0){
                 [self fetchHourlySteps:date callback:^(NSArray * data) {
                     steps = data;
                     dispatch_group_leave(loadDetailsGroup);
                 }];
-            }else if(i==1){
+            }else{
                 [self fetchHourlyActiveEnergyBurned:date callback:^(NSArray * data) {
                     calories = data;
                     dispatch_group_leave(loadDetailsGroup);
                 }];
             }
         }
-        
-        dispatch_group_notify(loadDetailsGroup,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-            if([steps count]>0 && [calories count] > 0){
-            [self preprocessUatRequest:steps calories:calories date:date callback:^(NSDictionary * data) {
-                [uatData addObject:data];
-                if([uatData count] == [dates count]){
+
+        dispatch_group_notify(loadDetailsGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            if([steps count] > 0 && [calories count] > 0){
+                [self preprocessUatRequest:steps calories:calories date:date callback:^(NSDictionary * data) {
+                    if(data){
+                        @synchronized (uatData) {
+                            [uatData addObject:data];
+                        }
+                    }
                     dispatch_group_leave(loadUatData);
-                }
-             }];
+                }];
+            }else{
+                dispatch_group_leave(loadUatData);
             }
         });
-        
     }
-    dispatch_group_notify(loadUatData,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-        NSLog(@"the uat data in dispatch_group_notify is, %@",[uatData description]);
+
+    dispatch_group_notify(loadUatData, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"the uat data in dispatch_group_notify is, %@", [uatData description]);
+        if(uatData.count == 0){
+            if(self->manualSyncInProgress){
+                [self notifyManualSyncResult:NO];
+            }
+            return;
+        }
         NSString* external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
         NSString *endpoint = [NSString stringWithFormat: @"%@/fitness-activity", external_base_url];
         NSDictionary *httpBody = @{
                 @"data" : uatData,
                 @"member_id" : self->memberId,
         };
-        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
+        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_auth_token: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
        [self PostJson:endpoint body:httpBody authToken:external_auth_token];
     });
+}
 
+-(void) initializeManualSyncWithStartDate:(NSString*)startDateStr endDate:(NSString*)endDateStr{
+    if(![startDateStr isKindOfClass:[NSString class]] || ![endDateStr isKindOfClass:[NSString class]] || startDateStr.length == 0 || endDateStr.length == 0){
+        [self injectJavascript:@"window.syncingFailed()"];
+        return;
+    }
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd";
+    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    formatter.timeZone = [NSTimeZone systemTimeZone];
+
+    NSDate *startDate = [formatter dateFromString:startDateStr];
+    NSDate *endDate = [formatter dateFromString:endDateStr];
+    if(!startDate || !endDate || [endDate compare:startDate] == NSOrderedAscending){
+        [self injectJavascript:@"window.syncingFailed()"];
+        return;
+    }
+
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDate *startOfStart = [cal startOfDayForDate:startDate];
+    NSDate *startOfEnd = [cal startOfDayForDate:endDate];
+
+    NSMutableArray *dates = [NSMutableArray new];
+    NSDate *cursor = startOfStart;
+    while([cursor compare:startOfEnd] != NSOrderedDescending){
+        [dates addObject:cursor];
+        NSDateComponents *oneDay = [[NSDateComponents alloc] init];
+        oneDay.day = 1;
+        cursor = [cal dateByAddingComponents:oneDay toDate:cursor options:0];
+    }
+
+    if(dates.count == 0){
+        [self injectJavascript:@"window.syncingFailed()"];
+        return;
+    }
+
+    [self canAccessHealthKit:^(BOOL granted){
+        if(!granted){
+            [self injectJavascript:@"window.syncingFailed()"];
+            return;
+        }
+        self->manualSyncInProgress = YES;
+        [self injectJavascript:@"window.syncingInProgress()"];
+        [self callUatApi:dates];
+    }];
 }
 
 -(void)callEmbellishApi:(NSMutableArray*) dates{
@@ -1770,7 +1847,7 @@ API_AVAILABLE(ios(11.0))
         
         NSLog(@"the hra-fitness-details req, %@",json);
         NSString* external_base_url = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_base_url"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_base_url"];
-        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_base_url: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
+        NSString* external_auth_token = [self isEmpty:[self->userDefaults stringForKey:@"tataAIG_auth_token"]] ? self->tataAIG_auth_token: [self->userDefaults stringForKey:@"tataAIG_auth_token"];
         [self PutJson:[NSString stringWithFormat:@"%@/hra-fitness-details",external_base_url] body:json authToken:external_auth_token];
     }
 }
@@ -1910,6 +1987,9 @@ API_AVAILABLE(ios(11.0))
     }
     
     NSString *methodName = [json valueForKey:@"method"];
+    if (methodName == nil || ![methodName isKindOfClass:[NSString class]] || [(NSString *)methodName length] == 0) {
+        methodName = [json valueForKey:@"action"];
+    }
     NSLog(@"json is %@",[json description]);
     NSLog(@"methodName is :::: %@", methodName);
     if([methodName isEqualToString:@"visitCallback"]){
@@ -1918,6 +1998,12 @@ API_AVAILABLE(ios(11.0))
         }else{
             [self postVisitCallback:[json valueForKey:@"message"] reason:@""];
         }
+    }else if([methodName isEqualToString:@"initializeManualSync"]){
+        id startValue = [json valueForKey:@"startDate"];
+        id endValue = [json valueForKey:@"endDate"];
+        NSString *startDate = [startValue isKindOfClass:[NSString class]] ? (NSString *)startValue : nil;
+        NSString *endDate = [endValue isKindOfClass:[NSString class]] ? (NSString *)endValue : nil;
+        [self initializeManualSyncWithStartDate:startDate endDate:endDate];
     }else if([methodName isEqualToString:@"VISIT_EVENT"]){
         id eventNameValue = [json valueForKey:@"eventName"];
         NSString *eventName = ([eventNameValue isKindOfClass:[NSString class]]) ? (NSString *)eventNameValue : nil;

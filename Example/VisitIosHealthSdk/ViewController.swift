@@ -136,12 +136,12 @@ class ViewController: VisitVideoCallDelegate {
                 print("consultationBooked triggered")
             case "visitCallback":
                 print("visitCallback triggered,", message)
+            case "NetworkError":
+                print("NetworkError triggered,", message, code)
             case "VisitAnalyticsEvent":
                 let eventName = notification.userInfo?["eventName"] ?? ""
                 let properties = notification.userInfo?["properties"] ?? [:]
-                print("VisitAnalyticsEvent triggered, eventName:", eventName, "properties:", properties)
-            case "NetworkError":
-                print("NetworkError triggered,", message, code)
+                print("VisitAnalyticsEvent triggered,", eventName, properties)
 
             case "ClosePWAEvent":
                 // show initial button again, in actual app this can be ignored
