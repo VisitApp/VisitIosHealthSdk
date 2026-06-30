@@ -182,7 +182,11 @@ class ViewController: VisitVideoCallDelegate {
                 print("visitCallback triggered,", message, reason)
             case "NetworkError":
                 print("NetworkError triggered,", message, code)
-                
+            case "VisitAnalyticsEvent":
+                let eventName = notification.userInfo?["eventName"] ?? ""
+                let properties = notification.userInfo?["properties"] ?? [:]
+                print("VisitAnalyticsEvent triggered,", eventName, properties)
+
             case "ClosePWAEvent":
                 // show initial button again, in actual app this can be ignored
                 self.showButton();
@@ -222,9 +226,109 @@ class ViewController: VisitVideoCallDelegate {
 }
 ```
 
+## VisitAnalyticsEvent (PWA analytics bridge)
+
+The PWA can forward analytics events to the native host app through the `visitIosView` JavaScript bridge. The SDK receives a `VISIT_EVENT` message and posts a `VisitAnalyticsEvent` notification that your app can observe.
+
+### Web (PWA) — send an event
+
+```javascript
+const pushVisitEvent = (eventName, props) => {
+  if (window.Android?.visitEvent) {
+    window.Android.visitEvent(
+      eventName,
+      props == null ? null : JSON.stringify(props)
+    );
+    return;
+  }
+
+  const payload = {
+    method: 'VISIT_EVENT',
+    eventName,
+    ...(props != null ? { props } : {})
+  };
+
+  if (window.webkit?.messageHandlers?.visitIosView) {
+    window.webkit.messageHandlers.visitIosView.postMessage(payload);
+  }
+};
+
+// Example
+pushVisitEvent('screen_view', { screen: 'manual_sync' });
+```
+
+### iOS — receive the event
+
+Listen for the existing `VisitEventType` notification and handle the `VisitAnalyticsEvent` case. Forward `eventName` and `properties` to your analytics SDK (Firebase, Mixpanel, etc.) as needed.
+
+```swift
+case "VisitAnalyticsEvent":
+    let eventName = notification.userInfo?["eventName"] as? String ?? ""
+    let properties = notification.userInfo?["properties"] as? [String: Any] ?? [:]
+    // Forward to your analytics provider
+    print("VisitAnalyticsEvent:", eventName, properties)
+```
+
+| Notification key | Type | Description |
+|---|---|---|
+| `event` | `String` | Always `"VisitAnalyticsEvent"` |
+| `eventName` | `String` | Event name from the PWA |
+| `properties` | `[String: Any]` | Optional event properties (only present when the PWA sends `props`) |
+
+## Manual step sync
+
+The PWA can trigger a manual HealthKit steps/calories sync for a selected date range. The SDK reads hourly steps and calories from HealthKit, then posts them to the `/fitness-activity` API using the same flow as automatic sync (`callUatApi`).
+
+### Web (PWA) — start manual sync
+
+Post a message to `visitIosView` with `method` or `action` set to `initializeManualSync`, plus `startDate` and `endDate` in `yyyy-MM-dd` format.
+
+```javascript
+window.webkit.messageHandlers.visitIosView.postMessage({
+  method: 'initializeManualSync', // `action` is also supported
+  startDate: '2026-06-25',
+  endDate: '2026-06-26'
+});
+```
+
+### Native flow
+
+1. Validates the date range and checks HealthKit permission.
+2. Calls `window.syncingInProgress()` in the WebView when sync starts.
+3. Fetches HealthKit data and syncs via `/fitness-activity`.
+4. Calls one of the completion callbacks below when finished.
+
+### Web (PWA) — sync status callbacks
+
+Implement these on `window` in the PWA to update the sync UI:
+
+```javascript
+window.syncingInProgress = () => {
+  // Show loading / syncing state
+};
+
+window.syncingCompleted = () => {
+  // Hide loading, show success
+};
+
+window.syncingFailed = () => {
+  // Hide loading, show error
+};
+```
+
+### Requirements
+
+- HealthKit read permission must be granted; otherwise `window.syncingFailed()` is called.
+- Call `initialParams` with `tataAIG_base_url` and `tataAIG_auth_token` before syncing so the fitness-activity API can be authenticated.
+- `memberId` must be available (set via `updateApiBaseUrlV2` from the PWA) for the sync payload.
+
+### iOS notification (optional)
+
+Manual sync does not post a separate native notification. Use the JavaScript callbacks above in the PWA, or listen for `visitCallback` notifications if the fitness-activity API reports success or failure.
+
 ## Author
 
-81799742, yash-vardhan@hotmail.com
+81799742, gaurav.kumar@getvisitapp.com
 
 ## License
 
