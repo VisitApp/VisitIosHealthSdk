@@ -20,9 +20,9 @@ API_AVAILABLE(ios(11.0))
               addScriptMessageHandler:self name:@"visitIosView"];
     self = [super initWithFrame:CGRectZero configuration:config];
     self.navigationDelegate = self;
-    // if (@available(iOS 16.4, *)) {
-    //     self.inspectable = true;
-    // }
+    if (@available(iOS 16.4, *)) {
+        self.inspectable = true;
+    }
     [self.scrollView setScrollEnabled:NO];
     [self.scrollView setMultipleTouchEnabled:NO];
     syncingEnabled = [[userDefaults stringForKey:@"syncingEnabled"] isEqualToString:@"false"] ? NO : YES;
@@ -721,6 +721,34 @@ API_AVAILABLE(ios(11.0))
     }
     self->manualSyncInProgress = NO;
     [self injectJavascript:success ? @"window.syncingCompleted()" : @"window.syncingFailed()"];
+}
+
+-(NSDictionary *)dictionaryFromScriptMessageBody:(id)body {
+    if (body == nil || body == [NSNull null]) {
+        return nil;
+    }
+    if ([body isKindOfClass:[NSDictionary class]]) {
+        return (NSDictionary *)body;
+    }
+    if ([body isKindOfClass:[NSString class]]) {
+        NSData *data = [(NSString *)body dataUsingEncoding:NSUTF8StringEncoding];
+        if (!data) {
+            return nil;
+        }
+        id parsed = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        if ([parsed isKindOfClass:[NSDictionary class]]) {
+            return (NSDictionary *)parsed;
+        }
+        return nil;
+    }
+    if ([body isKindOfClass:[NSData class]]) {
+        id parsed = [NSJSONSerialization JSONObjectWithData:(NSData *)body options:0 error:nil];
+        if ([parsed isKindOfClass:[NSDictionary class]]) {
+            return (NSDictionary *)parsed;
+        }
+    }
+    NSLog(@"visitIosView: unsupported message body type %@", NSStringFromClass([body class]));
+    return nil;
 }
 
 -(BOOL)isEmpty:(NSString *)str
@@ -1970,18 +1998,7 @@ API_AVAILABLE(ios(11.0))
 }
 
 - (void)userContentController:(nonnull WKUserContentController *)userContentController didReceiveScriptMessage:(nonnull WKScriptMessage *)message {
-    NSDictionary *json = nil;
-    if ([message.body isKindOfClass:[NSDictionary class]]) {
-        json = (NSDictionary *)message.body;
-    } else if ([message.body isKindOfClass:[NSString class]]) {
-        NSData *data = [(NSString *)message.body dataUsingEncoding:NSUTF8StringEncoding];
-        if (data) {
-            id parsed = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            if ([parsed isKindOfClass:[NSDictionary class]]) {
-                json = (NSDictionary *)parsed;
-            }
-        }
-    }
+    NSDictionary *json = [self dictionaryFromScriptMessageBody:message.body];
     if (json == nil) {
         return;
     }

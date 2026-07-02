@@ -230,6 +230,8 @@ class ViewController: VisitVideoCallDelegate {
 
 The PWA can forward analytics events to the native host app through the `visitIosView` JavaScript bridge. The SDK receives a `VISIT_EVENT` message and posts a `VisitAnalyticsEvent` notification that your app can observe.
 
+The bridge accepts **both** payload formats: a JavaScript object (`postMessage({ ... })`) or a JSON string (`postMessage(JSON.stringify({ ... }))`).
+
 ### Web (PWA) — send an event
 
 ```javascript
@@ -278,6 +280,8 @@ case "VisitAnalyticsEvent":
 ## Manual step sync
 
 The PWA can trigger a manual HealthKit steps/calories sync for a selected date range. The SDK reads hourly steps and calories from HealthKit, then posts them to the `/fitness-activity` API using the same flow as automatic sync (`callUatApi`).
+
+The bridge accepts **both** a JavaScript object and a `JSON.stringify` string for the message body.
 
 ### Web (PWA) — start manual sync
 
